@@ -7,7 +7,7 @@ import {
   Brain,
   Lock,
   Zap,
-  Sparkles,
+  Cat,
   MessageSquare,
   Clock,
   Search,
@@ -58,10 +58,10 @@ const features = [
     color: 'from-indigo-500 to-indigo-600',
   },
   {
-    icon: MessageSquare,
-    title: 'Interactive Chat',
+    icon: Cat,
+    title: 'Mascot Chat',
     description:
-      'Chat with your AI assistant using natural language. Ask questions, get insights, and manage tasks through conversation.',
+      'Chat with your friendly MindMesh mascot using natural language. Ask questions, get insights, and manage tasks through conversation.',
     color: 'from-cyan-500 to-cyan-600',
   },
   {
@@ -133,6 +133,7 @@ export default function Features() {
         >
           {features.map((feature, index) => {
             const Icon = feature.icon;
+            const isMascotChat = feature.title === 'Mascot Chat';
             return (
               <motion.div
                 key={index}
@@ -140,9 +141,13 @@ export default function Features() {
                 className="group p-6 bg-gray-50 rounded-xl hover:bg-white transition-all duration-300 border border-gray-200 hover:border-blue-200 hover:shadow-lg"
               >
                 <div
-                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  className={`w-12 h-12 rounded-lg ${
+                    isMascotChat 
+                      ? 'bg-gray-100' 
+                      : `bg-gradient-to-br ${feature.color}`
+                  } flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                 >
-                  <Icon className="w-6 h-6 text-white" />
+                  <Icon className={`w-6 h-6 ${isMascotChat ? 'text-black' : 'text-white'}`} />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {feature.title}

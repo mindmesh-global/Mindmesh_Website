@@ -203,29 +203,6 @@ export default function DownloadSection({ showTitle = false }: DownloadSectionPr
               </div>
             </motion.div>
           )}
-
-          {/* System Requirements */}
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">System Requirements</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600 max-w-2xl mx-auto">
-              <div>
-                <div className="font-semibold text-gray-900 mb-2">Windows</div>
-                <ul className="space-y-1">
-                  <li>• Windows 10 or later</li>
-                  <li>• 4 GB RAM minimum</li>
-                  <li>• 200 MB disk space</li>
-                </ul>
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900 mb-2">macOS</div>
-                <ul className="space-y-1">
-                  <li>• macOS 11.0 or later</li>
-                  <li>• 4 GB RAM minimum</li>
-                  <li>• 200 MB disk space</li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>

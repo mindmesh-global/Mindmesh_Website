@@ -108,9 +108,19 @@ export default function Footer() {
             <Heart className="w-4 h-4 text-red-500" />
             <span>by the MindMesh team</span>
           </p>
-          <p className="text-gray-400 text-sm mt-4 md:mt-0">
-            © {currentYear} MindMesh. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 mt-4 md:mt-0">
+            <div className="flex space-x-4">
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Terms of Service
+              </Link>
+            </div>
+            <p className="text-gray-400 text-sm">
+              © {currentYear} MindMesh. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
