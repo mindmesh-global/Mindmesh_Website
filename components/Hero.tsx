@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useDragControls } from 'framer-motion';
 import { 
   Sparkles, 
   Home, 
@@ -11,13 +11,14 @@ import {
   MessageSquare,
   Download,
   Play,
-  Folder,
   Calculator,
   ShoppingBag,
   Trash2,
-  Bell
 } from 'lucide-react';
 import MindMeshUI from './mindmeshui';
+import FeaturesWindow from './FeaturesWindow';
+import DownloadWindow from './DownloadWindow';
+import DocsWindow from './DocsWindow';
 
 interface IconPosition {
   x: number;
@@ -28,21 +29,19 @@ export default function Hero() {
   const leftIcons = [
     { icon: Home, label: 'home.mdx', color: 'text-blue-400' },
     { icon: Download, label: 'Sign up', color: 'text-teal-400' },
-    { icon: Folder, label: 'Product OS', color: 'text-yellow-400' },
     { icon: Calculator, label: 'Pricing', color: 'text-purple-400' },
     { icon: FileText, label: 'features', color: 'text-green-400' },
     { icon: Play, label: 'demo.mov', color: 'text-red-400' },
     { icon: BookOpen, label: 'Docs', color: 'text-cyan-400' },
     { icon: Mail, label: 'Talk to a human', color: 'text-orange-400' },
-    { icon: MessageSquare, label: 'Ask a question', color: 'text-pink-400' },
   ];
 
   const rightIcons = [
     { icon: Sparkles, label: 'Why MindMesh?', color: 'text-teal-400' },
-    { icon: Bell, label: 'Changelog', color: 'text-yellow-400' },
+    { icon: Download, label: 'Download', color: 'text-yellow-400' },
     { icon: BookOpen, label: 'Company handbook', color: 'text-blue-400' },
-    { icon: ShoppingBag, label: 'Store', color: 'text-pink-400' },
     { icon: Settings, label: 'Work here', color: 'text-purple-400' },
+    { icon: MessageSquare, label: 'Ask a question', color: 'text-pink-400' },
     { icon: Trash2, label: 'Trash', color: 'text-green-400' },
   ];
 
@@ -70,6 +69,8 @@ export default function Hero() {
   };
 
   const [iconPositions, setIconPositions] = useState<Record<string, IconPosition>>({});
+  const sectionRef = useRef<HTMLElement>(null);
+  const dragControls = useDragControls();
 
   // Initialize icon positions after mount (when window is available)
   useEffect(() => {
@@ -102,6 +103,14 @@ export default function Hero() {
   }, []);
 
   const [dragOffsets, setDragOffsets] = useState<Record<string, { x: number; y: number }>>({});
+  const [openWindow, setOpenWindow] = useState<'home' | 'features' | 'download' | 'docs' | null>('home');
+
+  const handleIconTap = (label: string) => {
+    if (label === 'home.mdx') setOpenWindow('home');
+    if (label === 'features') setOpenWindow('features');
+    if (label === 'Download') setOpenWindow('download');
+    if (label === 'Docs') setOpenWindow('docs');
+  };
 
   const handleDragStart = (label: string) => {
     setDragOffsets((prev) => ({ ...prev, [label]: { x: 0, y: 0 } }));
@@ -115,8 +124,15 @@ export default function Hero() {
   };
 
   const handleDragEnd = (label: string, event: any, info: any) => {
-    const currentPos = iconPositions[label];
     const offset = dragOffsets[label] || { x: 0, y: 0 };
+    const moved = Math.abs(offset.x) + Math.abs(offset.y);
+    if (moved < 8) {
+      if (label === 'home.mdx') setOpenWindow('home');
+      if (label === 'features') setOpenWindow('features');
+      if (label === 'Download') setOpenWindow('download');
+      if (label === 'Docs') setOpenWindow('docs');
+    }
+    const currentPos = iconPositions[label];
     const newX = currentPos.x + offset.x;
     const newY = currentPos.y + offset.y;
     
@@ -138,7 +154,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Lottie Background Animation */}
@@ -160,6 +176,7 @@ export default function Hero() {
             drag
             dragMomentum={false}
             dragElastic={0}
+            onTap={() => handleIconTap(item.label)}
             onDragStart={() => handleDragStart(item.label)}
             onDrag={(event, info) => handleDrag(item.label, event, info)}
             onDragEnd={(event, info) => handleDragEnd(item.label, event, info)}
@@ -187,20 +204,39 @@ export default function Hero() {
         );
       })}
 
-      {/* Mac Window */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="w-full max-w-5xl mx-auto px-4 z-20 mt-24">
-        <div 
-          className="bg-gray-900/90 backdrop-blur-xl rounded-lg border border-gray-700/50 shadow-2xl overflow-hidden flex flex-col"
-          style={{ maxHeight: '80vh', height: '80vh' }}
+      {/* Mac Window - opens when home.mdx or features icon is clicked */}
+      {openWindow && (
+        <motion.div
+          drag
+          dragControls={dragControls}
+          dragListener={false}
+          dragConstraints={sectionRef}
+          dragElastic={0}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="w-full max-w-5xl mx-auto px-4 z-20 mt-8"
+          whileDrag={{ cursor: 'grabbing' }}
         >
-          {/* Dashboard Content */}
-          <MindMeshUI />
-        </div>
-      </motion.div>
+          <div 
+            className="bg-gray-900/90 backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-0"
+            style={{ height: 'min(80vh, calc(100vh - 7rem))', maxHeight: 'calc(100vh - 7rem)' }}
+          >
+            {openWindow === 'home' && (
+              <MindMeshUI dragControls={dragControls} onClose={() => setOpenWindow(null)} />
+            )}
+            {openWindow === 'features' && (
+              <FeaturesWindow dragControls={dragControls} onClose={() => setOpenWindow(null)} />
+            )}
+            {openWindow === 'download' && (
+              <DownloadWindow dragControls={dragControls} onClose={() => setOpenWindow(null)} />
+            )}
+            {openWindow === 'docs' && (
+              <DocsWindow dragControls={dragControls} onClose={() => setOpenWindow(null)} />
+            )}
+          </div>
+        </motion.div>
+      )}
 
       {/* Scroll Indicator */}
       <motion.div

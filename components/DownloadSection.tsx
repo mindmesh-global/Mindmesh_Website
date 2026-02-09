@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Loader2, Check, Laptop, Monitor, ChevronDown } from 'lucide-react';
 
 interface DownloadSectionProps {
   showTitle?: boolean;
+  /** When true, use compact padding for use inside a window/modal */
+  embedded?: boolean;
 }
 
-export default function DownloadSection({ showTitle = false }: DownloadSectionProps) {
+export default function DownloadSection({ showTitle = false, embedded = false }: DownloadSectionProps) {
   const [os, setOS] = useState<string>('unknown');
   const [downloading, setDownloading] = useState(false);
   const [showOSSelector, setShowOSSelector] = useState(false);
@@ -84,8 +86,8 @@ export default function DownloadSection({ showTitle = false }: DownloadSectionPr
   const currentOSInfo = os !== 'unknown' ? downloadLinks[os as keyof typeof downloadLinks] : null;
 
   return (
-    <section className="py-24 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className={embedded ? 'py-8 px-4 min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/40' : 'py-24 bg-gradient-to-br from-blue-50 via-white to-purple-50'}>
+      <div className={embedded ? 'w-full max-w-md mx-auto' : 'max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'}>
         {showTitle && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -102,22 +104,26 @@ export default function DownloadSection({ showTitle = false }: DownloadSectionPr
         )}
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-200"
+          transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className={embedded
+            ? 'bg-white rounded-2xl shadow-xl shadow-blue-200/20 p-6 md:p-8 border border-gray-200/80 hover:shadow-2xl hover:shadow-blue-300/10 transition-shadow duration-300'
+            : 'bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-200'
+          }
         >
+          {embedded && (
+            <p className="text-center text-sm text-gray-500 mb-6">Get started in seconds</p>
+          )}
           {/* Main Download Button */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             {currentOSInfo ? (
-              <div className="mb-6">
-                <div className="inline-flex items-center space-x-3 px-4 py-2 bg-gray-100 rounded-lg">
+              <div className="mb-5">
+                <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gray-50 border border-gray-200/80 text-gray-700 font-medium text-sm shadow-sm">
                   {currentOSInfo.icon && (
-                    <currentOSInfo.icon className="w-5 h-5 text-gray-700" />
+                    <currentOSInfo.icon className="w-4 h-4 text-gray-500 shrink-0" />
                   )}
-                  <span className="text-gray-700 font-medium">
-                    Detected: {currentOSInfo.name}
-                  </span>
+                  <span>Detected: {currentOSInfo.name}</span>
                 </div>
               </div>
             ) : null}
@@ -125,21 +131,21 @@ export default function DownloadSection({ showTitle = false }: DownloadSectionPr
             <button
               onClick={() => handleDownload()}
               disabled={downloading || downloadComplete}
-              className="group relative px-8 py-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-w-[200px]"
+              className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-base shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-3 mx-auto min-w-[220px] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:shadow-lg active:scale-[0.98]"
             >
               {downloading ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin shrink-0" />
                   <span>Downloading...</span>
                 </>
               ) : downloadComplete ? (
                 <>
-                  <Check className="w-5 h-5" />
+                  <Check className="w-5 h-5 shrink-0" />
                   <span>Downloaded!</span>
                 </>
               ) : (
                 <>
-                  <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+                  <Download className="w-5 h-5 shrink-0 group-hover:translate-y-0.5 transition-transform duration-200" />
                   <span>
                     {currentOSInfo
                       ? `Download for ${currentOSInfo.name}`
@@ -150,7 +156,7 @@ export default function DownloadSection({ showTitle = false }: DownloadSectionPr
             </button>
 
             {currentOSInfo && (
-              <p className="text-sm text-gray-500 mt-3">
+              <p className="text-sm text-gray-500 mt-3 font-medium">
                 Size: {currentOSInfo.size}
               </p>
             )}
@@ -158,51 +164,54 @@ export default function DownloadSection({ showTitle = false }: DownloadSectionPr
             {/* OS Selector Toggle */}
             <button
               onClick={() => setShowOSSelector(!showOSSelector)}
-              className="mt-6 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors mx-auto"
+              className="mt-6 flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors mx-auto group/link"
             >
-              <span className="text-sm">Download for a different platform</span>
+              <span className="text-sm font-medium">Download for a different platform</span>
               <ChevronDown
-                className={`w-4 h-4 transition-transform ${
-                  showOSSelector ? 'rotate-180' : ''
-                }`}
+                className={`w-4 h-4 transition-transform duration-200 group-hover/link:translate-y-0.5 ${showOSSelector ? 'rotate-180' : ''}`}
               />
             </button>
           </div>
 
           {/* OS Selector */}
-          {showOSSelector && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="border-t border-gray-200 pt-8 mt-8"
-            >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-                Choose your platform
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
-                {Object.entries(downloadLinks).map(([key, info]) => {
-                  const Icon = info.icon;
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => {
-                        handleDownload(key);
-                        setShowOSSelector(false);
-                      }}
-                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 group"
-                    >
-                      <Icon className="w-8 h-8 text-gray-700 group-hover:text-blue-600 mx-auto mb-2" />
-                      <div className="font-semibold text-gray-900 group-hover:text-blue-600">
-                        {info.name}
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1">{info.size}</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
+          <AnimatePresence initial={false}>
+            {showOSSelector && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                className="overflow-hidden border-t border-gray-100 pt-6 mt-6"
+              >
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 text-center">
+                  Choose your platform
+                </h3>
+                <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+                  {Object.entries(downloadLinks).map(([key, info]) => {
+                    const Icon = info.icon;
+                    return (
+                      <motion.button
+                        key={key}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        onClick={() => {
+                          handleDownload(key);
+                          setShowOSSelector(false);
+                        }}
+                        className="p-4 rounded-xl border-2 border-gray-200 bg-gray-50/50 hover:border-blue-400 hover:bg-blue-50/80 hover:shadow-md active:scale-[0.98] transition-all duration-200 group text-center"
+                      >
+                        <Icon className="w-8 h-8 text-gray-600 group-hover:text-blue-600 mx-auto mb-2 transition-colors" />
+                        <div className="font-semibold text-gray-900 group-hover:text-blue-700 text-sm">
+                          {info.name}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-0.5">{info.size}</div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>
