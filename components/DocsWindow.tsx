@@ -8,6 +8,7 @@ type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 interface DocsWindowProps {
   dragControls?: DragControls;
   onClose?: () => void;
+  onMinimize?: () => void;
 }
 
 type DocId = 'privacy' | 'terms';
@@ -71,7 +72,7 @@ const termsContent = (
   </div>
 );
 
-export default function DocsWindow({ dragControls, onClose }: DocsWindowProps) {
+export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeDoc, setActiveDoc] = useState<DocId | null>(null);
@@ -124,7 +125,12 @@ export default function DocsWindow({ dragControls, onClose }: DocsWindowProps) {
               title="Close"
               aria-label="Close window"
             />
-            <button className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer hover:bg-yellow-600 transition-colors active:scale-90 opacity-50 cursor-not-allowed" title="Minimize" aria-hidden />
+            <button
+              onClick={onMinimize}
+              className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer hover:bg-yellow-600 transition-colors active:scale-90"
+              title="Minimize"
+              aria-label="Minimize window"
+            />
             <button
               onClick={handleFullscreen}
               className="w-3 h-3 rounded-full bg-green-500 cursor-pointer hover:bg-green-600 transition-colors active:scale-90"

@@ -1,5 +1,7 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, useDragControls } from 'framer-motion';
 import { 
   Sparkles, 
@@ -19,13 +21,102 @@ import MindMeshUI from './mindmeshui';
 import FeaturesWindow from './FeaturesWindow';
 import DownloadWindow from './DownloadWindow';
 import DocsWindow from './DocsWindow';
+import WhyMindMeshWindow from './WhyMindMeshWindow';
 
 interface IconPosition {
   x: number;
   y: number;
 }
 
+type WindowType = 'home' | 'features' | 'download' | 'docs' | 'why';
+interface OpenWindowItem {
+  id: string;
+  type: WindowType;
+}
+
+const CASCADE_OFFSET = 28; // px offset per window for stacked look (like Windows/macOS)
+const BASE_Z = 20;
+
+type DragConstraints = React.RefObject<HTMLElement | null>;
+
+const WINDOW_LABELS: Record<WindowType, string> = {
+  home: 'home.mdx',
+  features: 'features',
+  download: 'Download',
+  docs: 'Docs',
+  why: 'Why MindMesh?',
+};
+
+function StackedWindow({
+  item,
+  stackIndex,
+  onFocus,
+  onClose,
+  onMinimize,
+  dragConstraintsRef,
+}: {
+  item: OpenWindowItem;
+  stackIndex: number;
+  onFocus: () => void;
+  onClose: () => void;
+  onMinimize: () => void;
+  dragConstraintsRef: DragConstraints;
+}) {
+  const dragControls = useDragControls();
+  const offset = stackIndex * CASCADE_OFFSET;
+  return (
+    <motion.div
+      drag
+      dragControls={dragControls}
+      dragListener={false}
+      dragConstraints={dragConstraintsRef}
+      dragElastic={0}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.25 }}
+      onPointerDown={onFocus}
+      whileDrag={{ cursor: 'grabbing' }}
+      className="absolute w-full max-w-5xl px-4"
+      style={{
+        left: `calc(50% + ${offset}px)`,
+        top: `calc(50% + ${offset}px)`,
+        x: '-50%',
+        y: '-50%',
+        zIndex: BASE_Z + stackIndex,
+        height: 'min(80vh, calc(100vh - 7rem))',
+        maxHeight: 'calc(100vh - 7rem)',
+      }}
+    >
+      <div 
+        className="bg-gray-900/90 backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden flex flex-col h-full min-h-0"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {item.type === 'home' && (
+          <MindMeshUI dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+        {item.type === 'features' && (
+          <FeaturesWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+        {item.type === 'download' && (
+          <DownloadWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+        {item.type === 'docs' && (
+          <DocsWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+        {item.type === 'why' && (
+          <WhyMindMeshWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+export const OPEN_WINDOW_EVENT = 'mindmesh-open-window';
+
 export default function Hero() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const leftIcons = [
     { icon: Home, label: 'home.mdx', color: 'text-blue-400' },
     { icon: Download, label: 'Sign up', color: 'text-teal-400' },
@@ -70,7 +161,71 @@ export default function Hero() {
 
   const [iconPositions, setIconPositions] = useState<Record<string, IconPosition>>({});
   const sectionRef = useRef<HTMLElement>(null);
-  const dragControls = useDragControls();
+
+  // Multiple windows stack (last in array = on top, like Windows/macOS)
+  // On load/refresh, home.mdx window is open by default
+  const [openWindows, setOpenWindows] = useState<OpenWindowItem[]>(() => [
+    { id: 'home-default', type: 'home' },
+  ]);
+
+  const openWindow = useCallback((type: WindowType) => {
+    setOpenWindows((prev) => {
+      const existing = prev.find((w) => w.type === type);
+      if (existing) {
+        return [...prev.filter((w) => w.id !== existing.id), existing];
+      }
+      return [...prev, { id: `${type}-${Date.now()}`, type }];
+    });
+  }, []);
+
+  const bringToFront = (id: string) => {
+    setOpenWindows((prev) => {
+      const w = prev.find((x) => x.id === id);
+      if (!w || prev[prev.length - 1]?.id === id) return prev;
+      return [...prev.filter((x) => x.id !== id), w];
+    });
+  };
+
+  const [minimizedIds, setMinimizedIds] = useState<Set<string>>(new Set());
+
+  const minimizeWindow = (id: string) => {
+    setMinimizedIds((prev) => new Set([...prev, id]));
+  };
+
+  const restoreWindow = (id: string) => {
+    setMinimizedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    bringToFront(id);
+  };
+
+  const closeWindow = (id: string) => {
+    setOpenWindows((prev) => prev.filter((w) => w.id !== id));
+    setMinimizedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  };
+
+  // Listen for open-window from Navbar (when on home) and handle ?open= URL param
+  useEffect(() => {
+    const handleOpen = (e: CustomEvent<WindowType>) => {
+      openWindow(e.detail);
+    };
+    window.addEventListener(OPEN_WINDOW_EVENT, handleOpen as EventListener);
+    return () => window.removeEventListener(OPEN_WINDOW_EVENT, handleOpen as EventListener);
+  }, [openWindow]);
+
+  useEffect(() => {
+    const open = searchParams.get('open');
+    if (open === 'download') {
+      openWindow('download');
+      router.replace('/');
+    }
+  }, [searchParams, router, openWindow]);
 
   // Initialize icon positions after mount (when window is available)
   useEffect(() => {
@@ -103,13 +258,13 @@ export default function Hero() {
   }, []);
 
   const [dragOffsets, setDragOffsets] = useState<Record<string, { x: number; y: number }>>({});
-  const [openWindow, setOpenWindow] = useState<'home' | 'features' | 'download' | 'docs' | null>('home');
 
   const handleIconTap = (label: string) => {
-    if (label === 'home.mdx') setOpenWindow('home');
-    if (label === 'features') setOpenWindow('features');
-    if (label === 'Download') setOpenWindow('download');
-    if (label === 'Docs') setOpenWindow('docs');
+    if (label === 'home.mdx') openWindow('home');
+    if (label === 'features') openWindow('features');
+    if (label === 'Download') openWindow('download');
+    if (label === 'Docs') openWindow('docs');
+    if (label === 'Why MindMesh?') openWindow('why');
   };
 
   const handleDragStart = (label: string) => {
@@ -127,10 +282,11 @@ export default function Hero() {
     const offset = dragOffsets[label] || { x: 0, y: 0 };
     const moved = Math.abs(offset.x) + Math.abs(offset.y);
     if (moved < 8) {
-      if (label === 'home.mdx') setOpenWindow('home');
-      if (label === 'features') setOpenWindow('features');
-      if (label === 'Download') setOpenWindow('download');
-      if (label === 'Docs') setOpenWindow('docs');
+      if (label === 'home.mdx') openWindow('home');
+      if (label === 'features') openWindow('features');
+      if (label === 'Download') openWindow('download');
+      if (label === 'Docs') openWindow('docs');
+      if (label === 'Why MindMesh?') openWindow('why');
     }
     const currentPos = iconPositions[label];
     const newX = currentPos.x + offset.x;
@@ -155,16 +311,20 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Lottie Background Animation */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50">
-          <iframe 
-            src="https://lottie.host/embed/ce501b23-2e9a-47ce-8390-85000504ac4f/x1Tq89ZH77.lottie"
-            className="w-full h-full border-0"
-          ></iframe>
-        </div>
+      {/* Hero Background Image - high quality */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/herosec-bg.png"
+          alt=""
+          fill
+          priority
+          quality={95}
+          sizes="100vw"
+          className="object-cover object-center"
+        />
       </div>
+      {/* Dark overlay for contrast & readability */}
+      <div className="absolute inset-0 bg-black/50" />
 
       {/* Draggable Icons */}
       {allIcons.map((item, index) => {
@@ -204,37 +364,41 @@ export default function Hero() {
         );
       })}
 
-      {/* Mac Window - opens when home.mdx or features icon is clicked */}
-      {openWindow && (
+      {/* Stacked windows (Windows/macOS style – multiple open, click to bring to front) */}
+      {openWindows
+        .filter((item) => !minimizedIds.has(item.id))
+        .map((item, index) => (
+          <StackedWindow
+            key={item.id}
+            item={item}
+            stackIndex={index}
+            onFocus={() => bringToFront(item.id)}
+            onClose={() => closeWindow(item.id)}
+            onMinimize={() => minimizeWindow(item.id)}
+            dragConstraintsRef={sectionRef}
+          />
+        ))}
+
+      {/* Single dock for all minimized windows */}
+      {minimizedIds.size > 0 && (
         <motion.div
-          drag
-          dragControls={dragControls}
-          dragListener={false}
-          dragConstraints={sectionRef}
-          dragElastic={0}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="w-full max-w-5xl mx-auto px-4 z-20 mt-8"
-          whileDrag={{ cursor: 'grabbing' }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] flex flex-wrap gap-2 justify-center max-w-[90vw]"
         >
-          <div 
-            className="bg-gray-900/90 backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-0"
-            style={{ height: 'min(80vh, calc(100vh - 7rem))', maxHeight: 'calc(100vh - 7rem)' }}
-          >
-            {openWindow === 'home' && (
-              <MindMeshUI dragControls={dragControls} onClose={() => setOpenWindow(null)} />
-            )}
-            {openWindow === 'features' && (
-              <FeaturesWindow dragControls={dragControls} onClose={() => setOpenWindow(null)} />
-            )}
-            {openWindow === 'download' && (
-              <DownloadWindow dragControls={dragControls} onClose={() => setOpenWindow(null)} />
-            )}
-            {openWindow === 'docs' && (
-              <DocsWindow dragControls={dragControls} onClose={() => setOpenWindow(null)} />
-            )}
-          </div>
+          {openWindows
+            .filter((w) => minimizedIds.has(w.id))
+            .map((w) => (
+              <button
+                key={w.id}
+                onClick={() => restoreWindow(w.id)}
+                className="bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-700/90 transition-all duration-200 shadow-lg"
+                title={`Restore ${WINDOW_LABELS[w.type]}`}
+              >
+                <div className="w-4 h-4 rounded bg-gray-600" />
+                <span className="text-sm text-gray-300">{WINDOW_LABELS[w.type]}</span>
+              </button>
+            ))}
         </motion.div>
       )}
 

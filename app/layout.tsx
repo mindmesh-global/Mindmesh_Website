@@ -1,8 +1,20 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import ConditionalOverlays from '@/components/ConditionalOverlays';
+import { HomeSectionProvider } from '@/context/HomeSectionContext';
+import { UIOverlayProvider } from '@/context/UIOverlayContext';
 
 const inter = Inter({ subsets: ['latin'] });
+
+function ThemeScript() {
+  return (
+    <Script id="theme-init" strategy="beforeInteractive">
+      {`(function(){var d=document.documentElement,m=window.matchMedia('(prefers-color-scheme: dark)');function s(){d.classList.toggle('dark',m.matches);}s();m.addEventListener('change',s);})();`}
+    </Script>
+  );
+}
 
 export const metadata: Metadata = {
   title: 'MindMesh - Your AI-Powered Productivity Assistant',
@@ -22,8 +34,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className={`${inter.className} text-gray-900 bg-white dark:text-slate-100 dark:bg-slate-950 antialiased`}>
+        <ThemeScript />
+        <HomeSectionProvider>
+          <UIOverlayProvider>
+            {children}
+            <ConditionalOverlays />
+          </UIOverlayProvider>
+        </HomeSectionProvider>
+      </body>
     </html>
   );
 }

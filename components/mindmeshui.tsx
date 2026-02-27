@@ -1,6 +1,9 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { ChevronDown, Cat, Sun } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import DashboardPage from '@/app/dashboard/page';
+import { useUIOverlay } from '@/context/UIOverlayContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -9,13 +12,28 @@ interface MindMeshUIProps {
   dragControls?: DragControls;
   /** Called when the user closes the window (red button); used to hide window so it can be reopened from desktop icon */
   onClose?: () => void;
+  /** When set (e.g. in Hero with multiple windows), minimize is handled by parent and this window uses the shared dock */
+  onMinimize?: () => void;
 }
 
-export default function MindMeshUI({ dragControls, onClose }: MindMeshUIProps) {
+export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMeshUIProps) {
   const windowRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const uiOverlay = useUIOverlay();
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
+  const [isOverlayDropdownOpen, setIsOverlayDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (overlayRef.current && !overlayRef.current.contains(e.target as Node)) {
+        setIsOverlayDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleClose = () => {
     setIsClosed(true);
@@ -23,6 +41,10 @@ export default function MindMeshUI({ dragControls, onClose }: MindMeshUIProps) {
   };
 
   const handleMinimize = () => {
+    if (onMinimize) {
+      onMinimize();
+      return;
+    }
     setIsMinimized(true);
   };
 
@@ -63,8 +85,8 @@ export default function MindMeshUI({ dragControls, onClose }: MindMeshUIProps) {
     return null;
   }
 
-  // If minimized, show dock icon
-  if (isMinimized) {
+  // If minimized and no parent dock (standalone), show own dock icon
+  if (isMinimized && !onMinimize) {
     return (
       <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
         <button
@@ -115,9 +137,57 @@ export default function MindMeshUI({ dragControls, onClose }: MindMeshUIProps) {
               aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
             />
           </div>
-          {/* Title */}
-          <div className="flex-1 text-center">
+          {/* Title + Overlay dropdown */}
+          <div className="flex-1 flex items-center justify-center gap-1">
             <span className="text-sm text-gray-400 font-medium">home.mdx</span>
+            {uiOverlay && (
+              <div className="relative" ref={overlayRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsOverlayDropdownOpen(!isOverlayDropdownOpen)}
+                  className="p-0.5 rounded hover:bg-gray-700/60 transition-colors text-gray-500 hover:text-gray-300"
+                  title="Overlays"
+                  aria-label="Toggle overlays menu"
+                  aria-expanded={isOverlayDropdownOpen}
+                >
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isOverlayDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {isOverlayDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 py-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => uiOverlay.setShowMascot(!uiOverlay.showMascot)}
+                        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-200 hover:bg-gray-700/80 transition-colors"
+                      >
+                        <Cat className="w-4 h-4 text-amber-400" />
+                        Mascot
+                        {uiOverlay.showMascot && (
+                          <span className="ml-auto text-[10px] text-green-400">On</span>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => uiOverlay.setShowSensorBar(!uiOverlay.showSensorBar)}
+                        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-200 hover:bg-gray-700/80 transition-colors"
+                      >
+                        <Sun className="w-4 h-4 text-amber-400" />
+                        Sensor Bar
+                        {uiOverlay.showSensorBar && (
+                          <span className="ml-auto text-[10px] text-green-400">On</span>
+                        )}
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         </div>
         

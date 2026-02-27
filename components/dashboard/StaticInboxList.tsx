@@ -2,9 +2,71 @@
 
 import { useState, useRef, useEffect } from 'react';
 
+type BodyBlock =
+  | { type: 'paragraph'; text: string }
+  | { type: 'list'; items: string[] }
+  | { type: 'signature'; text: string };
+
+interface InboxMessage {
+  id: string;
+  from: string;
+  fromEmail?: string;
+  to?: string;
+  subject: string;
+  preview: string;
+  fullBody: BodyBlock[];
+  avatar: string;
+  date: string;
+  accountTag: string;
+  accountStyle: string;
+}
+
+const MESSAGES: InboxMessage[] = [
+  {
+    id: '1',
+    from: 'Sarah Chen',
+    fromEmail: 'sarah.chen@gmail.com',
+    to: 'me@mindmesh.com',
+    subject: 'Project Update Request',
+    preview: 'Hi, could you please provide an update on the current project status?',
+    fullBody: [
+      { type: 'paragraph', text: 'Hi,' },
+      { type: 'paragraph', text: 'Could you please provide an update on the current project status? We need to present the progress to stakeholders by end of week. Please include:' },
+      { type: 'list', items: ['Timeline for remaining tasks', 'Any blockers or dependencies', 'Resource allocation status'] },
+      { type: 'paragraph', text: 'Looking forward to your response.' },
+      { type: 'signature', text: 'Thanks,\nSarah Chen\nProject Manager' },
+    ],
+    avatar: 'SC',
+    date: 'Dec 16, 1:45 PM',
+    accountTag: 'user@gmail.com',
+    accountStyle: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800',
+  },
+  {
+    id: '2',
+    from: 'Oliver Park',
+    fromEmail: 'oliver.park@outlook.com',
+    to: 'me@mindmesh.com',
+    subject: 'Design Review Meeting',
+    preview: "Let's schedule a design review for the new feature mockups.",
+    fullBody: [
+      { type: 'paragraph', text: 'Hi,' },
+      { type: 'paragraph', text: "Let's schedule a design review for the new feature mockups. I've prepared the UI updates for the dashboard and would like your feedback before we move to development." },
+      { type: 'paragraph', text: "I've attached:" },
+      { type: 'list', items: ['Dashboard redesign mockups', 'Mobile responsive layouts', 'Updated component library'] },
+      { type: 'paragraph', text: "Can we meet tomorrow afternoon? I'm free between 2–4 PM." },
+      { type: 'signature', text: 'Best,\nOliver Park\nLead Designer' },
+    ],
+    avatar: 'OP',
+    date: 'Dec 16, 1:45 PM',
+    accountTag: 'user@outlook.com',
+    accountStyle: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800',
+  },
+];
+
 export function StaticInboxList() {
   const [selectedAccount, setSelectedAccount] = useState('All Accounts');
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const accounts = [
@@ -26,7 +88,7 @@ export function StaticInboxList() {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-700 p-6 transition-shadow">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-700 p-6 transition-shadow text-slate-900 dark:text-slate-100">
       <div className="flex items-start justify-between gap-4 mb-6 w-full">
         <div className="flex-1 min-w-0">
           <div className="flex items-start gap-3 mb-2">
@@ -37,7 +99,7 @@ export function StaticInboxList() {
             </div>
             <div>
               <div className="flex items-center gap-6">
-                <h2 className="text-2xl font-bold text-black">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                   Inbox
                 </h2>
                 <span className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
@@ -47,7 +109,7 @@ export function StaticInboxList() {
                   2 Emails today
                 </span>
               </div>
-              <p className="text-xs text-black mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Last refreshed: Dec 16, 2:30:45 PM
               </p>
 
@@ -73,7 +135,7 @@ export function StaticInboxList() {
               <input
                 type="text"
                 placeholder="Search by email..."
-                className="h-8 pl-8 pr-4 border border-slate-300 rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black"/>
+                className="h-8 pl-8 pr-4 border border-slate-300 dark:border-slate-600 rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"/>
             </div>
             <button className="h-10 w-30 border-none rounded-full bg-blue-500 text-white text-sm font-medium cursor-pointer px-4 py-2 flex items-center justify-center gap-2">
               <span>🔄</span>
@@ -84,7 +146,7 @@ export function StaticInboxList() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="h-8 w-40 pl-3 pr-8 border border-slate-200 rounded-md bg-white text-gray-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer flex items-center justify-between min-w-[240px] hover:border-slate-300 transition-colors"
+              className="h-8 w-40 pl-3 pr-8 border border-slate-200 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer flex items-center justify-between min-w-[240px] hover:border-slate-300 dark:hover:border-slate-500 transition-colors"
             >
               <span>{selectedAccount}</span>
               <svg 
@@ -98,7 +160,7 @@ export function StaticInboxList() {
             </button>
             
             {isOpen && (
-              <div className="absolute top-full left-0 mt-1 w-full bg-white border border-slate-200 rounded-md shadow-lg z-50 overflow-hidden">
+              <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-md shadow-lg z-50 overflow-hidden">
                 {accounts.map((account, index) => (
                   <button
                     key={index}
@@ -109,7 +171,7 @@ export function StaticInboxList() {
                     className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                       account === selectedAccount
                         ? 'bg-blue-600 text-white font-semibold'
-                        : 'text-gray-900 hover:bg-gray-50 font-normal'
+                        : 'text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-600 font-normal'
                     }`}
                   >
                     {account}
@@ -121,64 +183,109 @@ export function StaticInboxList() {
         </div>
       </div>
       <div className="space-y-3">
-        <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-start gap-3">
-
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-black font-semibold flex-shrink-0">
-              G
-            </div>
-            <div className="flex-1 min-w-0">
-
-              <div className="flex items-center justify-between mb-1">
-              <p className="font-medium text-black mb-1">Project Update Request</p>
-              <span className="px-2 py-1 text-xs rounded font-medium border bg-blue-50 text-blue-700 border-blue-200">
-                user@gmail.com
-              </span>
-                
-              </div>
-
-              <div className="flex items-center gap-2 mb-2 justify-between">
-                  <span className="text-xs text-black">user@gmail.com</span>
-                  <span className="text-xs text-black flex items-end ">Dec 16, 1:45 PM</span>
-                  
+        {MESSAGES.map((msg) => {
+          const isExpanded = expandedId === msg.id;
+          const hasTo = Boolean(msg.to);
+          return (
+            <div
+              key={msg.id}
+              onClick={() => setExpandedId(isExpanded ? null : msg.id)}
+              className={`border rounded-lg transition-all cursor-pointer overflow-hidden ${
+                isExpanded
+                  ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-blue-200 dark:border-blue-800 shadow-lg'
+                  : 'border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600'
+              }`}
+            >
+              {/* Collapsed / Preview state */}
+              {!isExpanded ? (
+                <div className="p-4 flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-600 dark:to-slate-700 text-slate-700 dark:text-slate-200 text-sm">
+                    {msg.avatar}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1 gap-2">
+                      <p className="font-medium text-slate-900 dark:text-slate-100 truncate">{msg.subject}</p>
+                      <span className={`px-2 py-1 text-xs rounded-md font-medium border flex-shrink-0 ${msg.accountStyle}`}>
+                        {msg.accountTag}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-2 justify-between text-xs text-slate-500 dark:text-slate-400">
+                      <span>{msg.from}</span>
+                      <span>{msg.date}</span>
+                    </div>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
+                      {msg.preview}
+                    </p>
+                  </div>
                 </div>
+              ) : (
+                /* Expanded – email-style layout */
+                <div className="bg-white dark:bg-slate-800/50">
+                  {/* Email header bar */}
+                  <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/50">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-11 h-11 rounded-full flex items-center justify-center font-semibold flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm shadow-md">
+                        {msg.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-0.5">
+                          {msg.subject}
+                        </h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-300">
+                          <span className="font-medium text-slate-500 dark:text-slate-400">From:</span>{' '}
+                          {msg.from} &lt;{msg.fromEmail ?? msg.from}&gt;
+                        </p>
+                        {hasTo && (
+                          <p className="text-sm text-slate-600 dark:text-slate-300 mt-0.5">
+                            <span className="font-medium text-slate-500 dark:text-slate-400">To:</span> {msg.to}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                        <span className={`px-2.5 py-1 text-xs rounded-md font-medium border ${msg.accountStyle}`}>
+                          {msg.accountTag}
+                        </span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{msg.date}</span>
+                      </div>
+                    </div>
+                  </div>
 
-              <p className="text-sm text-black line-clamp-2 ">
-                Hi, could you please provide an update on the current project status?
-              </p>
-
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-start gap-3">
-
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-black font-semibold flex-shrink-0">
-              O
-            </div>
-            <div className="flex-1 min-w-0">
-
-              <div className="flex items-center justify-between mb-1">
-              <p className="font-medium text-black mb-1">Design Review Meeting</p>
-              <span className="px-2 py-1 text-xs rounded font-medium border bg-purple-100 text-purple-800 border-purple-200">
-                user@outlook.com
-              </span>
-                
-              </div>
-
-              <div className="flex items-center gap-2 mb-2 justify-between">
-                  <span className="text-xs text-black">user@outlook.com</span>
-                  <span className="text-xs text-black flex items-end "> Dec 16, 1:45 PM</span>
+                  {/* Email body */}
+                  <div className="px-5 py-5">
+                    <div className="max-w-none space-y-4">
+                      {msg.fullBody.map((block, i) => (
+                        <div key={i} className="mb-4 last:mb-0">
+                          {block.type === 'paragraph' && (
+                            <p className="text-slate-700 dark:text-slate-200 leading-relaxed m-0">
+                              {block.text}
+                            </p>
+                          )}
+                          {block.type === 'list' && (
+                            <ul className="mt-2 mb-0 pl-5 space-y-1 text-slate-700 dark:text-slate-200 leading-relaxed list-disc">
+                              {(block.items ?? []).map((item, j) => (
+                                <li key={j}>{item}</li>
+                              ))}
+                            </ul>
+                          )}
+                          {block.type === 'signature' && (
+                            <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                              <p className="text-slate-600 dark:text-slate-300 text-sm whitespace-pre-wrap m-0 italic">
+                                {block.text}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-4">
+                      Click anywhere to collapse
+                    </p>
+                  </div>
                 </div>
-
-              <p className="text-sm text-black line-clamp-2">
-              Let&apos;s schedule a design review for the new feature mockups.
-              </p>
-
+              )}
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

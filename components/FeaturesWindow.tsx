@@ -11,6 +11,7 @@ import {
   Clock,
   Search,
   Shield,
+  Sparkles,
 } from 'lucide-react';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
@@ -30,9 +31,10 @@ const features = [
 interface FeaturesWindowProps {
   dragControls?: DragControls;
   onClose?: () => void;
+  onMinimize?: () => void;
 }
 
-export default function FeaturesWindow({ dragControls, onClose }: FeaturesWindowProps) {
+export default function FeaturesWindow({ dragControls, onClose, onMinimize }: FeaturesWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -82,7 +84,12 @@ export default function FeaturesWindow({ dragControls, onClose }: FeaturesWindow
               title="Close"
               aria-label="Close window"
             />
-            <button className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer hover:bg-yellow-600 transition-colors active:scale-90 opacity-50 cursor-not-allowed" title="Minimize" aria-hidden />
+            <button
+              onClick={onMinimize}
+              className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer hover:bg-yellow-600 transition-colors active:scale-90"
+              title="Minimize"
+              aria-label="Minimize window"
+            />
             <button
               onClick={handleFullscreen}
               className="w-3 h-3 rounded-full bg-green-500 cursor-pointer hover:bg-green-600 transition-colors active:scale-90"
@@ -97,6 +104,13 @@ export default function FeaturesWindow({ dragControls, onClose }: FeaturesWindow
 
         {/* Content - Features section */}
         <div className={`flex-1 min-h-0 overflow-y-auto bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+          {/* Why MindMesh? - section header */}
+          <div className="bg-black px-6 py-8 flex flex-col items-center justify-center">
+            <div className="w-14 h-14 rounded-xl border-2 border-white flex items-center justify-center mb-4">
+              <Sparkles className="w-7 h-7 text-white" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-xl font-semibold text-white text-center">Why MindMesh?</h2>
+          </div>
           <div className="max-w-4xl mx-auto px-6 py-8">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 text-center">
               Everything You Need to

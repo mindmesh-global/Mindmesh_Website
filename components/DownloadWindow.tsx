@@ -8,9 +8,10 @@ type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 interface DownloadWindowProps {
   dragControls?: DragControls;
   onClose?: () => void;
+  onMinimize?: () => void;
 }
 
-export default function DownloadWindow({ dragControls, onClose }: DownloadWindowProps) {
+export default function DownloadWindow({ dragControls, onClose, onMinimize }: DownloadWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -60,7 +61,12 @@ export default function DownloadWindow({ dragControls, onClose }: DownloadWindow
               title="Close"
               aria-label="Close window"
             />
-            <button className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer hover:bg-yellow-600 transition-colors active:scale-90 opacity-50 cursor-not-allowed" title="Minimize" aria-hidden />
+            <button
+              onClick={onMinimize}
+              className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer hover:bg-yellow-600 transition-colors active:scale-90"
+              title="Minimize"
+              aria-label="Minimize window"
+            />
             <button
               onClick={handleFullscreen}
               className="w-3 h-3 rounded-full bg-green-500 cursor-pointer hover:bg-green-600 transition-colors active:scale-90"
