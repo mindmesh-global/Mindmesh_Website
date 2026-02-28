@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ConditionalOverlays from '@/components/ConditionalOverlays';
+import Logo from '@/components/Logo';
 import { HomeSectionProvider } from '@/context/HomeSectionContext';
 import { UIOverlayProvider } from '@/context/UIOverlayContext';
 
@@ -39,6 +40,7 @@ export default function RootLayout({
         <ThemeScript />
         <HomeSectionProvider>
           <UIOverlayProvider>
+            <Logo />
             {children}
             <ConditionalOverlays />
           </UIOverlayProvider>

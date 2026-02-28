@@ -1,4 +1,3 @@
-import Navbar from '@/components/Navbar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,8 +8,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
-      <div className="pt-24 pb-16">
+      <div className="pt-16 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
