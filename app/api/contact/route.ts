@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
 
+const resend = new Resend(process.env.RESEND_API_KEY?.trim());
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = [
   'image/jpeg',
@@ -40,23 +42,43 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Log for debugging (remove in production or use proper storage)
-    console.log('Contact form submitted:', {
-      email,
-      queryLength: query.length,
-      hasAttachment: !!attachment?.size,
+    const contactEmail = process.env.CONTACT_EMAIL;
+    if (!contactEmail) {
+      console.error('CONTACT_EMAIL is not configured');
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+    }
+
+    const attachments: { filename: string; content: Buffer }[] = [];
+    if (attachment && attachment.size > 0) {
+      const buffer = Buffer.from(await attachment.arrayBuffer());
+      attachments.push({ filename: attachment.name, content: buffer });
+    }
+
+    // Use verified domain (e.g. contact@mindmesh.global) to send to any recipient.
+    // onboarding@resend.dev only allows sending to your Resend account email.
+    const fromAddress = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+    const { error: sendError } = await resend.emails.send({
+      from: fromAddress,
+      to: contactEmail,
+      replyTo: email,
+      subject: `Contact Form: ${email}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>From:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${query.replace(/\n/g, '<br>')}</p>
+      `,
+      attachments: attachments.length > 0 ? attachments : undefined,
     });
 
-    // TODO: Integrate email service (Resend, SendGrid, etc.)
-    // Example with Resend:
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    // await resend.emails.send({
-    //   from: 'contact@yoursite.com',
-    //   to: 'support@yoursite.com',
-    //   subject: `Contact: ${email}`,
-    //   html: `<p>${query}</p>`,
-    //   attachments: attachment ? [{ filename: attachment.name, content: await attachment.arrayBuffer() }] : [],
-    // });
+    if (sendError) {
+      const errMsg = sendError?.message || JSON.stringify(sendError);
+      console.error('Resend error:', errMsg);
+      return NextResponse.json(
+        { error: 'Failed to send email', details: errMsg },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ success: true, message: 'Message sent successfully' });
   } catch (error) {

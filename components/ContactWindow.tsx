@@ -106,7 +106,8 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to send. Please try again.');
+        const msg = data.details ? `${data.error}: ${data.details}` : (data.error || 'Failed to send. Please try again.');
+        throw new Error(msg);
       }
 
       setIsSuccess(true);
