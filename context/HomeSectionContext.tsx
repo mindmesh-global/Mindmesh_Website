@@ -40,7 +40,7 @@ export const HOME_SECTIONS = {
   },
   daily_narrative: {
     id: 'daily_narrative',
-    title: 'Daily Narrative',
+    title: "Yesterday's Narrative",
     summary: 'AI-written story of your day. Contains: emails, calendar & tasks woven into one narrative.',
     inferredFacts: [] as string[],
   },

@@ -8,27 +8,26 @@ import {
   Home, 
   FileText, 
   Mail, 
-  Settings, 
   BookOpen, 
-  MessageSquare,
   Download,
   Play,
   Calculator,
-  ShoppingBag,
-  Trash2,
 } from 'lucide-react';
 import MindMeshUI from './mindmeshui';
+import { useUIOverlay } from '@/context/UIOverlayContext';
 import FeaturesWindow from './FeaturesWindow';
-import DownloadWindow from './DownloadWindow';
 import DocsWindow from './DocsWindow';
-import WhyMindMeshWindow from './WhyMindMeshWindow';
+import SocialWindow from './SocialWindow';
+import PricingWindow from './PricingWindow';
+import ContactWindow from './ContactWindow';
+import WaitlistModal from './WaitlistModal';
 
 interface IconPosition {
   x: number;
   y: number;
 }
 
-type WindowType = 'home' | 'features' | 'download' | 'docs' | 'why';
+type WindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact';
 interface OpenWindowItem {
   id: string;
   type: WindowType;
@@ -40,11 +39,12 @@ const BASE_Z = 20;
 type DragConstraints = React.RefObject<HTMLElement | null>;
 
 const WINDOW_LABELS: Record<WindowType, string> = {
-  home: 'home.mdx',
-  features: 'features',
-  download: 'Download',
+  home: 'Mindmesh',
+  features: 'Features',
   docs: 'Docs',
-  why: 'Why MindMesh?',
+  social: 'Social',
+  subscription: 'Subscription',
+  contact: 'Contact Us',
 };
 
 function StackedWindow({
@@ -97,14 +97,17 @@ function StackedWindow({
         {item.type === 'features' && (
           <FeaturesWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
         )}
-        {item.type === 'download' && (
-          <DownloadWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
         {item.type === 'docs' && (
           <DocsWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
         )}
-        {item.type === 'why' && (
-          <WhyMindMeshWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        {item.type === 'social' && (
+          <SocialWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+        {item.type === 'subscription' && (
+          <PricingWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
+        {item.type === 'contact' && (
+          <ContactWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
         )}
       </div>
     </motion.div>
@@ -116,44 +119,41 @@ export const OPEN_WINDOW_EVENT = 'mindmesh-open-window';
 export default function Hero() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const uiOverlay = useUIOverlay();
 
   const leftIcons = [
-    { icon: Home, label: 'home.mdx', color: 'text-blue-400' },
-    { icon: Download, label: 'Sign up', color: 'text-teal-400' },
-    { icon: Calculator, label: 'Pricing', color: 'text-purple-400' },
-    { icon: FileText, label: 'features', color: 'text-green-400' },
-    { icon: Play, label: 'demo.mov', color: 'text-red-400' },
-    { icon: BookOpen, label: 'Docs', color: 'text-cyan-400' },
-    { icon: Mail, label: 'Talk to a human', color: 'text-orange-400' },
+    { icon: Home, label: 'Mindmesh', color: 'text-blue-400', labelColor: 'text-blue-800', logoSrc: '/images/Logo/mindmesh-logo-tight.png' },
+    { icon: Download, label: 'Join Waitlist', color: 'text-teal-400', labelColor: 'text-teal-800', iconSrc: '/images/join-waitlist-icon.png' },
+    { icon: Calculator, label: 'Subscription', color: 'text-purple-400', labelColor: 'text-purple-800', iconSrc: '/images/subscription-icon.png' },
+    { icon: FileText, label: 'Features', color: 'text-green-400', labelColor: 'text-green-800', iconSrc: '/images/features-icon.png' },
   ];
 
   const rightIcons = [
-    { icon: Sparkles, label: 'Why MindMesh?', color: 'text-teal-400' },
-    { icon: Download, label: 'Download', color: 'text-yellow-400' },
-    { icon: BookOpen, label: 'Company handbook', color: 'text-blue-400' },
-    { icon: Settings, label: 'Work here', color: 'text-purple-400' },
-    { icon: MessageSquare, label: 'Ask a question', color: 'text-pink-400' },
-    { icon: Trash2, label: 'Trash', color: 'text-green-400' },
+    { icon: Sparkles, label: 'Social', color: 'text-teal-400', labelColor: 'text-teal-800', iconSrc: '/images/social-icon.png' },
+    { icon: Play, label: 'Demo.mov', color: 'text-red-400', labelColor: 'text-red-800', iconSrc: '/images/demo-icon.png' },
+    { icon: BookOpen, label: 'Docs', color: 'text-cyan-400', labelColor: 'text-cyan-800', iconSrc: '/images/docs-icon.png' },
+    { icon: Mail, label: 'Contact Us', color: 'text-orange-400', labelColor: 'text-orange-800', iconSrc: '/images/contact-us-icon.png' },
   ];
 
   const allIcons = [...leftIcons, ...rightIcons];
 
   // Initialize positions - left icons on left, right icons on right
-  // Icons are arranged in perfect vertical columns with consistent spacing
+  // Icons arranged in vertical columns with balanced spacing
   const getInitialPosition = (index: number, isLeft: boolean): IconPosition => {
-    // Each icon takes: icon box (48px) + gap (8px) + text (~20px) = ~76px total
-    // Using 90px spacing for proper visual gap between icons
-    const iconSpacing = 90;
-    const startY = 96; // top-24 = 96px from top
-    const leftX = 32; // left-8 = 32px from left edge
+    const iconSpacing = 110; // Spacing for larger icons
+    const iconWidth = 96;
+    const sideMargin = 48; // More margin from screen edges
+    
+    // Vertically center the 4-icon column in viewport
+    const totalColumnHeight = 4 * iconSpacing;
+    const startY = typeof window !== 'undefined' 
+      ? Math.max(100, (window.innerHeight - totalColumnHeight) / 2)
+      : 120;
     
     if (isLeft) {
-      // All left icons perfectly aligned at x=32, evenly spaced vertically
-      return { x: leftX, y: startY + index * iconSpacing };
+      return { x: sideMargin, y: startY + index * iconSpacing };
     } else {
-      // All right icons perfectly aligned, evenly spaced vertically
-      // Icon container is 80px wide, so position at window width - 80px - 32px margin = window width - 112px
-      const rightX = typeof window !== 'undefined' ? window.innerWidth - 112 : 1200;
+      const rightX = typeof window !== 'undefined' ? window.innerWidth - iconWidth - sideMargin : 1200;
       const rightIndex = index - leftIcons.length;
       return { x: rightX, y: startY + rightIndex * iconSpacing };
     }
@@ -210,6 +210,14 @@ export default function Hero() {
     });
   };
 
+  // Update active window type for tooltip visibility (tooltips only when MindMesh 'home' is on top)
+  useEffect(() => {
+    if (!uiOverlay) return;
+    const visible = openWindows.filter((w) => !minimizedIds.has(w.id));
+    const top = visible[visible.length - 1];
+    uiOverlay.setActiveWindowType(top?.type ?? null);
+  }, [openWindows, minimizedIds, uiOverlay]);
+
   // Listen for open-window from Navbar (when on home) and handle ?open= URL param
   useEffect(() => {
     const handleOpen = (e: CustomEvent<WindowType>) => {
@@ -218,14 +226,6 @@ export default function Hero() {
     window.addEventListener(OPEN_WINDOW_EVENT, handleOpen as EventListener);
     return () => window.removeEventListener(OPEN_WINDOW_EVENT, handleOpen as EventListener);
   }, [openWindow]);
-
-  useEffect(() => {
-    const open = searchParams.get('open');
-    if (open === 'download') {
-      openWindow('download');
-      router.replace('/');
-    }
-  }, [searchParams, router, openWindow]);
 
   // Initialize icon positions after mount (when window is available)
   useEffect(() => {
@@ -258,13 +258,30 @@ export default function Hero() {
   }, []);
 
   const [dragOffsets, setDragOffsets] = useState<Record<string, { x: number; y: number }>>({});
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+
+  useEffect(() => {
+    const open = searchParams.get('open');
+    if (open === 'download') {
+      setIsWaitlistOpen(true);
+      router.replace('/');
+    } else if (open === 'subscription') {
+      openWindow('subscription');
+      router.replace('/');
+    } else if (open === 'contact') {
+      openWindow('contact');
+      router.replace('/');
+    }
+  }, [searchParams, router, openWindow]);
 
   const handleIconTap = (label: string) => {
-    if (label === 'home.mdx') openWindow('home');
-    if (label === 'features') openWindow('features');
-    if (label === 'Download') openWindow('download');
+    if (label === 'Mindmesh') openWindow('home');
+    if (label === 'Features') openWindow('features');
+    if (label === 'Join Waitlist') setIsWaitlistOpen(true);
+    if (label === 'Subscription') openWindow('subscription');
     if (label === 'Docs') openWindow('docs');
-    if (label === 'Why MindMesh?') openWindow('why');
+    if (label === 'Social') openWindow('social');
+    if (label === 'Contact Us') openWindow('contact');
   };
 
   const handleDragStart = (label: string) => {
@@ -282,11 +299,13 @@ export default function Hero() {
     const offset = dragOffsets[label] || { x: 0, y: 0 };
     const moved = Math.abs(offset.x) + Math.abs(offset.y);
     if (moved < 8) {
-      if (label === 'home.mdx') openWindow('home');
-      if (label === 'features') openWindow('features');
-      if (label === 'Download') openWindow('download');
+      if (label === 'Mindmesh') openWindow('home');
+      if (label === 'Features') openWindow('features');
+      if (label === 'Join Waitlist') setIsWaitlistOpen(true);
+      if (label === 'Subscription') openWindow('subscription');
       if (label === 'Docs') openWindow('docs');
-      if (label === 'Why MindMesh?') openWindow('why');
+      if (label === 'Social') openWindow('social');
+      if (label === 'Contact Us') openWindow('contact');
     }
     const currentPos = iconPositions[label];
     const newX = currentPos.x + offset.x;
@@ -347,17 +366,31 @@ export default function Hero() {
             }}
             transition={{ delay: 0.5 + index * 0.1, duration: 0.3 }}
             whileDrag={{ scale: 1.1, zIndex: 50 }}
-            className="absolute z-10 flex flex-col items-center gap-2 group pointer-events-auto"
+            className="absolute z-20 flex flex-col items-center gap-2 group pointer-events-auto"
             style={{
               left: position.x ? `${position.x + dragOffset.x}px` : '0px',
               top: position.y ? `${position.y + dragOffset.y}px` : '0px',
-              width: '80px', // Fixed width for consistent alignment
+              width: '96px', // Fixed width for consistent alignment
             }}
           >
-            <div className="w-12 h-12 rounded-lg bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center group-hover:bg-gray-700/50 transition-all duration-200 shadow-lg flex-shrink-0">
-              <item.icon className={`w-6 h-6 ${item.color}`} />
+            <div className={`rounded-lg flex items-center justify-center transition-all duration-200 shadow-lg flex-shrink-0 relative w-11 h-11 min-w-[44px] min-h-[44px] ${
+              ('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc)
+                ? 'bg-white border-2 border-gray-300 overflow-hidden'
+                : 'bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 group-hover:bg-gray-700/50 overflow-hidden'
+            }`}>
+              {('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc) ? (
+                <img
+                  src={((item as { logoSrc?: string; iconSrc?: string }).logoSrc ?? (item as { iconSrc?: string }).iconSrc) as string}
+                  alt={item.label}
+                  width={44}
+                  height={44}
+                  className="w-full h-full object-contain block min-w-[32px] min-h-[32px]"
+                />
+              ) : (
+                <item.icon className={`w-8 h-8 ${item.color}`} />
+              )}
             </div>
-            <span className="text-xs text-gray-300 group-hover:text-white transition-colors text-center max-w-[80px] whitespace-nowrap leading-tight">
+            <span className={`text-sm font-semibold group-hover:opacity-90 transition-colors text-center max-w-[96px] whitespace-nowrap leading-tight ${item.labelColor || 'text-slate-800'}`}>
               {item.label}
             </span>
           </motion.div>
@@ -421,6 +454,8 @@ export default function Hero() {
           />
         </motion.div>
       </motion.div>
+
+      <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
     </section>
   );
 }

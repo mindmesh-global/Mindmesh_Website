@@ -8,6 +8,7 @@ import { StaticDailyNarrativeCard } from '@/components/dashboard/StaticDailyNarr
 import { StaticWeatherCard } from '@/components/dashboard/StaticWeatherCard';
 import { StaticConnectedApps } from '@/components/dashboard/StaticConnectedApps';
 import { useHomeSection } from '@/context/HomeSectionContext';
+import { useUIOverlay } from '@/context/UIOverlayContext';
 import type { HomeSectionId } from '@/context/HomeSectionContext';
 
 const SECTION_IDS: HomeSectionId[] = [
@@ -23,7 +24,9 @@ const SECTION_IDS: HomeSectionId[] = [
 
 export default function DashboardPage() {
   const setActiveSection = useHomeSection()?.setActiveSection;
+  const uiOverlay = useUIOverlay();
   const containerRef = useRef<HTMLDivElement>(null);
+  const bottomSentinelRef = useRef<HTMLDivElement>(null);
   const timeClashRef = useRef<HTMLDivElement>(null);
   const inferredFactsRef = useRef<HTMLDivElement>(null);
   const todosRef = useRef<HTMLDivElement>(null);
@@ -91,6 +94,45 @@ export default function DashboardPage() {
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, [setActiveSection]);
 
+  // Track scroll-to-bottom for sensor bar tooltip (only show when user has scrolled to end)
+  useEffect(() => {
+    if (!uiOverlay?.setHasScrolledToBottom) return;
+    const scrollRoot = containerRef.current?.parentElement ?? null;
+    const sentinel = bottomSentinelRef.current;
+    const connectedAppsEl = connectedAppsRef.current;
+    if (!sentinel && !connectedAppsEl) return;
+
+    const checkAtBottom = () => {
+      if (scrollRoot) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRoot;
+        const atBottom = scrollHeight - scrollTop - clientHeight < 50;
+        if (atBottom) uiOverlay.setHasScrolledToBottom(true);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const anyVisible = entries.some((e) => e.isIntersecting && e.intersectionRatio > 0.02);
+        if (anyVisible) uiOverlay.setHasScrolledToBottom(true);
+        else if (scrollRoot) checkAtBottom();
+      },
+      { root: scrollRoot ?? null, rootMargin: '0px', threshold: [0, 0.02, 0.1, 0.5, 1] }
+    );
+
+    if (sentinel) observer.observe(sentinel);
+    if (connectedAppsEl) observer.observe(connectedAppsEl);
+
+    if (scrollRoot) {
+      scrollRoot.addEventListener('scroll', checkAtBottom, { passive: true });
+      checkAtBottom();
+    }
+
+    return () => {
+      observer.disconnect();
+      scrollRoot?.removeEventListener('scroll', checkAtBottom);
+    };
+  }, [uiOverlay]);
+
   return (
     <div ref={containerRef} className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -120,7 +162,7 @@ export default function DashboardPage() {
           <StaticInboxList />
         </div>
 
-        {/* Daily Narrative */}
+        {/* Yesterday's Narrative */}
         <div ref={dailyNarrativeRef} data-home-section="daily_narrative" className="mb-8">
           <StaticDailyNarrativeCard />
         </div>
@@ -129,6 +171,8 @@ export default function DashboardPage() {
         <div ref={connectedAppsRef} data-home-section="connected_apps" className="mb-8">
           <StaticConnectedApps />
         </div>
+        {/* Sentinel for scroll-to-bottom detection (sensor bar shows only when this is visible) */}
+        <div ref={bottomSentinelRef} className="h-4 w-full shrink-0" aria-hidden />
       </div>
     </div>
   );

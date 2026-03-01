@@ -98,7 +98,7 @@ export default function FeaturesWindow({ dragControls, onClose, onMinimize }: Fe
             />
           </div>
           <div className="flex-1 text-center">
-            <span className="text-sm text-gray-400 font-medium">features</span>
+            <span className="text-sm text-gray-400 font-medium">Features</span>
           </div>
         </div>
 

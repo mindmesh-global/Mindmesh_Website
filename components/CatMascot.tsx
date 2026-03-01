@@ -35,7 +35,7 @@ function getSectionIndex(section: HomeSectionId | null): number {
 }
 
 
-export default function CatMascot() {
+export default function CatMascot({ showTooltip = true }: { showTooltip?: boolean }) {
   const pathname = usePathname();
   const homeSection = useHomeSection();
   const activeSection = homeSection?.activeSection ?? null;
@@ -44,7 +44,7 @@ export default function CatMascot() {
   const [userDismissed, setUserDismissed] = useState(false);
   const isDashboard = pathname === '/dashboard';
   const displaySection = userDismissed ? null : (isDashboard && !activeSection ? SECTION_ORDER[0] : activeSection);
-  const activeInfo = displaySection && sectionConfig ? sectionConfig[displaySection] : null;
+  const activeInfo = showTooltip && displaySection && sectionConfig ? sectionConfig[displaySection] : null;
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number; cx: number; cy: number } | null>(null);
 
@@ -134,7 +134,7 @@ export default function CatMascot() {
       )}
 
       <div
-        className="fixed bottom-4 right-4 z-50 flex flex-col items-center pointer-events-none select-none"
+        className="fixed bottom-4 right-28 z-50 flex flex-col items-center pointer-events-none select-none"
         aria-hidden
       >
         <AnimatePresence mode="wait">

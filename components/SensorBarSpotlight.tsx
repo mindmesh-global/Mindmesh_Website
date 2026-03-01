@@ -1,48 +1,60 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { X, Sparkles } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 
 /**
  * A dummy sensor bar UI with a spotlight effect centered on the screen.
  * Mimics an IR sensor bar (e.g. Wii-style) with a soft spotlight emanating from the center.
+ * Tooltip connects to sensor bar via curved line (like CatMascot connects to dashboard).
  */
 export default function SensorBarSpotlight() {
   const [inputValue, setInputValue] = useState('');
-  const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
-  const [viewBox, setViewBox] = useState('0 0 1200 800');
+  const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number; cx: number; cy: number } | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const sensorBarRef = useRef<HTMLDivElement>(null);
   const uiOverlay = useUIOverlay();
 
-  useEffect(() => {
-    const updateLine = () => {
-      setViewBox(`0 0 ${window.innerWidth} ${window.innerHeight}`);
-      const tip = tooltipRef.current;
-      const bar = sensorBarRef.current;
-      if (!tip || !bar) return;
-      const tr = tip.getBoundingClientRect();
-      const br = bar.getBoundingClientRect();
-      setLineCoords({
-        x1: tr.right,
-        y1: tr.top + tr.height / 2,
-        x2: br.left,
-        y2: br.top + br.height / 2,
-      });
-    };
-    updateLine();
-    window.addEventListener('resize', updateLine);
-    const t = setTimeout(updateLine, 200);
-    return () => {
-      window.removeEventListener('resize', updateLine);
-      clearTimeout(t);
-    };
+  const updateLine = useCallback(() => {
+    const tip = tooltipRef.current;
+    const bar = sensorBarRef.current;
+    if (!tip || !bar) {
+      setLineCoords(null);
+      return;
+    }
+    const tr = tip.getBoundingClientRect();
+    const br = bar.getBoundingClientRect();
+    // Line from tooltip (right center) to sensor bar (left center)
+    const x1 = tr.right;
+    const y1 = tr.top + tr.height / 2;
+    const x2 = br.left;
+    const y2 = br.top + br.height / 2;
+    const cx = (x1 + x2) / 2 + 40;
+    const cy = (y1 + y2) / 2;
+    setLineCoords({ x1, y1, x2, y2, cx, cy });
   }, []);
 
+  useEffect(() => {
+    const run = () => requestAnimationFrame(updateLine);
+    const t1 = setTimeout(run, 300);
+    const t2 = setTimeout(run, 600); // After tooltip + sensor bar animations
+    window.addEventListener('resize', run);
+    window.addEventListener('scroll', run, true);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener('resize', run);
+      window.removeEventListener('scroll', run, true);
+    };
+  }, [updateLine]);
+
   const handleSkip = () => {
-    if (uiOverlay) uiOverlay.setShowSensorBar(false);
+    if (uiOverlay) {
+      uiOverlay.setHasScrolledToBottom(false);
+      uiOverlay.setShowSensorBar(false);
+    }
   };
 
   return (
@@ -50,25 +62,6 @@ export default function SensorBarSpotlight() {
       className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none"
       aria-hidden
     >
-      {/* Dark overlay with radial spotlight cutout - pointer-events-none so clicks pass through */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(
-              ellipse 120% 80% at 50% 50%,
-              transparent 0%,
-              transparent 40%,
-              rgba(0, 0, 0, 0.15) 60%,
-              rgba(0, 0, 0, 0.4) 100%
-            )
-          `,
-        }}
-      />
-
-      {/* Inner brighter spotlight core */}
-      <div className="absolute inset-0 pointer-events-none" />
-
       {/* Sensor bar with tooltip */}
       <div className="relative flex flex-col items-center gap-4 pointer-events-none overflow-visible">
         <motion.div
@@ -76,6 +69,7 @@ export default function SensorBarSpotlight() {
           initial={{ x: '-100vw', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          onAnimationComplete={updateLine}
           className="relative flex items-center gap-3 rounded-full bg-gray-600 border pl-4 pr-6 py-3 shadow-lg pointer-events-auto z-10"
         >
           <input
@@ -96,29 +90,19 @@ export default function SensorBarSpotlight() {
           ))}
         </motion.div>
 
-        {/* Connector line - from tooltip to sensor bar (dynamic) */}
+        {/* Connector line - tooltip to sensor bar (curved, like CatMascot) */}
         {lineCoords && (
           <svg
-            className="fixed inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 1 }}
-            preserveAspectRatio="none"
-            viewBox={viewBox}
+            className="fixed inset-0 w-full h-full pointer-events-none z-[35]"
+            style={{ width: '100vw', height: '100vh' }}
             aria-hidden
           >
-            <defs>
-              <marker id="sensor-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
-              </marker>
-            </defs>
-            <line
-              x1={lineCoords.x1}
-              y1={lineCoords.y1}
-              x2={lineCoords.x2}
-              y2={lineCoords.y2}
-              stroke="#3b82f6"
-              strokeWidth="2.5"
+            <path
+              d={`M ${lineCoords.x1} ${lineCoords.y1} Q ${lineCoords.cx} ${lineCoords.cy} ${lineCoords.x2} ${lineCoords.y2}`}
+              fill="none"
+              stroke="rgba(0,0,0,0.25)"
+              strokeWidth="2"
               strokeLinecap="round"
-              markerEnd="url(#sensor-arrowhead)"
             />
           </svg>
         )}

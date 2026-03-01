@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { User, Mail, Check } from 'lucide-react';
 
 type ModalState = 'form' | 'loading' | 'success';
@@ -12,6 +13,8 @@ interface WaitlistModalProps {
 }
 
 export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
+  const dragControls = useDragControls();
+  const containerRef = useRef<HTMLDivElement>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -58,53 +61,54 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     onClose();
   }, [onClose]);
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) handleClose();
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') handleClose();
-  };
-
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+    if (!isOpen) return;
+    const onEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+    document.addEventListener('keydown', onEscape);
+    return () => document.removeEventListener('keydown', onEscape);
+  }, [isOpen, handleClose]);
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={containerRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          onKeyDown={handleKeyDown}
-        >
-          {/* Backdrop blur overlay */}
+          className="fixed inset-0 flex items-center justify-start pl-6 sm:pl-36 pt-0 pb-36 pointer-events-none"
+          style={{ zIndex: 2147483647 }}
+          >
+          {/* Backdrop blur overlay - no close on click, only close button closes */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 bg-slate-900/50 backdrop-blur-md"
-            onClick={handleOverlayClick}
           />
 
-          {/* Mac-style window */}
+          {/* Mac-style draggable window */}
           <motion.div
+            drag
+            dragControls={dragControls}
+            dragListener={false}
+            dragElastic={0}
+            dragConstraints={containerRef}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-md bg-white rounded-xl overflow-hidden shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.12),0_24px_48px_rgba(0,0,0,0.08)]"
+            whileDrag={{ cursor: 'grabbing' }}
+            className="relative w-full max-w-md bg-white rounded-xl overflow-hidden border border-slate-200/90 shadow-[0_8px_24px_rgba(0,0,0,0.12),0_24px_48px_rgba(0,0,0,0.08)] cursor-default pointer-events-auto"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Mac title bar - dark like Navbar / home */}
-            <div className="bg-gray-900 border-b border-gray-800 px-5 py-3.5 flex items-center gap-3 select-none">
+            {/* Mac title bar - draggable handle */}
+            <div
+              onPointerDown={(e) => { if ((e.target as HTMLElement).closest('button')) return; dragControls.start(e); }}
+              style={{ touchAction: 'none' }}
+              className="bg-gray-900 border-b border-gray-800 px-5 py-3.5 flex items-center gap-3 select-none cursor-grab active:cursor-grabbing"
+            >
               <button
                 type="button"
                 onClick={handleClose}
@@ -329,4 +333,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === 'undefined') return null;
+  return createPortal(modalContent, document.body);
 }

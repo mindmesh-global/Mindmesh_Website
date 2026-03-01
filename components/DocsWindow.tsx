@@ -1,7 +1,8 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { FileText, Shield, Scale } from 'lucide-react';
+import { FileText, ChevronDown, ChevronRight, Shield, Scale, HelpCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -11,11 +12,91 @@ interface DocsWindowProps {
   onMinimize?: () => void;
 }
 
-type DocId = 'privacy' | 'terms';
+type DocId = 'faq' | 'privacy' | 'terms';
 
 const docItems: { id: DocId; label: string; icon: typeof Shield }[] = [
+  { id: 'faq', label: 'FAQ', icon: HelpCircle },
   { id: 'privacy', label: 'Privacy Policy', icon: Shield },
   { id: 'terms', label: 'Terms and Conditions', icon: Scale },
+];
+
+const accordionItems: { title: string; content: React.ReactNode }[] = [
+  {
+    title: 'What does Mindmesh do?',
+    content: (
+      <>
+        <p className="mb-3">Mindmesh is a cognitive OS layer that works on top of your email, calendar, and other apps. It:</p>
+        <ul className="list-disc pl-5 space-y-1.5">
+          <li>Fetches emails from Gmail & Outlook</li>
+          <li>Fetches events from Google Calendar & Outlook Calendar</li>
+          <li>Uses AI enrichment to understand emails and events (TODOs, inferred facts, summaries)</li>
+          <li>Stores your email and calendar info in AI memory</li>
+          <li>Lets you search your emails and events in natural language via semantic search</li>
+          <li>Gives you a daily summary with Today&apos;s Overview</li>
+          <li>Shows Daily Narrative—&quot;what mattered yesterday&quot;</li>
+          <li>Lets you ask questions in natural language through the Mascot & Sensor Bar AI assistant</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    title: 'What problem does Mindmesh solve?',
+    content: (
+      <>
+        <p className="font-medium text-gray-800 mb-1">Problem:</p>
+        <p className="mb-2">People use 50+ apps (Gmail, Outlook, Slack, Calendar, Notion, Jira, etc.), which leads to:</p>
+        <ul className="list-disc pl-5 space-y-1 mb-4">
+          <li>Information scattered across many tools</li>
+          <li>Too many notifications</li>
+          <li>No single memory of what actually mattered</li>
+          <li>Important things slipping through the cracks</li>
+          <li>Mental overload and constant context switching</li>
+        </ul>
+        <p className="font-medium text-gray-800 mb-1">Mindmesh solution: One layer that</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Shows data from multiple apps in one place</li>
+          <li>Remembers what actually matters</li>
+          <li>Suggests what you need to do next</li>
+          <li>Creates a continuous narrative of your life and work</li>
+          <li>Lets you ask questions and get answers through the AI assistant</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    title: 'Who is Mindmesh for?',
+    content: (
+      <>
+        <ul className="list-disc pl-5 space-y-1 mb-3">
+          <li><strong>Busy professionals</strong>—who use multiple email accounts, calendars, and tools</li>
+          <li><strong>Knowledge workers</strong>—who manage emails, meetings, and tasks</li>
+          <li><strong>Remote workers</strong>—who want all important info in one place</li>
+        </ul>
+        <p className="mb-1">Anyone who wants to:</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Not miss important emails and events</li>
+          <li>Get a daily summary and &quot;what mattered yesterday&quot;</li>
+          <li>Search email and calendar in natural language</li>
+          <li>Ask the AI assistant questions like &quot;What do I need to do now?&quot; or &quot;Prepare me for my next meeting&quot;</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    title: 'How is Mindmesh different from email clients?',
+    content:
+      'Mindmesh is not an email client. It\'s a cognitive layer that treats apps like Gmail and Calendar as data sources, surfaces only what matters (10–20 attention objects instead of hundreds of items), and gives you narratives instead of raw logs. The AI assistant is the main interface—you talk to your digital life instead of browsing folders and lists.',
+  },
+  {
+    title: 'What are Mascot and Sensor Bar?',
+    content:
+      'Mascot is a chat-style AI assistant and Sensor Bar is a command palette. Both let you ask questions in natural language, such as "What do I need to do now?", "Summarize today", or "Prepare me for my next meeting." They use Mindmesh\'s memory and attention engine to give context-aware answers.',
+  },
+  {
+    title: 'What is Today\'s Overview',
+    content:
+      'Today\'s Overview is your daily AI summary. It aggregates emails and calendar events from Gmail, Outlook, and calendars, and surfaces inferred facts, TODOs, time clashes, and a concise overview so you can start your day with clarity instead of digging through inboxes.',
+  },
 ];
 
 const privacyPolicyContent = (
@@ -75,7 +156,8 @@ const termsContent = (
 export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [activeDoc, setActiveDoc] = useState<DocId | null>(null);
+  const [activeDoc, setActiveDoc] = useState<DocId>('faq');
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
   const handleClose = () => {
     onClose?.();
@@ -101,8 +183,6 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
-
-  const content = activeDoc === 'privacy' ? privacyPolicyContent : activeDoc === 'terms' ? termsContent : null;
 
   return (
     <div className="w-full min-h-0 flex-1 flex flex-col">
@@ -149,7 +229,7 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
           <nav className="w-52 flex-shrink-0 bg-gray-800/50 border-r border-gray-700/50 p-3 flex flex-col gap-1">
             <div className="flex items-center gap-2 px-2 py-1.5 text-gray-400 text-xs font-medium uppercase tracking-wider">
               <FileText className="w-3.5 h-3.5" />
-              Legal
+              Documents
             </div>
             {docItems.map((item) => {
               const Icon = item.icon;
@@ -172,15 +252,61 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
           </nav>
           {/* Document body */}
           <div className="flex-1 min-h-0 overflow-y-auto bg-white">
-            {content ? (
-              <div className="max-w-3xl mx-auto px-6 py-8">
-                {content}
+            {activeDoc === 'faq' && (
+              <div className="max-w-2xl mx-auto px-6 py-8">
+                <div className="flex items-center gap-2 mb-6">
+                  <HelpCircle className="w-5 h-5 text-cyan-600" />
+                  <h2 className="text-lg font-semibold text-gray-900">Mindmesh FAQ</h2>
+                </div>
+                <div className="space-y-2">
+                  {accordionItems.map((item, index) => {
+                    const isExpanded = expandedIndex === index;
+                    return (
+                      <div
+                        key={index}
+                        className="border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition-colors"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setExpandedIndex(isExpanded ? null : index)}
+                          className="w-full flex items-center justify-between gap-4 px-4 py-3.5 text-left bg-gray-50 hover:bg-gray-100 transition-colors"
+                        >
+                          <span className="font-medium text-gray-900">{item.title}</span>
+                          {isExpanded ? (
+                            <ChevronDown className="w-5 h-5 shrink-0 text-gray-500" />
+                          ) : (
+                            <ChevronRight className="w-5 h-5 shrink-0 text-gray-500" />
+                          )}
+                        </button>
+                        <AnimatePresence initial={false}>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="px-4 py-3 border-t border-gray-200 bg-white text-gray-600 text-sm leading-relaxed">
+                                {item.content}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400 px-6">
-                <FileText className="w-12 h-12 mb-4 opacity-50" />
-                <p className="text-sm font-medium">Select a document</p>
-                <p className="text-xs mt-1">Choose Privacy Policy or Terms and Conditions from the sidebar</p>
+            )}
+            {activeDoc === 'privacy' && (
+              <div className="max-w-3xl mx-auto px-6 py-8">
+                {privacyPolicyContent}
+              </div>
+            )}
+            {activeDoc === 'terms' && (
+              <div className="max-w-3xl mx-auto px-6 py-8">
+                {termsContent}
               </div>
             )}
           </div>

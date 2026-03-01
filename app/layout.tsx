@@ -18,7 +18,7 @@ function ThemeScript() {
 }
 
 export const metadata: Metadata = {
-  title: 'MindMesh - Your AI-Powered Productivity Assistant',
+  title: 'MindMesh - Your AI-Powered Assistant',
   description: 'A local-first, AI-powered productivity assistant that helps you manage your emails, calendar, and tasks seamlessly.',
   keywords: ['productivity', 'AI assistant', 'email management', 'calendar', 'desktop app'],
   authors: [{ name: 'MindMesh Team' }],

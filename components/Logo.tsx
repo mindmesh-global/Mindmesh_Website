@@ -22,7 +22,7 @@ export default function Logo() {
         height={128}
         className="object-contain"
       />
-      <span className="text-3xl font-semibold group-hover:opacity-80 transition-opacity -mt-2 -ml-9 text-blue-500">
+      <span className="text-3xl font-semibold group-hover:opacity-80 transition-opacity -mt-2 -ml-9 text-blue-700">
         Mindmesh
       </span>
     </Link>

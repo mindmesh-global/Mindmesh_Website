@@ -1,17 +1,23 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import DownloadSection from './DownloadSection';
+import { Twitter, Linkedin, Github } from 'lucide-react';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
-interface DownloadWindowProps {
+interface SocialWindowProps {
   dragControls?: DragControls;
   onClose?: () => void;
   onMinimize?: () => void;
 }
 
-export default function DownloadWindow({ dragControls, onClose, onMinimize }: DownloadWindowProps) {
+const SOCIAL_LINKS = [
+  { icon: Twitter, label: 'Twitter / X', href: 'https://twitter.com', color: 'hover:text-sky-400' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com', color: 'hover:text-blue-500' },
+  { icon: Github, label: 'GitHub', href: 'https://github.com', color: 'hover:text-gray-300' },
+];
+
+export default function SocialWindow({ dragControls, onClose, onMinimize }: SocialWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -75,13 +81,27 @@ export default function DownloadWindow({ dragControls, onClose, onMinimize }: Do
             />
           </div>
           <div className="flex-1 text-center">
-            <span className="text-sm text-gray-400 font-medium">Download</span>
+            <span className="text-sm text-gray-400 font-medium">Social</span>
           </div>
         </div>
 
-        {/* Content - Download section */}
-        <div className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
-          <DownloadSection showTitle={false} embedded />
+        {/* Content - Social links */}
+        <div className={`flex-1 min-h-0 overflow-y-auto p-8 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+          <div className="max-w-md mx-auto flex flex-col gap-4">
+            <h1 className="text-2xl font-semibold text-white text-center mb-4">Connect with us</h1>
+            {SOCIAL_LINKS.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-4 p-4 rounded-lg bg-gray-800/60 border border-gray-700/50 text-gray-300 transition-colors ${item.color}`}
+              >
+                <item.icon className="w-8 h-8" />
+                <span className="text-lg font-medium">{item.label}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
