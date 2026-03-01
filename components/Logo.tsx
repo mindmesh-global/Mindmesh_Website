@@ -16,7 +16,7 @@ export default function Logo() {
       }`}
     >
       <Image
-        src="/images/Logo/mindmesh logo.png"
+        src="/images/Logo/mindmesh-logo.png"
         alt="Mindmesh"
         width={128}
         height={128}
