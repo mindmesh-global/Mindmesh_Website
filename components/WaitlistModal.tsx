@@ -20,6 +20,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [emailError, setEmailError] = useState('');
   const [state, setState] = useState<ModalState>('form');
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validateEmail = (value: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,9 +28,10 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   };
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
       const trimmedEmail = email.trim();
+      const trimmedName = name.trim();
 
       if (!trimmedEmail) {
         setEmailError('Email is required');
@@ -42,14 +44,27 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       }
 
       setEmailError('');
+      setSubmitError(null);
       setState('loading');
 
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: trimmedEmail, name: trimmedName }),
+        });
+        const data = await res.json().catch(() => ({}));
 
-      setTimeout(() => {
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to join waitlist');
+        }
         setState('success');
-      }, 1500);
+      } catch (err) {
+        setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+        setState('form');
+      }
     },
-    [email]
+    [email, name]
   );
 
   const handleClose = useCallback(() => {
@@ -57,6 +72,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setName('');
     setEmail('');
     setEmailError('');
+    setSubmitError(null);
     setFocusedInput(null);
     onClose();
   }, [onClose]);
@@ -135,6 +151,11 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       Be among the first to experience the future of productivity.
                     </p>
 
+                    {submitError && (
+                      <p className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200">
+                        {submitError}
+                      </p>
+                    )}
                     <form onSubmit={handleSubmit} className="mt-6 space-y-5">
                       {/* Name input - optional */}
                       <div>
