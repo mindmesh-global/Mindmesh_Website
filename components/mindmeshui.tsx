@@ -95,7 +95,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
           title="Restore window"
         >
           <div className="w-4 h-4 rounded bg-gray-600"></div>
-          <span className="text-sm text-gray-300">Mindmesh</span>
+          <span className="text-sm text-gray-300">MindMesh</span>
         </button>
       </div>
     );
@@ -139,7 +139,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
           </div>
           {/* Title + Overlay dropdown */}
           <div className="flex-1 flex items-center justify-center gap-1">
-            <span className="text-sm text-gray-400 font-medium">Mindmesh</span>
+            <span className="text-sm text-gray-400 font-medium">MindMesh</span>
             {uiOverlay && (
               <div className="relative" ref={overlayRef}>
                 <button

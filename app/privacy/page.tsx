@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Mindmesh',
-  description: 'Privacy Policy for Mindmesh - Your Cognitive OS Layer and Productivity Assistant',
+  title: 'Privacy Policy - MindMesh',
+  description: 'Privacy Policy for MindMesh - Your Cognitive OS Layer and Productivity Assistant',
 };
 
 export default function PrivacyPage() {
@@ -17,7 +17,7 @@ export default function PrivacyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Introduction</h2>
               <p className="text-gray-700 mb-4">
-                Welcome to Mindmesh. This Privacy Policy explains how we collect, use, and protect your information when you use our desktop application and related services.
+                Welcome to MindMesh. This Privacy Policy explains how we collect, use, and protect your information when you use our desktop application and related services.
               </p>
             </section>
 
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">3. How We Store Your Information</h2>
               <p className="text-gray-700 mb-4">
-                Mindmesh follows a <strong>local-first architecture</strong>. Most of your data is stored locally on your device, including emails, calendar events, and vector embeddings for search. This data stays on your device and is not transmitted to our servers.
+                MindMesh follows a <strong>local-first architecture</strong>. Most of your data is stored locally on your device, including emails, calendar events, and vector embeddings for search. This data stays on your device and is not transmitted to our servers.
               </p>
               <p className="text-gray-700 mb-4">
                 We maintain minimal cloud storage for account authentication, OAuth tokens, and session data. We do not permanently store the full content of your emails or calendar events in our cloud infrastructure.
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
                 You can access, update, or delete your account information at any time through the Service settings. You can disconnect third-party services at any time, which will revoke our access to those services.
               </p>
               <p className="text-gray-700 mb-4">
-                To delete all local data, uninstall the Mindmesh application from your device. This will remove all locally stored content.
+                To delete all local data, uninstall the MindMesh application from your device. This will remove all locally stored content.
               </p>
             </section>
 

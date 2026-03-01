@@ -134,7 +134,7 @@ export default function DashboardPage() {
   }, [uiOverlay]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-slate-100">
+    <div ref={containerRef} className="min-h-screen bg-gray-200 dark:bg-slate-800 text-gray-900 dark:text-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 flex items-start justify-between gap-4">

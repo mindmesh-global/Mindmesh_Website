@@ -136,3 +136,21 @@ html, body {
   animation-delay: 4s;
 }
 
+/* Mascot Chatbot */
+.mascot-root {
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+.mascot-chatbox {
+  background: white !important;
+  backdrop-filter: blur(12px) !important;
+  max-width: 1000px !important;
+  width: min(1000px, calc(100vw - 2rem)) !important;
+}
+
+.mascot-chatbox [data-mascot-scroll] {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+

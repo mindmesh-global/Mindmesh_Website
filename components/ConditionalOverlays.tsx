@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import CatMascot from '@/components/CatMascot';
+import MascotChatbot from '@/components/MascotChatbot';
 import SensorBarSpotlight from '@/components/SensorBarSpotlight';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 
@@ -41,7 +41,7 @@ export default function ConditionalOverlays() {
   return (
     <>
       {showSensorBarTooltip && <SensorBarSpotlight />}
-      {showMascot && <CatMascot showTooltip={showTooltips} />}
+      {showMascot && <MascotChatbot showTooltip={showTooltips} />}
     </>
   );
 }

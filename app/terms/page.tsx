@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - Mindmesh',
-  description: 'Terms of Service for Mindmesh - Your Cognitive OS Layer and Productivity Assistant',
+  title: 'Terms of Service - MindMesh',
+  description: 'Terms of Service for MindMesh - Your Cognitive OS Layer and Productivity Assistant',
 };
 
 export default function TermsPage() {
@@ -17,14 +17,14 @@ export default function TermsPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Agreement to Terms</h2>
               <p className="text-gray-700 mb-4">
-                By accessing or using Mindmesh, you agree to be bound by these Terms of Service. If you disagree with any part of these Terms, you may not access or use the Service.
+                By accessing or using MindMesh, you agree to be bound by these Terms of Service. If you disagree with any part of these Terms, you may not access or use the Service.
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Description of Service</h2>
               <p className="text-gray-700 mb-4">
-                Mindmesh is a cognitive OS layer and productivity assistant that integrates with your email and calendar services, processes your communications using AI, and provides semantic search capabilities. Data is stored locally on your device with cloud backup for authentication.
+                MindMesh is a cognitive OS layer and productivity assistant that integrates with your email and calendar services, processes your communications using AI, and provides semantic search capabilities. Data is stored locally on your device with cloud backup for authentication.
               </p>
             </section>
 
@@ -59,7 +59,7 @@ export default function TermsPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">7. Intellectual Property</h2>
               <p className="text-gray-700 mb-4">
-                The Service and its content are owned by Mindmesh and protected by intellectual property laws. You retain ownership of your content but grant us a license to access, process, and store it as necessary to provide the Service, including sharing with third-party AI services.
+                The Service and its content are owned by MindMesh and protected by intellectual property laws. You retain ownership of your content but grant us a license to access, process, and store it as necessary to provide the Service, including sharing with third-party AI services.
               </p>
             </section>
 

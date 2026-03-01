@@ -22,10 +22,10 @@ const docItems: { id: DocId; label: string; icon: typeof Shield }[] = [
 
 const accordionItems: { title: string; content: React.ReactNode }[] = [
   {
-    title: 'What does Mindmesh do?',
+    title: 'What does MindMesh do?',
     content: (
       <>
-        <p className="mb-3">Mindmesh is a cognitive OS layer that works on top of your email, calendar, and other apps. It:</p>
+        <p className="mb-3">MindMesh is a cognitive OS layer that works on top of your email, calendar, and other apps. It:</p>
         <ul className="list-disc pl-5 space-y-1.5">
           <li>Fetches emails from Gmail & Outlook</li>
           <li>Fetches events from Google Calendar & Outlook Calendar</li>
@@ -40,7 +40,7 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
     ),
   },
   {
-    title: 'What problem does Mindmesh solve?',
+    title: 'What problem does MindMesh solve?',
     content: (
       <>
         <p className="font-medium text-gray-800 mb-1">Problem:</p>
@@ -52,7 +52,7 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
           <li>Important things slipping through the cracks</li>
           <li>Mental overload and constant context switching</li>
         </ul>
-        <p className="font-medium text-gray-800 mb-1">Mindmesh solution: One layer that</p>
+        <p className="font-medium text-gray-800 mb-1">MindMesh solution: One layer that</p>
         <ul className="list-disc pl-5 space-y-1">
           <li>Shows data from multiple apps in one place</li>
           <li>Remembers what actually matters</li>
@@ -64,7 +64,7 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
     ),
   },
   {
-    title: 'Who is Mindmesh for?',
+    title: 'Who is MindMesh for?',
     content: (
       <>
         <ul className="list-disc pl-5 space-y-1 mb-3">
@@ -83,14 +83,14 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
     ),
   },
   {
-    title: 'How is Mindmesh different from email clients?',
+    title: 'How is MindMesh different from email clients?',
     content:
-      'Mindmesh is not an email client. It\'s a cognitive layer that treats apps like Gmail and Calendar as data sources, surfaces only what matters (10–20 attention objects instead of hundreds of items), and gives you narratives instead of raw logs. The AI assistant is the main interface—you talk to your digital life instead of browsing folders and lists.',
+      'MindMesh is not an email client. It\'s a cognitive layer that treats apps like Gmail and Calendar as data sources, surfaces only what matters (10–20 attention objects instead of hundreds of items), and gives you narratives instead of raw logs. The AI assistant is the main interface—you talk to your digital life instead of browsing folders and lists.',
   },
   {
     title: 'What are Mascot and Sensor Bar?',
     content:
-      'Mascot is a chat-style AI assistant and Sensor Bar is a command palette. Both let you ask questions in natural language, such as "What do I need to do now?", "Summarize today", or "Prepare me for my next meeting." They use Mindmesh\'s memory and attention engine to give context-aware answers.',
+      'Mascot is a chat-style AI assistant and Sensor Bar is a command palette. Both let you ask questions in natural language, such as "What do I need to do now?", "Summarize today", or "Prepare me for my next meeting." They use MindMesh\'s memory and attention engine to give context-aware answers.',
   },
   {
     title: 'What is Today\'s Overview',
@@ -226,8 +226,8 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
         {/* Content */}
         <div className={`flex-1 min-h-0 flex overflow-hidden ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           {/* Sidebar */}
-          <nav className="w-52 flex-shrink-0 bg-gray-800/50 border-r border-gray-700/50 p-3 flex flex-col gap-1">
-            <div className="flex items-center gap-2 px-2 py-1.5 text-gray-400 text-xs font-medium uppercase tracking-wider">
+          <nav className="w-52 flex-shrink-0 bg-gray-800/80 border-r border-gray-700/50 p-3 flex flex-col gap-1">
+            <div className="flex items-center gap-2 px-2 py-1.5 text-gray-200 text-xs font-medium uppercase tracking-wider">
               <FileText className="w-3.5 h-3.5" />
               Documents
             </div>
@@ -240,8 +240,8 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
                   onClick={() => setActiveDoc(item.id)}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                      : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-200 border border-transparent'
+                      ? 'bg-cyan-500/30 text-white border border-cyan-400/50'
+                      : 'text-gray-300 hover:bg-gray-700/50 hover:text-white border border-transparent'
                   }`}
                 >
                   <Icon className="w-4 h-4 shrink-0" />
@@ -256,7 +256,7 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
               <div className="max-w-2xl mx-auto px-6 py-8">
                 <div className="flex items-center gap-2 mb-6">
                   <HelpCircle className="w-5 h-5 text-cyan-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">Mindmesh FAQ</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">MindMesh FAQ</h2>
                 </div>
                 <div className="space-y-2">
                   {accordionItems.map((item, index) => {

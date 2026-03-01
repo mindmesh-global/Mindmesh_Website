@@ -39,7 +39,7 @@ const BASE_Z = 20;
 type DragConstraints = React.RefObject<HTMLElement | null>;
 
 const WINDOW_LABELS: Record<WindowType, string> = {
-  home: 'Mindmesh',
+  home: 'MindMesh',
   features: 'Features',
   docs: 'Docs',
   social: 'Social',
@@ -122,7 +122,7 @@ export default function Hero() {
   const uiOverlay = useUIOverlay();
 
   const leftIcons = [
-    { icon: Home, label: 'Mindmesh', color: 'text-blue-400', labelColor: 'text-blue-800', logoSrc: '/images/Logo/mindmesh-logo-tight.png' },
+    { icon: Home, label: 'MindMesh', color: 'text-blue-400', labelColor: 'text-blue-800', logoSrc: '/images/Logo/mindmesh-logo-tight.png' },
     { icon: Download, label: 'Join Waitlist', color: 'text-teal-400', labelColor: 'text-teal-800', iconSrc: '/images/join-waitlist-icon.png' },
     { icon: Calculator, label: 'Subscription', color: 'text-purple-400', labelColor: 'text-purple-800', iconSrc: '/images/subscription-icon.png' },
     { icon: FileText, label: 'Features', color: 'text-green-400', labelColor: 'text-green-800', iconSrc: '/images/features-icon.png' },
@@ -275,7 +275,7 @@ export default function Hero() {
   }, [searchParams, router, openWindow]);
 
   const handleIconTap = (label: string) => {
-    if (label === 'Mindmesh') openWindow('home');
+    if (label === 'MindMesh') openWindow('home');
     if (label === 'Features') openWindow('features');
     if (label === 'Join Waitlist') setIsWaitlistOpen(true);
     if (label === 'Subscription') openWindow('subscription');
@@ -299,7 +299,7 @@ export default function Hero() {
     const offset = dragOffsets[label] || { x: 0, y: 0 };
     const moved = Math.abs(offset.x) + Math.abs(offset.y);
     if (moved < 8) {
-      if (label === 'Mindmesh') openWindow('home');
+      if (label === 'MindMesh') openWindow('home');
       if (label === 'Features') openWindow('features');
       if (label === 'Join Waitlist') setIsWaitlistOpen(true);
       if (label === 'Subscription') openWindow('subscription');
@@ -375,7 +375,7 @@ export default function Hero() {
           >
             <div className={`rounded-lg flex items-center justify-center transition-all duration-200 shadow-lg flex-shrink-0 relative w-11 h-11 min-w-[44px] min-h-[44px] ${
               ('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc)
-                ? 'bg-white border-2 border-gray-300 overflow-hidden'
+                ? 'bg-white border-2 border-gray-300 overflow-hidden' + (item.label === 'Social' ? ' ring-2 ring-teal-400/60 ring-offset-1 ring-offset-transparent' : '')
                 : 'bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 group-hover:bg-gray-700/50 overflow-hidden'
             }`}>
               {('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc) ? (
@@ -384,7 +384,7 @@ export default function Hero() {
                   alt={item.label}
                   width={44}
                   height={44}
-                  className="w-full h-full object-contain block min-w-[32px] min-h-[32px]"
+                  className={`w-full h-full block min-w-[32px] min-h-[32px] ${item.label === 'Social' ? 'object-cover' : 'object-contain'}`}
                 />
               ) : (
                 <item.icon className={`w-8 h-8 ${item.color}`} />

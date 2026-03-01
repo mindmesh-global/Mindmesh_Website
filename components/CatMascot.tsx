@@ -255,7 +255,10 @@ export default function CatMascot({ showTooltip = true }: { showTooltip?: boolea
           )}
         </AnimatePresence>
 
-        <div className="w-[120px] h-[120px] flex-shrink-0">
+        <div
+          className="flex-shrink-0"
+          style={{ width: 400, height: 220 }}
+        >
           <DotLottieReact
             src={LOTTIE_CAT_URL}
             loop

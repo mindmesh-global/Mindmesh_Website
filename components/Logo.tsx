@@ -17,13 +17,13 @@ export default function Logo() {
     >
       <Image
         src="/images/Logo/mindmesh-logo.png"
-        alt="Mindmesh"
+        alt="MindMesh"
         width={128}
         height={128}
         className="object-contain"
       />
       <span className="text-3xl font-semibold group-hover:opacity-80 transition-opacity -mt-2 -ml-9 text-blue-700">
-        Mindmesh
+        MindMesh
       </span>
     </Link>
   );
