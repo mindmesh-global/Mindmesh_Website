@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import MascotChatbot from '@/components/MascotChatbot';
 import SensorBarSpotlight from '@/components/SensorBarSpotlight';
+import IntroGreetingTooltip from '@/components/IntroGreetingTooltip';
 import { useUIOverlay } from '@/context/UIOverlayContext';
+import { useOnboardingTour } from '@/context/OnboardingTourContext';
 
 const MINDMESH_PAGES = ['/', '/dashboard'];
 
 export default function ConditionalOverlays() {
   const overlay = useUIOverlay();
+  const onboarding = useOnboardingTour();
   const pathname = usePathname();
   const [isTabVisible, setIsTabVisible] = useState(true);
 
@@ -28,20 +31,22 @@ export default function ConditionalOverlays() {
     }
   }, [pathname, overlay]);
 
-  if (!overlay) return null;
-  const { showMascot, showSensorBar, activeWindowType, hasScrolledToBottom } = overlay;
+  if (!overlay || !onboarding) return null;
+  const { showMascot, showSensorBar, activeWindowType } = overlay;
 
   const isMindmeshPage = pathname && MINDMESH_PAGES.includes(pathname);
   const isMindmeshWindowOnTop = pathname !== '/' || activeWindowType === 'home';
   const showTooltips = Boolean(isMindmeshPage && isTabVisible && isMindmeshWindowOnTop);
-  const showSensorBarTooltip = Boolean(showSensorBar && showTooltips && hasScrolledToBottom);
+  const showMascotTooltip = showTooltips && onboarding.introCompleted && !onboarding.mascotTourCompleted;
+  const showSensorBarTooltip = Boolean(showSensorBar && showTooltips && onboarding.mascotTourCompleted && !onboarding.sensorBarCompleted);
 
   if (!isMindmeshPage) return null;
 
   return (
     <>
+      {pathname === '/' && <IntroGreetingTooltip />}
       {showSensorBarTooltip && <SensorBarSpotlight />}
-      {showMascot && <MascotChatbot showTooltip={showTooltips} />}
+      {showMascot && <MascotChatbot showTooltip={showMascotTooltip} />}
     </>
   );
 }

@@ -4,42 +4,46 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useUIOverlay } from '@/context/UIOverlayContext';
+import { useOnboardingTour } from '@/context/OnboardingTourContext';
+import { createPortal } from 'react-dom';
+
+const PADDING = 12;
+const SENSOR_BAR_Z = 2147483648; // Above mascot (2147483647)
 
 /**
- * A dummy sensor bar UI with a spotlight effect centered on the screen.
- * Mimics an IR sensor bar (e.g. Wii-style) with a soft spotlight emanating from the center.
- * Tooltip connects to sensor bar via curved line (like CatMascot connects to dashboard).
+ * Sensor bar spotlight - shows when mascot tour (8 steps) completes.
+ * Highlights sensor bar and tooltip, dims rest of screen. No connector line.
  */
 export default function SensorBarSpotlight() {
   const [inputValue, setInputValue] = useState('');
-  const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number; cx: number; cy: number } | null>(null);
+  const [spotlightRects, setSpotlightRects] = useState<{
+    bar: { left: number; top: number; width: number; height: number };
+    tooltip: { left: number; top: number; width: number; height: number };
+  } | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const sensorBarRef = useRef<HTMLDivElement>(null);
   const uiOverlay = useUIOverlay();
+  const onboarding = useOnboardingTour();
 
-  const updateLine = useCallback(() => {
-    const tip = tooltipRef.current;
+  const updateSpotlight = useCallback(() => {
     const bar = sensorBarRef.current;
-    if (!tip || !bar) {
-      setLineCoords(null);
+    const tip = tooltipRef.current;
+    if (!bar || !tip) {
+      setSpotlightRects(null);
       return;
     }
-    const tr = tip.getBoundingClientRect();
     const br = bar.getBoundingClientRect();
-    // Line from tooltip (right center) to sensor bar (left center)
-    const x1 = tr.right;
-    const y1 = tr.top + tr.height / 2;
-    const x2 = br.left;
-    const y2 = br.top + br.height / 2;
-    const cx = (x1 + x2) / 2 + 40;
-    const cy = (y1 + y2) / 2;
-    setLineCoords({ x1, y1, x2, y2, cx, cy });
+    const tr = tip.getBoundingClientRect();
+    setSpotlightRects({
+      bar: { left: br.left, top: br.top, width: br.width, height: br.height },
+      tooltip: { left: tr.left, top: tr.top, width: tr.width, height: tr.height },
+    });
   }, []);
 
   useEffect(() => {
-    const run = () => requestAnimationFrame(updateLine);
+    const run = () => requestAnimationFrame(updateSpotlight);
     const t1 = setTimeout(run, 300);
-    const t2 = setTimeout(run, 600); // After tooltip + sensor bar animations
+    const t2 = setTimeout(run, 800);
     window.addEventListener('resize', run);
     window.addEventListener('scroll', run, true);
     return () => {
@@ -48,29 +52,100 @@ export default function SensorBarSpotlight() {
       window.removeEventListener('resize', run);
       window.removeEventListener('scroll', run, true);
     };
-  }, [updateLine]);
+  }, [updateSpotlight]);
 
   const handleSkip = () => {
+    onboarding?.setSensorBarCompleted();
     if (uiOverlay) {
-      uiOverlay.setHasScrolledToBottom(false);
       uiOverlay.setShowSensorBar(false);
     }
   };
 
-  return (
+  const content = (
     <div
-      className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none"
+      className="fixed inset-0 flex items-center justify-center pointer-events-none"
+      style={{ zIndex: SENSOR_BAR_Z }}
       aria-hidden
     >
-      {/* Sensor bar with tooltip */}
+      {/* Spotlight overlay - dim background, highlight sensor bar + tooltip */}
+      {typeof document !== 'undefined' && (
+        <svg
+          className="fixed inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: SENSOR_BAR_Z, width: '100vw', height: '100vh' }}
+          aria-hidden
+        >
+          <defs>
+            <mask id="sensor-bar-spotlight-mask">
+              <rect width="100%" height="100%" fill="white" />
+              {spotlightRects && (
+                <>
+                  <rect
+                    x={spotlightRects.bar.left - PADDING}
+                    y={spotlightRects.bar.top - PADDING}
+                    width={spotlightRects.bar.width + PADDING * 2}
+                    height={spotlightRects.bar.height + PADDING * 2}
+                    rx="24"
+                    ry="24"
+                    fill="black"
+                  />
+                  <rect
+                    x={spotlightRects.tooltip.left - PADDING}
+                    y={spotlightRects.tooltip.top - PADDING}
+                    width={spotlightRects.tooltip.width + PADDING * 2}
+                    height={spotlightRects.tooltip.height + PADDING * 2}
+                    rx="8"
+                    ry="8"
+                    fill="black"
+                  />
+                </>
+              )}
+            </mask>
+          </defs>
+          <rect
+            width="100%"
+            height="100%"
+            fill="rgba(0,0,0,0.5)"
+            mask="url(#sensor-bar-spotlight-mask)"
+          />
+          {spotlightRects && (
+            <>
+              <rect
+                x={spotlightRects.bar.left - PADDING}
+                y={spotlightRects.bar.top - PADDING}
+                width={spotlightRects.bar.width + PADDING * 2}
+                height={spotlightRects.bar.height + PADDING * 2}
+                rx="24"
+                ry="24"
+                fill="none"
+                stroke="rgba(255,255,255,0.9)"
+                strokeWidth="2"
+              />
+              <rect
+                x={spotlightRects.tooltip.left - PADDING}
+                y={spotlightRects.tooltip.top - PADDING}
+                width={spotlightRects.tooltip.width + PADDING * 2}
+                height={spotlightRects.tooltip.height + PADDING * 2}
+                rx="8"
+                ry="8"
+                fill="none"
+                stroke="rgba(255,255,255,0.9)"
+                strokeWidth="2"
+              />
+            </>
+          )}
+        </svg>
+      )}
+
+      {/* Sensor bar + tooltip */}
       <div className="relative flex flex-col items-center gap-4 pointer-events-none overflow-visible">
         <motion.div
           ref={sensorBarRef}
           initial={{ x: '-100vw', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          onAnimationComplete={updateLine}
-          className="relative flex items-center gap-3 rounded-full bg-gray-600 border pl-4 pr-6 py-3 shadow-lg pointer-events-auto z-10"
+          onAnimationComplete={updateSpotlight}
+          className="relative flex items-center gap-3 rounded-full bg-gray-600 border pl-4 pr-6 py-3 shadow-lg pointer-events-auto"
+          style={{ zIndex: SENSOR_BAR_Z + 2 }}
         >
           <input
             type="text"
@@ -90,30 +165,15 @@ export default function SensorBarSpotlight() {
           ))}
         </motion.div>
 
-        {/* Connector line - tooltip to sensor bar (curved, like CatMascot) */}
-        {lineCoords && (
-          <svg
-            className="fixed inset-0 w-full h-full pointer-events-none z-[35]"
-            style={{ width: '100vw', height: '100vh' }}
-            aria-hidden
-          >
-            <path
-              d={`M ${lineCoords.x1} ${lineCoords.y1} Q ${lineCoords.cx} ${lineCoords.cy} ${lineCoords.x2} ${lineCoords.y2}`}
-              fill="none"
-              stroke="rgba(0,0,0,0.25)"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        )}
-
-        {/* Tooltip - fixed at bottom left of screen */}
+        {/* Tooltip - fixed at bottom left */}
         <motion.div
           ref={tooltipRef}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.2 }}
-          className="fixed left-40 bottom-1/4 z-10 px-4 py-2 rounded-xl bg-white border-2 border-black shadow-lg pointer-events-auto"
+          onAnimationComplete={updateSpotlight}
+          className="fixed left-40 bottom-1/4 px-4 py-2 rounded-xl bg-white border-2 border-black shadow-lg pointer-events-auto"
+          style={{ zIndex: SENSOR_BAR_Z + 2 }}
         >
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium text-black">Search anything, jump anywhere</p>
@@ -126,14 +186,11 @@ export default function SensorBarSpotlight() {
             <X className="w-4 h-4" />
             Skip
           </button>
-          {/* Arrow pointing up to sensor bar */}
-          <div
-            className="absolute -top-2 left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[8px] border-b-white"
-            style={{ filter: 'drop-shadow(0 -1px 0 black)' }}
-            aria-hidden
-          />
         </motion.div>
       </div>
     </div>
   );
+
+  if (typeof document === 'undefined') return null;
+  return createPortal(content, document.body);
 }

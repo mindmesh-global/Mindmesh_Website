@@ -333,7 +333,7 @@ export default function Hero() {
       {/* Hero Background Image - high quality */}
       <div className="absolute inset-0">
         <Image
-          src="/images/herosec-bg.png"
+          src="/images/mindmesh-bg.png"
           alt=""
           fill
           priority

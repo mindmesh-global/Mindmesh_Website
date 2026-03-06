@@ -1,0 +1,30 @@
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688495858}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688495860}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688497445}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688497446}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688497446}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688497448}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688502593}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688502596}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688519726}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688520607}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688520608}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:localStorage","message":"localStorage check","data":{"mounted":true,"seen":false,"willShow":true},"hypothesisId":"H4","timestamp":1772688520655}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688521113}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688521114}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:onAnimationComplete","message":"Overlay animation done","data":{},"hypothesisId":"H1","timestamp":1772688521437}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688578587}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688578592}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:onAnimationComplete","message":"Overlay animation done","data":{},"hypothesisId":"H1","timestamp":1772688578875}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:onAnimationComplete","message":"Overlay animation done","data":{},"hypothesisId":"H1","timestamp":1772688578929}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688579387}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688579388}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688579392}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688579390}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688579501}
+{"sessionId":"35e2d8","location":"ConditionalOverlays.tsx:render","message":"Rendering IntroGreetingTooltip","data":{"pathname":"/","isMindmeshPage":true},"hypothesisId":"H4","timestamp":1772688579501}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688605424}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip.tsx:render","message":"Overlay rendering","data":{"visible":true,"zIndex":2147483644},"hypothesisId":"H1","timestamp":1772688605425}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip:init","message":"Tour init check","data":{"mounted":true,"completed":true,"willStart":false},"timestamp":1772689258054}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip:init","message":"Tour init check","data":{"mounted":true,"completed":true,"willStart":false},"timestamp":1772766883514}
+{"sessionId":"35e2d8","location":"IntroGreetingTooltip:init","message":"Tour init check","data":{"mounted":true,"completed":true,"willStart":false},"timestamp":1772769922429}

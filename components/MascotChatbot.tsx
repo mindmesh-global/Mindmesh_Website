@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { usePathname } from 'next/navigation';
 import { useHomeSection } from '@/context/HomeSectionContext';
+import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import type { HomeSectionId } from '@/context/HomeSectionContext';
 import {
   X,
@@ -43,7 +44,7 @@ const LOTTIE_CAT_URL =
   'https://lottie.host/7ac5c67a-7983-42a0-b290-2e0429865911/uvdYl2wxbT.lottie';
 
 const DRAG_THRESHOLD = 5;
-const COLLAPSED_SIZE = 300;
+const COLLAPSED_SIZE = 360;
 const CHAT_WIDTH = 1360;
 const CHAT_HEIGHT = 930;
 const CHAT_MIN_WIDTH = 800;
@@ -57,6 +58,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const homeSection = useHomeSection();
+  const onboarding = useOnboardingTour();
   const activeSection = homeSection?.activeSection ?? null;
   const sectionConfig = homeSection?.sectionConfig;
   const setActiveSection = homeSection?.setActiveSection;
@@ -65,38 +67,38 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   const displaySection = userDismissed ? null : (isDashboard && !activeSection ? SECTION_ORDER[0] : activeSection);
   const activeInfo = showTooltipProp && displaySection && sectionConfig ? sectionConfig[displaySection] : null;
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number; cx: number; cy: number } | null>(null);
+  const [spotlightRect, setSpotlightRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const dragControls = useDragControls();
   const modalRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const updateLine = useCallback(() => {
-    if (!displaySection || !tooltipRef.current) {
-      setLineCoords(null);
+  const PADDING = 12;
+
+  const updateSpotlight = useCallback(() => {
+    if (!displaySection) {
+      setSpotlightRect(null);
       return;
     }
     const sectionEl = document.querySelector(`[data-home-section="${displaySection}"]`);
     if (!sectionEl) {
-      setLineCoords(null);
+      setSpotlightRect(null);
       return;
     }
     const sectionRect = sectionEl.getBoundingClientRect();
-    const tooltipRect = tooltipRef.current.getBoundingClientRect();
-    const x1 = sectionRect.right;
-    const y1 = sectionRect.top + sectionRect.height / 2;
-    const x2 = tooltipRect.left;
-    const y2 = tooltipRect.top + tooltipRect.height / 2;
-    const cx = (x1 + x2) / 2 + 40;
-    const cy = (y1 + y2) / 2;
-    setLineCoords({ x1, y1, x2, y2, cx, cy });
+    setSpotlightRect({
+      x: sectionRect.left - PADDING,
+      y: sectionRect.top - PADDING,
+      w: sectionRect.width + PADDING * 2,
+      h: sectionRect.height + PADDING * 2,
+    });
   }, [displaySection]);
 
   useEffect(() => {
     if (!activeInfo) {
-      setLineCoords(null);
+      setSpotlightRect(null);
       return;
     }
-    const run = () => requestAnimationFrame(updateLine);
+    const run = () => requestAnimationFrame(updateSpotlight);
     const t = setTimeout(run, 120);
     window.addEventListener('scroll', run, true);
     window.addEventListener('resize', run);
@@ -105,7 +107,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
       window.removeEventListener('scroll', run, true);
       window.removeEventListener('resize', run);
     };
-  }, [displaySection, activeInfo, updateLine]);
+  }, [displaySection, activeInfo, updateSpotlight]);
 
   const scrollToSection = useCallback((sectionId: HomeSectionId) => {
     const el = document.querySelector(`[data-home-section="${sectionId}"]`);
@@ -118,6 +120,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     if (idx >= 0 && idx === SECTION_ORDER.length - 1) {
       setUserDismissed(true);
       setActiveSection(null);
+      onboarding?.setMascotTourCompleted();
       return;
     }
     const nextSection = getNextSection(displaySection);
@@ -125,13 +128,14 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     requestAnimationFrame(() => {
       requestAnimationFrame(() => scrollToSection(nextSection));
     });
-  }, [displaySection, setActiveSection, scrollToSection]);
+  }, [displaySection, setActiveSection, scrollToSection, onboarding]);
 
   const handleTooltipSkip = useCallback(() => {
     if (!setActiveSection) return;
     setUserDismissed(true);
     setActiveSection(null);
-  }, [setActiveSection]);
+    onboarding?.setMascotTourCompleted();
+  }, [setActiveSection, onboarding]);
 
   useEffect(() => {
     setMounted(true);
@@ -197,19 +201,43 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
 
   const content = (
     <>
-      {/* Connector line (when tooltip visible) */}
-      {!isExpanded && lineCoords && (
+      {/* Spotlight overlay - dim background, highlight section */}
+      {!isExpanded && activeInfo && spotlightRect && (
         <svg
           className="fixed inset-0 w-full h-full pointer-events-none"
-          style={{ zIndex: 2147483646, width: '100vw', height: '100vh' }}
+          style={{ zIndex: 2147483644, width: '100vw', height: '100vh' }}
           aria-hidden
         >
-          <path
-            d={`M ${lineCoords.x1} ${lineCoords.y1} Q ${lineCoords.cx} ${lineCoords.cy} ${lineCoords.x2} ${lineCoords.y2}`}
+          <defs>
+            <mask id="mascot-spotlight-mask">
+              <rect width="100%" height="100%" fill="white" />
+              <rect
+                x={spotlightRect.x}
+                y={spotlightRect.y}
+                width={spotlightRect.w}
+                height={spotlightRect.h}
+                rx="8"
+                ry="8"
+                fill="black"
+              />
+            </mask>
+          </defs>
+          <rect
+            width="100%"
+            height="100%"
+            fill="rgba(0,0,0,0.4)"
+            mask="url(#mascot-spotlight-mask)"
+          />
+          <rect
+            x={spotlightRect.x}
+            y={spotlightRect.y}
+            width={spotlightRect.w}
+            height={spotlightRect.h}
+            rx="8"
+            ry="8"
             fill="none"
-            stroke="rgba(0,0,0,0.2)"
+            stroke="rgba(255,255,255,0.9)"
             strokeWidth="2"
-            strokeLinecap="round"
           />
         </svg>
       )}
@@ -313,8 +341,8 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
               {/* Mascot - always at bottom, fixed position */}
               <div className="flex-shrink-0 flex items-center justify-center pointer-events-none" aria-hidden>
               <div
-                className="flex items-center justify-center cursor-pointer pointer-events-auto"
-                style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
+                className="relative flex items-center justify-center cursor-pointer pointer-events-auto mascot-glow-wrapper"
+                style={{ width: 320, height: 220, minWidth: 320, minHeight: 220 }}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -322,12 +350,15 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                   if (pointerDownRef.current) hasMovedRef.current = true;
                 }}
               >
-                <DotLottieReact
-                  src={LOTTIE_CAT_URL}
-                  loop
-                  autoplay
-                  className="w-full h-full"
-                />
+                <div className="mascot-body-glow w-full h-full relative z-10">
+                  <DotLottieReact
+                    src={LOTTIE_CAT_URL}
+                    loop
+                    autoplay
+                    speed={0.3}
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
             </div>

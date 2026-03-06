@@ -6,6 +6,7 @@ import ConditionalOverlays from '@/components/ConditionalOverlays';
 import Logo from '@/components/Logo';
 import { HomeSectionProvider } from '@/context/HomeSectionContext';
 import { UIOverlayProvider } from '@/context/UIOverlayContext';
+import { OnboardingTourProvider } from '@/context/OnboardingTourContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -40,9 +41,11 @@ export default function RootLayout({
         <ThemeScript />
         <HomeSectionProvider>
           <UIOverlayProvider>
+            <OnboardingTourProvider>
             <Logo />
             {children}
             <ConditionalOverlays />
+            </OnboardingTourProvider>
           </UIOverlayProvider>
         </HomeSectionProvider>
       </body>

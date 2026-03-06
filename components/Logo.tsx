@@ -1,28 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 
 export default function Logo() {
-  const pathname = usePathname();
-  const isHome = pathname === '/';
-
   return (
     <Link
       href="/"
-      className={`fixed top-0 -left-4 z-50 flex items-center gap-2 group ${
-        isHome ? 'text-white' : 'text-gray-900 dark:text-white'
-      }`}
+      className="fixed top-4 left-6 z-50 group"
     >
-      <Image
-        src="/images/Logo/mindmesh-logo.png"
-        alt="MindMesh"
-        width={128}
-        height={128}
-        className="object-contain"
-      />
-      <span className="text-3xl font-semibold group-hover:opacity-80 transition-opacity -mt-2 -ml-9 text-blue-700">
+      <span
+        className="text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight group-hover:opacity-90 transition-opacity"
+        style={{
+          background: 'linear-gradient(to right, #fbbf24, #f97316, #ec4899, #db2777)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          filter: 'drop-shadow(0 0 8px rgba(249, 115, 22, 0.6)) drop-shadow(0 0 20px rgba(236, 72, 153, 0.4))',
+        }}
+      >
         MindMesh
       </span>
     </Link>
