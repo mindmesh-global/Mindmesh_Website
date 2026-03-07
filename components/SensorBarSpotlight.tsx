@@ -61,7 +61,7 @@ export default function SensorBarSpotlight({ showTooltip = false }: SensorBarSpo
 
   const handleSkip = () => {
     onboarding?.setSensorBarCompleted();
-    // Tooltip/spotlight hides; sensor bar stays visible if user has it ON from dropdown
+    uiOverlay?.setShowSensorBar(false);
   };
 
   const content = (

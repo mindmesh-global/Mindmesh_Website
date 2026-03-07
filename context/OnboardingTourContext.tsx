@@ -5,14 +5,17 @@ import { createContext, useContext, useState, useCallback, useEffect, ReactNode 
 const INTRO_STORAGE_KEY = 'mindmesh-intro-greeting-seen';
 const MASCOT_TOUR_STORAGE_KEY = 'mindmesh-mascot-tour-seen';
 const SENSOR_BAR_STORAGE_KEY = 'mindmesh-sensor-bar-seen';
+const DROPDOWN_TOOLTIP_STORAGE_KEY = 'mindmesh-dropdown-tooltip-seen';
 
 type OnboardingTourContextType = {
   introCompleted: boolean;
   mascotTourCompleted: boolean;
   sensorBarCompleted: boolean;
+  dropdownTooltipCompleted: boolean;
   setIntroCompleted: () => void;
   setMascotTourCompleted: () => void;
   setSensorBarCompleted: () => void;
+  setDropdownTooltipCompleted: () => void;
 };
 
 const OnboardingTourContext = createContext<OnboardingTourContextType | null>(null);
@@ -21,6 +24,7 @@ export function OnboardingTourProvider({ children }: { children: ReactNode }) {
   const [introCompleted, setIntroCompletedState] = useState(false);
   const [mascotTourCompleted, setMascotTourCompletedState] = useState(false);
   const [sensorBarCompleted, setSensorBarCompletedState] = useState(false);
+  const [dropdownTooltipCompleted, setDropdownTooltipCompletedState] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -33,10 +37,12 @@ export function OnboardingTourProvider({ children }: { children: ReactNode }) {
       setIntroCompletedState(localStorage.getItem(INTRO_STORAGE_KEY) === 'true');
       setMascotTourCompletedState(localStorage.getItem(MASCOT_TOUR_STORAGE_KEY) === 'true');
       setSensorBarCompletedState(localStorage.getItem(SENSOR_BAR_STORAGE_KEY) === 'true');
+      setDropdownTooltipCompletedState(localStorage.getItem(DROPDOWN_TOOLTIP_STORAGE_KEY) === 'true');
     } catch {
       setIntroCompletedState(false);
       setMascotTourCompletedState(false);
       setSensorBarCompletedState(false);
+      setDropdownTooltipCompletedState(false);
     }
   }, [mounted]);
 
@@ -67,8 +73,17 @@ export function OnboardingTourProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const setDropdownTooltipCompleted = useCallback(() => {
+    try {
+      localStorage.setItem(DROPDOWN_TOOLTIP_STORAGE_KEY, 'true');
+      setDropdownTooltipCompletedState(true);
+    } catch {
+      setDropdownTooltipCompletedState(true);
+    }
+  }, []);
+
   return (
-    <OnboardingTourContext.Provider value={{ introCompleted, mascotTourCompleted, sensorBarCompleted, setIntroCompleted, setMascotTourCompleted, setSensorBarCompleted }}>
+    <OnboardingTourContext.Provider value={{ introCompleted, mascotTourCompleted, sensorBarCompleted, dropdownTooltipCompleted, setIntroCompleted, setMascotTourCompleted, setSensorBarCompleted, setDropdownTooltipCompleted }}>
       {children}
     </OnboardingTourContext.Provider>
   );

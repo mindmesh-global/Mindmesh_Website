@@ -7,6 +7,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { usePathname } from 'next/navigation';
 import { useHomeSection } from '@/context/HomeSectionContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
+import { useUIOverlay } from '@/context/UIOverlayContext';
 import type { HomeSectionId } from '@/context/HomeSectionContext';
 import {
   X,
@@ -59,6 +60,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   const pathname = usePathname();
   const homeSection = useHomeSection();
   const onboarding = useOnboardingTour();
+  const uiOverlay = useUIOverlay();
   const activeSection = homeSection?.activeSection ?? null;
   const sectionConfig = homeSection?.sectionConfig;
   const setActiveSection = homeSection?.setActiveSection;
@@ -120,6 +122,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     if (idx >= 0 && idx === SECTION_ORDER.length - 1) {
       setUserDismissed(true);
       setActiveSection(null);
+      uiOverlay?.setShowSensorBar(true);
       onboarding?.setMascotTourCompleted();
       return;
     }
@@ -128,7 +131,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     requestAnimationFrame(() => {
       requestAnimationFrame(() => scrollToSection(nextSection));
     });
-  }, [displaySection, setActiveSection, scrollToSection, onboarding]);
+  }, [displaySection, setActiveSection, scrollToSection, onboarding, uiOverlay]);
 
   const handleTooltipSkip = useCallback(() => {
     if (!setActiveSection) return;

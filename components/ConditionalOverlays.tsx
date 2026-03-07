@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import MascotChatbot from '@/components/MascotChatbot';
 import SensorBarSpotlight from '@/components/SensorBarSpotlight';
 import IntroGreetingTooltip from '@/components/IntroGreetingTooltip';
+import DropdownOverlayTooltip from '@/components/DropdownOverlayTooltip';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 
@@ -39,6 +40,7 @@ export default function ConditionalOverlays() {
   const showTooltips = Boolean(isMindmeshPage && isTabVisible && isMindmeshWindowOnTop);
   const showMascotTooltip = showTooltips && onboarding.introCompleted && !onboarding.mascotTourCompleted;
   const showSensorBarTooltip = Boolean(showSensorBar && showTooltips && onboarding.mascotTourCompleted && !onboarding.sensorBarCompleted);
+  const showDropdownTooltip = Boolean(showTooltips && onboarding.sensorBarCompleted && !onboarding.dropdownTooltipCompleted);
 
   if (!isMindmeshPage) return null;
 
@@ -46,6 +48,7 @@ export default function ConditionalOverlays() {
     <>
       {pathname === '/' && <IntroGreetingTooltip />}
       {showSensorBar && showTooltips && <SensorBarSpotlight showTooltip={showSensorBarTooltip} />}
+      {showDropdownTooltip && <DropdownOverlayTooltip />}
       {showMascot && <MascotChatbot showTooltip={showMascotTooltip} />}
     </>
   );

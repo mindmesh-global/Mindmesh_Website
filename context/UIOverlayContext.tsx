@@ -9,10 +9,12 @@ type UIOverlayContextType = {
   showSensorBar: boolean;
   activeWindowType: ActiveWindowType;
   hasScrolledToBottom: boolean;
+  openOverlayDropdown: boolean;
   setShowMascot: (v: boolean) => void;
   setShowSensorBar: (v: boolean) => void;
   setActiveWindowType: (v: ActiveWindowType) => void;
   setHasScrolledToBottom: (v: boolean) => void;
+  setOpenOverlayDropdown: (v: boolean) => void;
 };
 
 const UIOverlayContext = createContext<UIOverlayContextType | null>(null);
@@ -22,14 +24,16 @@ export function UIOverlayProvider({ children }: { children: ReactNode }) {
   const [showSensorBar, setShowSensorBarState] = useState(false);
   const [activeWindowType, setActiveWindowTypeState] = useState<ActiveWindowType>('home');
   const [hasScrolledToBottom, setHasScrolledToBottomState] = useState(false);
+  const [openOverlayDropdown, setOpenOverlayDropdownState] = useState(false);
   const setShowMascot = useCallback((v: boolean) => setShowMascotState(v), []);
   const setShowSensorBar = useCallback((v: boolean) => setShowSensorBarState(v), []);
   const setActiveWindowType = useCallback((v: ActiveWindowType) => setActiveWindowTypeState(v), []);
   const setHasScrolledToBottom = useCallback((v: boolean) => setHasScrolledToBottomState(v), []);
+  const setOpenOverlayDropdown = useCallback((v: boolean) => setOpenOverlayDropdownState(v), []);
 
   return (
     <UIOverlayContext.Provider
-      value={{ showMascot, showSensorBar, activeWindowType, hasScrolledToBottom, setShowMascot, setShowSensorBar, setActiveWindowType, setHasScrolledToBottom }}
+      value={{ showMascot, showSensorBar, activeWindowType, hasScrolledToBottom, openOverlayDropdown, setShowMascot, setShowSensorBar, setActiveWindowType, setHasScrolledToBottom, setOpenOverlayDropdown }}
     >
       {children}
     </UIOverlayContext.Provider>

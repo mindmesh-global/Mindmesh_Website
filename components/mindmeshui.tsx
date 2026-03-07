@@ -4,6 +4,7 @@ import { ChevronDown, Cat, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardPage from '@/app/dashboard/page';
 import { useUIOverlay } from '@/context/UIOverlayContext';
+import { useOnboardingTour } from '@/context/OnboardingTourContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -20,6 +21,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
   const windowRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const uiOverlay = useUIOverlay();
+  const onboarding = useOnboardingTour();
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
@@ -34,6 +36,14 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Open dropdown when requested (e.g. from DropdownOverlayTooltip)
+  useEffect(() => {
+    if (uiOverlay?.openOverlayDropdown) {
+      setIsOverlayDropdownOpen(true);
+      uiOverlay.setOpenOverlayDropdown(false);
+    }
+  }, [uiOverlay?.openOverlayDropdown]);
 
   const handleClose = () => {
     setIsClosed(true);
@@ -144,7 +154,11 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
               <div className="relative" ref={overlayRef}>
                 <button
                   type="button"
-                  onClick={() => setIsOverlayDropdownOpen(!isOverlayDropdownOpen)}
+                  data-mindmesh-dropdown="true"
+                  onClick={() => {
+                    setIsOverlayDropdownOpen(!isOverlayDropdownOpen);
+                    if (!isOverlayDropdownOpen) onboarding?.setDropdownTooltipCompleted();
+                  }}
                   className="p-0.5 rounded hover:bg-gray-700/60 transition-colors text-gray-500 hover:text-gray-300"
                   title="Overlays"
                   aria-label="Toggle overlays menu"
@@ -155,6 +169,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
                 <AnimatePresence>
                   {isOverlayDropdownOpen && (
                     <motion.div
+                      data-mindmesh-dropdown-menu="true"
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -4 }}
