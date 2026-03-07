@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Zap } from 'lucide-react';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { createPortal } from 'react-dom';
@@ -143,23 +143,52 @@ export default function DropdownOverlayTooltip() {
       {/* Tooltip */}
       <motion.div
         ref={tooltipRef}
-        initial={{ opacity: 0, y: 4 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.2 }}
-        className="fixed left-40 bottom-1/4 px-4 py-2 rounded-xl bg-white border-2 border-black shadow-lg pointer-events-auto"
-        style={{ zIndex: DROPDOWN_TOOLTIP_Z + 1 }}
+        transition={{ delay: 0.2, duration: 0.25 }}
+        className="fixed left-40 bottom-1/4 rounded-2xl overflow-hidden pointer-events-auto"
+        style={{
+          zIndex: DROPDOWN_TOOLTIP_Z + 1,
+          background: 'linear-gradient(135deg, #1e1b4b 0%, #0f0a1e 50%, #0c0a14 100%)',
+          boxShadow: '0 0 0 1px rgba(139,92,246,0.5), 0 0 30px rgba(139,92,246,0.4), 0 0 60px rgba(168,85,247,0.2)',
+        }}
       >
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium text-black">You can open Sensor Bar from here</p>
+        <div
+          className="absolute inset-0 rounded-2xl opacity-30"
+          style={{
+            backgroundImage: `radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+              radial-gradient(2px 2px at 50px 70px, rgba(255,255,255,0.6), transparent),
+              radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.5), transparent)`,
+          }}
+        />
+        <div className="relative p-5 min-w-[260px]">
+          <div className="flex items-start gap-3">
+            <div
+              className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
+                boxShadow: '0 0 15px rgba(34,211,238,0.4)',
+              }}
+            >
+              <Zap className="w-5 h-5 text-white" strokeWidth={2.5} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-extrabold text-white mb-1">Features Shortcut</h3>
+              <p className="text-sm text-white leading-relaxed">You can open Sensor Bar from here</p>
+            </div>
+          </div>
+          <div className="mt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-transparent border border-cyan-400/60 hover:bg-cyan-500/10 text-white text-xs font-semibold transition-all"
+              style={{ boxShadow: '0 0 12px rgba(34,211,238,0.3)' }}
+            >
+              <X className="w-3.5 h-3.5" />
+              Got it
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={handleDismiss}
-          className="mt-2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-black text-xs font-semibold hover:bg-slate-200 transition-all"
-        >
-          <X className="w-4 h-4" />
-          Got it
-        </button>
       </motion.div>
     </div>
   );

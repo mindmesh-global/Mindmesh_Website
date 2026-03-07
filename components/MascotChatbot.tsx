@@ -138,7 +138,8 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     setUserDismissed(true);
     setActiveSection(null);
     onboarding?.setMascotTourCompleted();
-  }, [setActiveSection, onboarding]);
+    uiOverlay?.setShowSensorBar(true);
+  }, [setActiveSection, onboarding, uiOverlay]);
 
   useEffect(() => {
     setMounted(true);
@@ -276,32 +277,44 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                    className="absolute bottom-full left-0 mb-2 rounded-2xl overflow-visible text-left pointer-events-auto bg-white border-2 border-black shadow-[0_4px_14px_rgba(0,0,0,0.15)]"
+                    className="absolute bottom-full left-0 mb-2 rounded-2xl overflow-visible text-left pointer-events-auto"
                     style={{
-                      width: '220px',
-                      minWidth: '200px',
-                      maxWidth: '240px',
+                      width: '240px',
+                      minWidth: '220px',
+                      maxWidth: '260px',
                       marginLeft: '-30px',
+                      background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #0f0a1e 100%)',
+                      boxShadow: '0 0 0 1px rgba(139,92,246,0.5), 0 0 40px rgba(139,92,246,0.35), 0 0 80px rgba(126,34,206,0.2)',
                     }}
                   >
-                    <div className="p-4 space-y-3 max-h-[300px] overflow-y-auto">
+                    <div
+                      className="absolute inset-0 rounded-2xl opacity-30"
+                      style={{
+                        backgroundImage: `radial-gradient(2px 2px at 15px 25px, rgba(255,255,255,0.8), transparent),
+                          radial-gradient(2px 2px at 35px 60px, rgba(255,255,255,0.6), transparent),
+                          radial-gradient(2px 2px at 45px 120px, rgba(255,255,255,0.7), transparent),
+                          radial-gradient(2px 2px at 80px 35px, rgba(255,255,255,0.5), transparent),
+                          radial-gradient(2px 2px at 120px 90px, rgba(255,255,255,0.6), transparent)`,
+                      }}
+                    />
+                    <div className="relative p-4 space-y-3 max-h-[300px] overflow-y-auto">
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-medium text-gray-500">{currentStep} / {totalSteps}</span>
+                        <span className="text-xs font-medium text-white">{currentStep} / {totalSteps}</span>
                       </div>
                       <div className="space-y-2">
-                        <h3 className="text-sm font-bold text-black">{activeInfo.title}</h3>
+                        <h3 className="text-lg font-extrabold text-white">{activeInfo.title}</h3>
                         {activeInfo.summary && (
-                          <p className="text-xs text-gray-700 leading-relaxed">{activeInfo.summary}</p>
+                          <p className="text-xs text-white leading-relaxed">{activeInfo.summary}</p>
                         )}
                       </div>
                       {'inferredFacts' in activeInfo && Array.isArray(activeInfo.inferredFacts) && activeInfo.inferredFacts.length > 0 && (
-                        <div className="space-y-2 pt-1 border-t border-gray-200">
-                          <span className="text-[11px] font-semibold text-black uppercase tracking-wide">Inferred Facts</span>
-                          <p className="text-[11px] text-gray-600 leading-snug">Key insights from emails, calendar & tasks.</p>
+                        <div className="space-y-2 pt-1 border-t border-white/20">
+                          <span className="text-[11px] font-semibold text-white uppercase tracking-wide">Inferred Facts</span>
+                          <p className="text-[11px] text-white leading-snug">Key insights from emails, calendar & tasks.</p>
                           <ul className="space-y-1.5">
                             {activeInfo.inferredFacts.map((fact, i) => (
-                              <li key={i} className="flex items-start gap-2 text-xs text-gray-800 leading-relaxed">
-                                <span className="text-amber-600 mt-0.5 flex-shrink-0">💡</span>
+                              <li key={i} className="flex items-start gap-2 text-xs text-white leading-relaxed">
+                                <span className="text-amber-400 mt-0.5 flex-shrink-0">💡</span>
                                 <span>{fact}</span>
                               </li>
                             ))}
@@ -312,18 +325,22 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                         <button
                           type="button"
                           onClick={handleTooltipSkip}
-                          className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg border-2 border-black bg-white hover:bg-gray-100 active:scale-[0.98] text-black text-xs font-semibold transition-all duration-200"
+                          className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg bg-transparent border border-violet-400/70 hover:bg-violet-500/10 active:scale-[0.98] text-white text-xs font-semibold transition-all duration-200"
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <ChevronRight className="w-3.5 h-3.5" />
                           Skip
                         </button>
                         <button
                           type="button"
                           onClick={handleTooltipNext}
-                          className="flex-1 flex items-center justify-center gap-1 py-2 px-3 rounded-lg border-2 border-black bg-black hover:bg-gray-800 active:scale-[0.98] text-white text-xs font-semibold transition-all duration-200"
+                          className="flex-1 flex items-center justify-center gap-1 py-2 px-3 rounded-lg active:scale-[0.98] text-white text-xs font-semibold transition-all duration-200"
+                          style={{
+                            background: 'linear-gradient(180deg, #6d28d9 0%, #8b5cf6 50%, #a78bfa 100%)',
+                            boxShadow: '0 0 20px rgba(139,92,246,0.5), 0 2px 8px rgba(0,0,0,0.2)',
+                          }}
                         >
-                          <ChevronRight className="w-4 h-4" />
                           Next
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>

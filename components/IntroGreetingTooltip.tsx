@@ -1,15 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
+import { useUIOverlay } from '@/context/UIOverlayContext';
 
 const INTRO_Z_INDEX = 2147483645; // Stack above MindMesh windows, below mascot
 
 export default function IntroGreetingTooltip() {
   const onboarding = useOnboardingTour();
+  const uiOverlay = useUIOverlay();
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -25,7 +28,16 @@ export default function IntroGreetingTooltip() {
     }
   }, [mounted, onboarding?.introCompleted]);
 
-  const handleDismiss = () => {
+  const handleClose = () => {
+    setVisible(false);
+    onboarding?.setIntroCompleted();
+    onboarding?.setMascotTourCompleted();
+    onboarding?.setSensorBarCompleted();
+    onboarding?.setDropdownTooltipCompleted();
+    uiOverlay?.setShowSensorBar(false);
+  };
+
+  const handleNext = () => {
     setVisible(false);
     onboarding?.setIntroCompleted();
   };
@@ -36,7 +48,6 @@ export default function IntroGreetingTooltip() {
     <AnimatePresence>
       {visible && (
         <>
-          {/* Dim overlay - separate element, animates its own opacity */}
           <motion.div
             key="intro-overlay"
             initial={{ opacity: 0 }}
@@ -46,73 +57,106 @@ export default function IntroGreetingTooltip() {
             className="fixed inset-0 cursor-default backdrop-blur-sm"
             style={{
               zIndex: INTRO_Z_INDEX - 1,
-              backgroundColor: 'rgba(0,0,0,0.55)',
+              backgroundColor: 'rgba(0,0,0,0.6)',
             }}
-            onClick={handleDismiss}
+            onClick={handleClose}
             aria-hidden
           />
-          {/* Modal - highlighted */}
           <motion.div
             key="intro-modal"
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            transition={{
-              type: 'spring',
-              stiffness: 400,
-              damping: 28,
-              mass: 0.8,
+            initial={{ opacity: 0, y: 12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+            className="fixed top-14 right-20 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg overflow-hidden"
+            style={{
+              zIndex: INTRO_Z_INDEX,
+              background: 'linear-gradient(135deg, #1c1917 0%, #292524 30%, #1e1b4b 100%)',
+              borderRadius: '20px',
+              boxShadow: '0 0 0 1px rgba(251,191,36,0.3), 0 0 50px rgba(249,115,22,0.25), 0 0 100px rgba(139,92,246,0.15), 0 25px 50px -12px rgba(0,0,0,0.5)',
             }}
-            className="fixed top-6 right-6 max-w-[280px] rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 shadow-xl shadow-slate-900/10 dark:shadow-black/20 overflow-hidden"
-            style={{ zIndex: INTRO_Z_INDEX }}
             onClick={(e) => e.stopPropagation()}
           >
-        <div className="p-4 pr-10 relative">
-          <button
-            onClick={handleDismiss}
-            className="absolute top-3 right-3 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            aria-label="Dismiss"
-          >
-            <X className="w-4 h-4" />
-          </button>
+            {/* Starry background overlay */}
+            <div
+              className="absolute inset-0 opacity-60"
+              style={{
+                backgroundImage: `radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.9), transparent),
+                  radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.7), transparent),
+                  radial-gradient(2px 2px at 50px 160px, rgba(255,255,255,0.8), transparent),
+                  radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.6), transparent),
+                  radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.7), transparent),
+                  radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.5), transparent)`,
+              }}
+            />
+            <div className="relative p-6">
+              <button
+                onClick={handleClose}
+                className="absolute top-4 right-4 p-2 rounded-full text-white hover:bg-white/10 transition-colors"
+                aria-label="Dismiss"
+              >
+                <X className="w-5 h-5" strokeWidth={2} />
+              </button>
 
-          <div className="flex items-start gap-3">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 300, damping: 20 }}
-              className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center"
-            >
-              <Sparkles className="w-5 h-5 text-white" />
-            </motion.div>
-            <div className="space-y-1.5 min-w-0">
-              <motion.h3
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15, duration: 0.25 }}
-                className="text-base font-bold text-slate-900 dark:text-slate-100"
-              >
-                Welcome to MindMesh
-              </motion.h3>
-              <motion.p
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25, duration: 0.25 }}
-                className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed"
-              >
-                Hi! Your AI-powered productivity assistant. Click the MindMesh icon to open your dashboard.
-              </motion.p>
+              <div className="flex items-start gap-4 mb-5">
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.15, duration: 0.3 }}
+                  className="flex-shrink-0"
+                >
+                  <Image
+                    src="/images/Logo/mindmesh-logo-tight.png"
+                    alt="MindMesh"
+                    width={56}
+                    height={56}
+                    className="object-contain"
+                  />
+                </motion.div>
+                <div className="flex-1 min-w-0 pt-1">
+                  <motion.h3
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.25 }}
+                    className="text-xl font-bold text-white"
+                  >
+                    Welcome to MindMesh!
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.25 }}
+                    className="text-white text-sm leading-relaxed mt-2"
+                  >
+                    Hi! I&apos;m your AI-powered productivity assistant.
+                  </motion.p>
+                  <motion.p
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35, duration: 0.25 }}
+                    className="text-white text-sm leading-relaxed"
+                  >
+                   Your smart workspace for meetings and productivity.
+                   <br />
+                   <br />
+                   Click Next to explore the dashboard.
+                  </motion.p>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={handleNext}
+                  className="py-3 px-8 rounded-xl font-bold text-white transition-all hover:opacity-95 active:scale-[0.98]"
+                  style={{
+                    background: 'linear-gradient(180deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%)',
+                    boxShadow: '0 0 20px rgba(139,92,246,0.5), 0 0 40px rgba(168,85,247,0.3)',
+                  }}
+                >
+                  Next
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="px-4 pb-4 pt-1 flex justify-end">
-            <button
-              onClick={handleDismiss}
-              className="px-4 py-2 rounded-xl text-black border-2 border-black bg-transparent hover:bg-black/5 font-semibold transition-colors"
-            >
-              Next
-            </button>
-          </div>
-        </div>
           </motion.div>
         </>
       )}

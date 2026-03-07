@@ -2,12 +2,13 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Search } from 'lucide-react';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import { createPortal } from 'react-dom';
 
 const PADDING = 12;
+const TOOLTIP_CUTOUT_PADDING = 0; // Exact match - no gap, only card highlighted
 const SENSOR_BAR_Z = 2147483648; // Above mascot (2147483647)
 
 interface SensorBarSpotlightProps {
@@ -92,12 +93,12 @@ export default function SensorBarSpotlight({ showTooltip = false }: SensorBarSpo
                     fill="black"
                   />
                   <rect
-                    x={spotlightRects.tooltip.left - PADDING}
-                    y={spotlightRects.tooltip.top - PADDING}
-                    width={spotlightRects.tooltip.width + PADDING * 2}
-                    height={spotlightRects.tooltip.height + PADDING * 2}
-                    rx="8"
-                    ry="8"
+                    x={spotlightRects.tooltip.left - TOOLTIP_CUTOUT_PADDING}
+                    y={spotlightRects.tooltip.top - TOOLTIP_CUTOUT_PADDING}
+                    width={spotlightRects.tooltip.width + TOOLTIP_CUTOUT_PADDING * 2}
+                    height={spotlightRects.tooltip.height + TOOLTIP_CUTOUT_PADDING * 2}
+                    rx="16"
+                    ry="16"
                     fill="black"
                   />
                 </>
@@ -110,32 +111,6 @@ export default function SensorBarSpotlight({ showTooltip = false }: SensorBarSpo
             fill="rgba(0,0,0,0.5)"
             mask="url(#sensor-bar-spotlight-mask)"
           />
-          {spotlightRects && (
-            <>
-              <rect
-                x={spotlightRects.bar.left - PADDING}
-                y={spotlightRects.bar.top - PADDING}
-                width={spotlightRects.bar.width + PADDING * 2}
-                height={spotlightRects.bar.height + PADDING * 2}
-                rx="24"
-                ry="24"
-                fill="none"
-                stroke="rgba(255,255,255,0.9)"
-                strokeWidth="2"
-              />
-              <rect
-                x={spotlightRects.tooltip.left - PADDING}
-                y={spotlightRects.tooltip.top - PADDING}
-                width={spotlightRects.tooltip.width + PADDING * 2}
-                height={spotlightRects.tooltip.height + PADDING * 2}
-                rx="8"
-                ry="8"
-                fill="none"
-                stroke="rgba(255,255,255,0.9)"
-                strokeWidth="2"
-              />
-            </>
-          )}
         </svg>
       )}
 
@@ -172,24 +147,48 @@ export default function SensorBarSpotlight({ showTooltip = false }: SensorBarSpo
         {showTooltip && (
           <motion.div
             ref={tooltipRef}
-            initial={{ opacity: 0, y: 4 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.2 }}
+            transition={{ delay: 0.25, duration: 0.25 }}
             onAnimationComplete={updateSpotlight}
-            className="fixed left-40 bottom-1/4 px-4 py-2 rounded-xl bg-white border-2 border-black shadow-lg pointer-events-auto"
-            style={{ zIndex: SENSOR_BAR_Z + 2 }}
+            className="fixed left-40 bottom-1/4 rounded-2xl overflow-hidden pointer-events-auto"
+            style={{
+              zIndex: SENSOR_BAR_Z + 2,
+              background: 'linear-gradient(135deg, #1c1917 0%, #1e1b4b 40%, #0f0a1e 100%)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+            }}
           >
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-medium text-black">Search anything, jump anywhere</p>
+            <div
+              className="absolute inset-0 opacity-30"
+            />
+            <div className="relative p-5 min-w-[280px]">
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ea580c 100%)',
+                    boxShadow: '0 0 20px rgba(249,115,22,0.4)',
+                  }}
+                >
+                  <Search className="w-6 h-6 text-white" strokeWidth={2.5} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-extrabold text-white mb-1">Sensor Bar</h3>
+                  <p className="text-sm text-white leading-relaxed">Search anything in your workspace and jump to it instantly.</p>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleSkip}
+                  className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-transparent border border-amber-400/60 hover:bg-amber-500/10 text-white text-xs font-semibold transition-all"
+                  style={{ boxShadow: '0 0 12px rgba(251,191,36,0.3)' }}
+                >
+                  <X className="w-4 h-4" />
+                  Skip
+                </button>
+              </div>
             </div>
-            <button
-              type="button"
-              onClick={handleSkip}
-              className="mt-2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-black text-xs font-semibold hover:bg-slate-200 transition-all"
-            >
-              <X className="w-4 h-4" />
-              Skip
-            </button>
           </motion.div>
         )}
       </div>
