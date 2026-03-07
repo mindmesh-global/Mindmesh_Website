@@ -25,16 +25,18 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
     title: 'What does MindMesh do?',
     content: (
       <>
-        <p className="mb-3">MindMesh is a cognitive OS layer that works on top of your email, calendar, and other apps. It:</p>
+        <p className="mb-3">
+          MindMesh connects your email, calendar, and activity into one AI-powered memory. It
+          helps you find things faster, understand what matters, and turn scattered information
+          into clear next steps. It can:
+        </p>
         <ul className="list-disc pl-5 space-y-1.5">
-          <li>Fetches emails from Gmail & Outlook</li>
-          <li>Fetches events from Google Calendar & Outlook Calendar</li>
-          <li>Uses AI enrichment to understand emails and events (TODOs, inferred facts, summaries)</li>
-          <li>Stores your email and calendar info in AI memory</li>
-          <li>Lets you search your emails and events in natural language via semantic search</li>
-          <li>Gives you a daily summary with Today&apos;s Overview</li>
-          <li>Shows Daily Narrative—&quot;what mattered yesterday&quot;</li>
-          <li>Lets you ask questions in natural language through the Mascot & Sensor Bar AI assistant</li>
+          <li>Pull in email and calendar data from Gmail, Outlook, Google Calendar, Outlook Calendar and any other Mail Provider in real time</li>
+          <li>Enrich messages and events with summaries, inferred facts, and to-dos</li>
+          <li>Let you search and ask questions in natural language</li>
+          <li>Show Today's Overview for what needs attention now</li>
+          <li>Generate Yesterday’s Narrative so you can catch up quickly</li>
+          <li>Support fast, contextual help through Mascot Chat and the Sensor Bar</li>
         </ul>
       </>
     ),
@@ -44,22 +46,18 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
     content: (
       <>
         <p className="font-medium text-gray-800 mb-1">Problem:</p>
-        <p className="mb-2">People use 50+ apps (Gmail, Outlook, Slack, Calendar, Notion, Jira, etc.), which leads to:</p>
-        <ul className="list-disc pl-5 space-y-1 mb-4">
-          <li>Information scattered across many tools</li>
-          <li>Too many notifications</li>
-          <li>No single memory of what actually mattered</li>
-          <li>Important things slipping through the cracks</li>
-          <li>Mental overload and constant context switching</li>
-        </ul>
-        <p className="font-medium text-gray-800 mb-1">MindMesh solution: One layer that</p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>Shows data from multiple apps in one place</li>
-          <li>Remembers what actually matters</li>
-          <li>Suggests what you need to do next</li>
-          <li>Creates a continuous narrative of your life and work</li>
-          <li>Lets you ask questions and get answers through the AI assistant</li>
-        </ul>
+        <p className="mb-2">
+          The problem is not just too many apps. It is that the context between them gets lost.
+          Important details live across email, calendar, notes, and other tools, but there is no
+          shared memory connecting them. That leads to missed follow-ups, constant context
+          switching, and the feeling that you are always reconstructing what happened.
+        </p>
+        <p className="mb-2">
+          MindMesh solves this by adding a memory layer on top of your workflow. It pulls context
+          from the tools you use, keeps track of what matters, builds a continuous narrative over
+          time, and helps you decide what to do next through AI-powered search and assistant
+          workflows.
+        </p>
       </>
     ),
   },
@@ -67,35 +65,190 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
     title: 'Who is MindMesh for?',
     content: (
       <>
-        <ul className="list-disc pl-5 space-y-1 mb-3">
-          <li><strong>Busy professionals</strong>—who use multiple email accounts, calendars, and tools</li>
-          <li><strong>Knowledge workers</strong>—who manage emails, meetings, and tasks</li>
-          <li><strong>Remote workers</strong>—who want all important info in one place</li>
-        </ul>
-        <p className="mb-1">Anyone who wants to:</p>
+        <p className="mb-3">
+          MindMesh is for people who live in their inbox, calendar, and browser all day and need a
+          better way to keep context together. It is built for busy professionals and knowledge
+          workers who manage multiple accounts, high message volume, and meeting-heavy schedules,
+          and who want help understanding what matters, what needs action, and what comes next.
+        </p>
+        <p className="mb-1">It is especially valuable if you want to:</p>
         <ul className="list-disc pl-5 space-y-1">
-          <li>Not miss important emails and events</li>
-          <li>Get a daily summary and &quot;what mattered yesterday&quot;</li>
-          <li>Search email and calendar in natural language</li>
-          <li>Ask the AI assistant questions like &quot;What do I need to do now?&quot; or &quot;Prepare me for my next meeting&quot;</li>
+          <li>Keep important emails and events from slipping through the cracks</li>
+          <li>Start the day with a clear summary instead of a backlog</li>
+          <li>Review what mattered yesterday without reconstructing it manually</li>
+          <li>Search and ask questions across your workflow in plain language</li>
         </ul>
+      </>
+    ),
+  },
+  {
+    title: 'How do I know MindMesh is safe to install and connect?',
+    content: (
+      <>
+        <p className="mb-3">
+          MindMesh is built to be trustworthy at both the account and desktop level. Our
+          integrations are verified with major platforms where required, and the desktop app is
+          distributed with platform signing so you can install it with confidence.
+        </p>
+        <p className="mb-2">That includes:</p>
+        <ul className="list-disc pl-5 space-y-1 mb-3">
+          <li>Google verification for supported Google integrations</li>
+          <li>Microsoft verification for supported Microsoft integrations</li>
+          <li>Apple Developer signing and notarization for macOS distribution</li>
+          <li>Windows code signing through a trusted certificate authority</li>
+        </ul>
+        <p className="mb-2">
+          MindMesh is also built with a local-first approach, so core memory stays close to the
+          user while external services are used selectively for connected features and AI
+          functionality.
+        </p>
       </>
     ),
   },
   {
     title: 'How is MindMesh different from email clients?',
     content:
-      'MindMesh is not an email client. It\'s a cognitive layer that treats apps like Gmail and Calendar as data sources, surfaces only what matters (10–20 attention objects instead of hundreds of items), and gives you narratives instead of raw logs. The AI assistant is the main interface—you talk to your digital life instead of browsing folders and lists.',
+      'Email clients help you manage messages. MindMesh helps you manage context. It treats tools like Gmail, Outlook, and Calendar as sources of information, then filters, enriches, and connects that information so you can focus on what actually matters. Instead of sorting through raw activity, you get summaries, narratives, semantic search, and an AI assistant that helps you understand and act on your day.',
   },
   {
-    title: 'What are Mascot and Sensor Bar?',
-    content:
-      'Mascot is a chat-style AI assistant and Sensor Bar is a command palette. Both let you ask questions in natural language, such as "What do I need to do now?", "Summarize today", or "Prepare me for my next meeting." They use MindMesh\'s memory and attention engine to give context-aware answers.',
+    title: 'What is Mascot?',
+    content: (
+      <>
+        <p className="mb-3">
+          Mascot is MindMesh&apos;s chat-style AI assistant that lives on your Desktop and can be launched with a single click. It gives you a dedicated conversational
+          interface where you can ask questions about your email, calendar, and saved memory in
+          natural language.
+        </p>
+        <p className="mb-3">
+          Unlike a simple chat box, Mascot is built for ongoing context. It keeps conversation
+          continuity across follow-up questions, can ask clarifying questions when your request is
+          ambiguous, and uses MindMesh&apos;s memory and retrieval pipeline to return answers
+          grounded in your actual workflow.
+        </p>
+        <p className="mb-2">You can use Mascot to do things like:</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>ask what needs your attention right now</li>
+          <li>summarize your day</li>
+          <li>find important emails or meetings</li>
+          <li>prepare for upcoming events</li>
+          <li>follow up on earlier questions without starting over</li>
+        </ul>
+      </>
+    ),
   },
   {
-    title: 'What is Today\'s Overview',
-    content:
-      'Today\'s Overview is your daily AI summary. It aggregates emails and calendar events from Gmail, Outlook, and calendars, and surfaces inferred facts, TODOs, time clashes, and a concise overview so you can start your day with clarity instead of digging through inboxes.',
+    title: 'What is Sensor Bar?',
+    content: (
+      <>
+        <p className="mb-3">
+          Sensor Bar is MindMesh&apos;s fast command layer for quick queries and actions. It can
+          surface email and calendar context, launch installed apps, and use built-in plugins for
+          things like dictionary lookups, currency conversion, timezone conversion, math, and unit
+          conversion.
+        </p>
+        <p className="mb-2">
+          It is designed for lightweight, high-speed interactions, so you can get an answer,
+          preview key information, or trigger an action without opening a full chat flow.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "What is Today's Overview?",
+    content: (
+      <>
+        <p className="mb-3">
+          Today&apos;s Overview is your daily AI briefing in MindMesh. It aggregates relevant
+          email and calendar activity, highlights inferred facts, to-dos, and scheduling conflicts,
+          and gives you a concise summary of what deserves attention today. This is the first thing you see when you open MindMesh and keeps refreshing as the day progreses.
+        </p>
+        <p className="mb-2">
+          Instead of digging through inboxes and events one by one, you get a clearer picture of
+          your day in one place.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'What does MindMesh actually remember?',
+    content: (
+      <>
+        <p className="mb-3">
+          MindMesh remembers the parts of your digital life that are most useful later: email
+          activity, calendar events, key details, inferred facts, to-dos, summaries, and daily
+          narratives.
+        </p>
+        <p className="mb-2">
+          Instead of just storing raw messages and events, it builds searchable memory from them,
+          so you can find what happened, understand what mattered, and ask questions about it later
+          in natural language.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Where is my data stored, and how private is it?',
+    content: (
+      <>
+        <p className="mb-3">
+          MindMesh is local-first. Core memory stays close to you on-device, while some cloud
+          services may be used selectively for sync, heavy compute, and AI features.
+        </p>
+        <p className="mb-2">
+          It is designed to be privacy-conscious and to give you more control over your data than
+          a typical cloud-only workflow tool.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Do I need to trust MindMesh with my inbox?',
+    content: (
+      <>
+        <p className="mb-3">
+          Yes, if you connect your inbox, you are trusting MindMesh with access to that data.
+          MindMesh is designed to handle that responsibility with a local-first architecture and a
+          more privacy-conscious model than a typical cloud-only productivity tool.
+        </p>
+        <p className="mb-2">
+          In practice, that means keeping core memory close to the user, using external services
+          selectively, and only accessing inbox data to power features like search, summaries,
+          inferred action items, and assistant workflows.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Is MindMesh a desktop app or a web app?',
+    content: (
+      <>
+        <p className="mb-3">
+          MindMesh is a desktop app that you install on your computer. It is designed to run as a
+          local-first application, with core memory and context kept close to the user rather than
+          living entirely in a browser tab.
+        </p>
+        <p className="mb-2">
+          Some connected services and AI features may still rely on cloud APIs, but the product
+          itself is built as an installed desktop experience, not a typical web app.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "How does Yesterday's Narrative work?",
+    content: (
+      <>
+        <p className="mb-3">
+          Yesterday&apos;s Narrative takes the previous day&apos;s activity and turns it into a
+          concise story. MindMesh uses the emails, meetings, inferred facts, and to-dos associated
+          with that day to generate highlights, priorities, and a summary you can review quickly.
+        </p>
+        <p className="mb-2">
+          The goal is to help you understand the shape of the day after the fact, not just scroll
+          through a log of messages and events.
+        </p>
+      </>
+    ),
   },
 ];
 

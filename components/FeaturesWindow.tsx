@@ -17,15 +17,15 @@ import {
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
 const features = [
-  { icon: Mail, title: 'Smart Email Management', description: 'AI-powered email organization and prioritization. Never miss an important message with intelligent filtering and summaries.', color: 'from-blue-500 to-blue-600' },
-  { icon: Calendar, title: 'Calendar Intelligence', description: 'Automatically sync and manage your calendar events. Get smart suggestions and reminders based on your schedule.', color: 'from-purple-500 to-purple-600' },
-  { icon: Brain, title: 'AI Assistant', description: 'Your personal AI assistant that understands context and helps you make decisions faster with natural language processing.', color: 'from-pink-500 to-pink-600' },
-  { icon: Lock, title: 'Local-First Architecture', description: 'All your data stays on your device. No cloud storage, no data mining. Complete privacy and control over your information.', color: 'from-green-500 to-green-600' },
-  { icon: Zap, title: 'Lightning Fast', description: 'Built with performance in mind. Instant search, real-time updates, and seamless integration with your workflow.', color: 'from-yellow-500 to-yellow-600' },
-  { icon: Search, title: 'Powerful Search', description: 'Find anything instantly with semantic search across emails, calendar events, and your entire memory database.', color: 'from-indigo-500 to-indigo-600' },
-  { icon: Cat, title: 'Mascot Chat', description: 'Chat with your friendly MindMesh mascot using natural language. Ask questions, get insights, and manage tasks through conversation.', color: 'from-cyan-500 to-cyan-600' },
-  { icon: Clock, title: 'Time Management', description: 'Smart time tracking and productivity insights. Understand how you spend your time and optimize your workflow.', color: 'from-orange-500 to-orange-600' },
-  { icon: Shield, title: 'Enterprise Security', description: 'Bank-level encryption and security. Your sensitive data is protected with industry-standard security practices.', color: 'from-red-500 to-red-600' },
+  { icon: Mail, title: 'Your workflow finally has memory', description: 'MindMesh helps you capture context, surface what matters, and act faster across email, calendar, and everything in between.', color: 'from-blue-500 to-blue-600' },
+  { icon: Calendar, title: 'Ask naturally, get useful answers', description: 'With Mascot Chat, Ask questions in plain language and get answers grounded in your actual context. MindMesh combines memory retrieval with live data when needed, so responses stay useful instead of generic.', color: 'from-purple-500 to-purple-600' },
+  { icon: Brain, title: 'Find the exact email or event fast', description: 'Search by meaning, not just keywords. MindMesh helps you surface the thread, meeting, or detail you need without digging through folders, tabs, or long histories.', color: 'from-pink-500 to-pink-600' },
+  { icon: Lock, title: 'Know what matters today', description: 'See the emails, meetings, and follow-ups that deserve attention now. MindMesh helps turn a busy inbox and calendar into a clearer picture of your day.', color: 'from-green-500 to-green-600' },
+  { icon: Zap, title: 'Works across multiple accounts', description: 'Keep context across work and personal accounts without losing track of where something came from. MindMesh is built to retrieve the right memory with the right account scope.', color: 'from-yellow-500 to-yellow-600' },
+  { icon: Search, title: 'Local-first by design', description: 'MindMesh is designed to keep core data close to the user, with cloud services used selectively for sync, heavy compute, and AI features. That gives you more control without giving up useful intelligence.', color: 'from-indigo-500 to-indigo-600' },
+  { icon: Cat, title: 'Start with the story, not the search', description: 'Yesterday’s Narrative gives you a clean recap of what happened, what changed, and what still needs attention.', color: 'from-cyan-500 to-cyan-600' },
+  { icon: Clock, title: 'Turn activity into action', description: 'MindMesh extracts inferred facts and to-dos from emails and meetings, so important details do not stay buried in threads and calendar events.', color: 'from-orange-500 to-orange-600' },
+  { icon: Shield, title: 'Capture context instantly', description: 'Use the Sensor Bar to check, launch, ask, and capture things the moment they matter, without breaking your flow.', color: 'from-red-500 to-red-600' },
 ];
 
 interface FeaturesWindowProps {
@@ -113,12 +113,12 @@ export default function FeaturesWindow({ dragControls, onClose, onMinimize }: Fe
           </div>
           <div className="max-w-4xl mx-auto px-6 py-8">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 text-center">
-              Everything You Need to
+            Stop managing Tools.
               <br />
-              <span className="gradient-text">Stay Productive</span>
+              <span className="gradient-text">Start using Memory.</span>
             </h2>
             <p className="text-gray-600 text-center mb-8 max-w-xl mx-auto">
-              Powerful features designed to make your workflow seamless and efficient
+            MindMesh turns scattered activity into searchable context so you can find what matters, understand it faster, and decide what to do next.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((feature, index) => {
