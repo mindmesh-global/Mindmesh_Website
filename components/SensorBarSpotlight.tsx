@@ -10,11 +10,16 @@ import { createPortal } from 'react-dom';
 const PADDING = 12;
 const SENSOR_BAR_Z = 2147483648; // Above mascot (2147483647)
 
+interface SensorBarSpotlightProps {
+  /** When true: full spotlight + tooltip (onboarding). When false: only the sensor bar. */
+  showTooltip?: boolean;
+}
+
 /**
- * Sensor bar spotlight - shows when mascot tour (8 steps) completes.
- * Highlights sensor bar and tooltip, dims rest of screen. No connector line.
+ * Sensor bar - shows on mindmesh screen when Sensor Bar option is ON.
+ * With showTooltip: spotlight + tooltip (onboarding). Without: just the bar.
  */
-export default function SensorBarSpotlight() {
+export default function SensorBarSpotlight({ showTooltip = false }: SensorBarSpotlightProps) {
   const [inputValue, setInputValue] = useState('');
   const [spotlightRects, setSpotlightRects] = useState<{
     bar: { left: number; top: number; width: number; height: number };
@@ -56,9 +61,7 @@ export default function SensorBarSpotlight() {
 
   const handleSkip = () => {
     onboarding?.setSensorBarCompleted();
-    if (uiOverlay) {
-      uiOverlay.setShowSensorBar(false);
-    }
+    // Tooltip/spotlight hides; sensor bar stays visible if user has it ON from dropdown
   };
 
   const content = (
@@ -67,8 +70,8 @@ export default function SensorBarSpotlight() {
       style={{ zIndex: SENSOR_BAR_Z }}
       aria-hidden
     >
-      {/* Spotlight overlay - dim background, highlight sensor bar + tooltip */}
-      {typeof document !== 'undefined' && (
+      {/* Spotlight overlay - only when showTooltip (onboarding) */}
+      {showTooltip && typeof document !== 'undefined' && (
         <svg
           className="fixed inset-0 w-full h-full pointer-events-none"
           style={{ zIndex: SENSOR_BAR_Z, width: '100vw', height: '100vh' }}
@@ -165,28 +168,30 @@ export default function SensorBarSpotlight() {
           ))}
         </motion.div>
 
-        {/* Tooltip - fixed at bottom left */}
-        <motion.div
-          ref={tooltipRef}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.2 }}
-          onAnimationComplete={updateSpotlight}
-          className="fixed left-40 bottom-1/4 px-4 py-2 rounded-xl bg-white border-2 border-black shadow-lg pointer-events-auto"
-          style={{ zIndex: SENSOR_BAR_Z + 2 }}
-        >
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-black">Search anything, jump anywhere</p>
-          </div>
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="mt-2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-black text-xs font-semibold hover:bg-slate-200 transition-all"
+        {/* Tooltip - only when showTooltip (onboarding) */}
+        {showTooltip && (
+          <motion.div
+            ref={tooltipRef}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.2 }}
+            onAnimationComplete={updateSpotlight}
+            className="fixed left-40 bottom-1/4 px-4 py-2 rounded-xl bg-white border-2 border-black shadow-lg pointer-events-auto"
+            style={{ zIndex: SENSOR_BAR_Z + 2 }}
           >
-            <X className="w-4 h-4" />
-            Skip
-          </button>
-        </motion.div>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-black">Search anything, jump anywhere</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleSkip}
+              className="mt-2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-black text-xs font-semibold hover:bg-slate-200 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Skip
+            </button>
+          </motion.div>
+        )}
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ export default function ConditionalOverlays() {
   return (
     <>
       {pathname === '/' && <IntroGreetingTooltip />}
-      {showSensorBarTooltip && <SensorBarSpotlight />}
+      {showSensorBar && showTooltips && <SensorBarSpotlight showTooltip={showSensorBarTooltip} />}
       {showMascot && <MascotChatbot showTooltip={showMascotTooltip} />}
     </>
   );

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
-export type ActiveWindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact' | null;
+export type ActiveWindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact' | 'appDirectory' | null;
 
 type UIOverlayContextType = {
   showMascot: boolean;
@@ -19,7 +19,7 @@ const UIOverlayContext = createContext<UIOverlayContextType | null>(null);
 
 export function UIOverlayProvider({ children }: { children: ReactNode }) {
   const [showMascot, setShowMascotState] = useState(true);
-  const [showSensorBar, setShowSensorBarState] = useState(true);
+  const [showSensorBar, setShowSensorBarState] = useState(false);
   const [activeWindowType, setActiveWindowTypeState] = useState<ActiveWindowType>('home');
   const [hasScrolledToBottom, setHasScrolledToBottomState] = useState(false);
   const setShowMascot = useCallback((v: boolean) => setShowMascotState(v), []);

@@ -324,16 +324,6 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                         </button>
                       </div>
                     </div>
-                    <div
-                      className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0"
-                      style={{ borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderTop: '14px solid black' }}
-                      aria-hidden
-                    />
-                    <div
-                      className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-0 h-0"
-                      style={{ borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderTop: '12px solid white' }}
-                      aria-hidden
-                    />
                   </motion.div>
                 )}
               </AnimatePresence>

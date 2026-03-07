@@ -9,17 +9,19 @@ import {
   FileText, 
   Mail, 
   BookOpen, 
-  Download,
   Play,
+  Download,
   Calculator,
+  FolderOpen,
 } from 'lucide-react';
 import MindMeshUI from './mindmeshui';
-import { useUIOverlay } from '@/context/UIOverlayContext';
+import { useUIOverlay, type ActiveWindowType } from '@/context/UIOverlayContext';
 import FeaturesWindow from './FeaturesWindow';
 import DocsWindow from './DocsWindow';
 import SocialWindow from './SocialWindow';
 import PricingWindow from './PricingWindow';
 import ContactWindow from './ContactWindow';
+import AppDirectoryWindow from './AppDirectoryWindow';
 import WaitlistModal from './WaitlistModal';
 
 interface IconPosition {
@@ -27,7 +29,7 @@ interface IconPosition {
   y: number;
 }
 
-type WindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact';
+type WindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact' | 'appDirectory';
 interface OpenWindowItem {
   id: string;
   type: WindowType;
@@ -45,6 +47,7 @@ const WINDOW_LABELS: Record<WindowType, string> = {
   social: 'Social',
   subscription: 'Subscription',
   contact: 'Contact Us',
+  appDirectory: 'App Directory',
 };
 
 function StackedWindow({
@@ -109,6 +112,9 @@ function StackedWindow({
         {item.type === 'contact' && (
           <ContactWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
         )}
+        {item.type === 'appDirectory' && (
+          <AppDirectoryWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+        )}
       </div>
     </motion.div>
   );
@@ -122,17 +128,18 @@ export default function Hero() {
   const uiOverlay = useUIOverlay();
 
   const leftIcons = [
-    { icon: Home, label: 'MindMesh', color: 'text-blue-400', labelColor: 'text-blue-800', logoSrc: '/images/Logo/mindmesh-logo-tight.png' },
-    { icon: Download, label: 'Join Waitlist', color: 'text-teal-400', labelColor: 'text-teal-800', iconSrc: '/images/join-waitlist-icon.png' },
-    { icon: Calculator, label: 'Subscription', color: 'text-purple-400', labelColor: 'text-purple-800', iconSrc: '/images/subscription-icon.png' },
-    { icon: FileText, label: 'Features', color: 'text-green-400', labelColor: 'text-green-800', iconSrc: '/images/features-icon.png' },
+    { icon: Home, label: 'MindMesh', color: 'text-blue-400', labelColor: 'text-white', glowColor: 'rgba(96,165,250,0.9)', logoSrc: '/images/Logo/mindmesh-logo-tight.png' },
+    { icon: Download, label: 'Join Waitlist', color: 'text-teal-400', labelColor: 'text-white', glowColor: 'rgba(45,212,191,0.9)', iconSrc: '/images/join-waitlist-icon.png' },
+    { icon: Calculator, label: 'Subscription', color: 'text-purple-400', labelColor: 'text-white', glowColor: 'rgba(192,132,252,0.9)', iconSrc: '/images/subscription-icon.png' },
+    { icon: FileText, label: 'Features', color: 'text-green-400', labelColor: 'text-white', glowColor: 'rgba(74,222,128,0.9)', iconSrc: '/images/features-icon.png' },
+    { icon: FolderOpen, label: 'App Directory', color: 'text-amber-400', labelColor: 'text-white', glowColor: 'rgba(251,191,36,0.95)' },
   ];
 
   const rightIcons = [
-    { icon: Sparkles, label: 'Social', color: 'text-teal-400', labelColor: 'text-teal-800', iconSrc: '/images/social-icon.png' },
-    { icon: Play, label: 'Demo.mov', color: 'text-red-400', labelColor: 'text-red-800', iconSrc: '/images/demo-icon.png' },
-    { icon: BookOpen, label: 'Docs', color: 'text-cyan-400', labelColor: 'text-cyan-800', iconSrc: '/images/docs-icon.png' },
-    { icon: Mail, label: 'Contact Us', color: 'text-orange-400', labelColor: 'text-orange-800', iconSrc: '/images/contact-us-icon.png' },
+    { icon: Sparkles, label: 'Social', color: 'text-teal-400', labelColor: 'text-white', glowColor: 'rgba(45,212,191,0.9)', iconSrc: '/images/social-icon.png' },
+    { icon: Play, label: 'Demo.mov', color: 'text-red-400', labelColor: 'text-white', glowColor: 'rgba(248,113,113,0.9)', iconSrc: '/images/demo-icon.png' },
+    { icon: BookOpen, label: 'Docs', color: 'text-cyan-400', labelColor: 'text-white', glowColor: 'rgba(34,211,238,0.9)', iconSrc: '/images/docs-icon.png' },
+    { icon: Mail, label: 'Contact Us', color: 'text-orange-400', labelColor: 'text-white', glowColor: 'rgba(251,146,60,0.9)', iconSrc: '/images/contact-us-icon.png' },
   ];
 
   const allIcons = [...leftIcons, ...rightIcons];
@@ -144,8 +151,10 @@ export default function Hero() {
     const iconWidth = 96;
     const sideMargin = 48; // More margin from screen edges
     
-    // Vertically center the 4-icon column in viewport
-    const totalColumnHeight = 4 * iconSpacing;
+    // Vertically center the icon columns in viewport
+    const leftCount = leftIcons.length;
+    const rightCount = rightIcons.length;
+    const totalColumnHeight = Math.max(leftCount, rightCount) * iconSpacing;
     const startY = typeof window !== 'undefined' 
       ? Math.max(100, (window.innerHeight - totalColumnHeight) / 2)
       : 120;
@@ -215,7 +224,7 @@ export default function Hero() {
     if (!uiOverlay) return;
     const visible = openWindows.filter((w) => !minimizedIds.has(w.id));
     const top = visible[visible.length - 1];
-    uiOverlay.setActiveWindowType(top?.type ?? null);
+    uiOverlay.setActiveWindowType((top?.type ?? null) as ActiveWindowType);
   }, [openWindows, minimizedIds, uiOverlay]);
 
   // Listen for open-window from Navbar (when on home) and handle ?open= URL param
@@ -259,6 +268,7 @@ export default function Hero() {
 
   const [dragOffsets, setDragOffsets] = useState<Record<string, { x: number; y: number }>>({});
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
   useEffect(() => {
     const open = searchParams.get('open');
@@ -279,6 +289,7 @@ export default function Hero() {
     if (label === 'Features') openWindow('features');
     if (label === 'Join Waitlist') setIsWaitlistOpen(true);
     if (label === 'Subscription') openWindow('subscription');
+    if (label === 'App Directory') openWindow('appDirectory');
     if (label === 'Docs') openWindow('docs');
     if (label === 'Social') openWindow('social');
     if (label === 'Contact Us') openWindow('contact');
@@ -303,6 +314,7 @@ export default function Hero() {
       if (label === 'Features') openWindow('features');
       if (label === 'Join Waitlist') setIsWaitlistOpen(true);
       if (label === 'Subscription') openWindow('subscription');
+      if (label === 'App Directory') openWindow('appDirectory');
       if (label === 'Docs') openWindow('docs');
       if (label === 'Social') openWindow('social');
       if (label === 'Contact Us') openWindow('contact');
@@ -359,6 +371,8 @@ export default function Hero() {
             onDragStart={() => handleDragStart(item.label)}
             onDrag={(event, info) => handleDrag(item.label, event, info)}
             onDragEnd={(event, info) => handleDragEnd(item.label, event, info)}
+            onHoverStart={() => setHoveredIcon(item.label)}
+            onHoverEnd={() => setHoveredIcon(null)}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ 
               opacity: 1, 
@@ -366,18 +380,23 @@ export default function Hero() {
             }}
             transition={{ delay: 0.5 + index * 0.1, duration: 0.3 }}
             whileDrag={{ scale: 1.1, zIndex: 50 }}
-            className="absolute z-20 flex flex-col items-center gap-2 group pointer-events-auto"
+            className="absolute z-20 flex flex-col items-center gap-2 group pointer-events-auto cursor-pointer"
             style={{
               left: position.x ? `${position.x + dragOffset.x}px` : '0px',
               top: position.y ? `${position.y + dragOffset.y}px` : '0px',
               width: '96px', // Fixed width for consistent alignment
             }}
           >
-            <div className={`rounded-lg flex items-center justify-center transition-all duration-200 shadow-lg flex-shrink-0 relative w-11 h-11 min-w-[44px] min-h-[44px] ${
-              ('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc)
-                ? 'bg-white border-2 border-gray-300 overflow-hidden' + (item.label === 'Social' ? ' ring-2 ring-teal-400/60 ring-offset-1 ring-offset-transparent' : '')
-                : 'bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 group-hover:bg-gray-700/50 overflow-hidden'
-            }`}>
+            <div
+              className={`rounded-lg flex items-center justify-center transition-all duration-200 flex-shrink-0 relative w-11 h-11 min-w-[44px] min-h-[44px] group-hover:scale-105 ${
+                ('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc)
+                  ? 'overflow-visible' + (item.label === 'Social' ? ' ring-2 ring-teal-400/60 ring-offset-1 ring-offset-transparent' : '')
+                  : 'bg-gray-800/50 backdrop-blur-sm group-hover:bg-gray-700/50 overflow-hidden shadow-lg' + (item.label === 'App Directory' ? '' : ' border border-gray-700/50')
+              }`}
+              style={('glowColor' in item && item.glowColor) ? {
+                filter: `drop-shadow(0 0 6px ${item.glowColor}) drop-shadow(0 0 12px ${item.glowColor}) drop-shadow(0 0 20px ${item.glowColor})`,
+              } : undefined}
+            >
               {('logoSrc' in item && item.logoSrc) || ('iconSrc' in item && item.iconSrc) ? (
                 <img
                   src={((item as { logoSrc?: string; iconSrc?: string }).logoSrc ?? (item as { iconSrc?: string }).iconSrc) as string}
@@ -390,7 +409,20 @@ export default function Hero() {
                 <item.icon className={`w-8 h-8 ${item.color}`} />
               )}
             </div>
-            <span className={`text-sm font-semibold group-hover:opacity-90 transition-colors text-center max-w-[96px] whitespace-nowrap leading-tight ${item.labelColor || 'text-slate-800'}`}>
+            <span
+              className={`text-sm font-semibold transition-all duration-300 text-center max-w-[96px] whitespace-nowrap leading-tight group-hover:opacity-100 ${item.labelColor || 'text-slate-800'} group-hover:bg-black group-hover:px-2 group-hover:py-1 group-hover:rounded-md`}
+              style={
+                'glowColor' in item && item.glowColor && hoveredIcon === item.label
+                  ? {
+                      textShadow: `0 0 8px ${item.glowColor}, 0 0 16px ${item.glowColor}, 0 0 24px ${item.glowColor}`,
+                      transition: 'text-shadow 0.3s ease, opacity 0.3s ease',
+                    }
+                  : {
+                      textShadow: 'none',
+                      transition: 'text-shadow 0.3s ease, opacity 0.3s ease',
+                    }
+              }
+            >
               {item.label}
             </span>
           </motion.div>
@@ -412,12 +444,13 @@ export default function Hero() {
           />
         ))}
 
-      {/* Single dock for all minimized windows */}
+      {/* Single dock for all minimized windows - shifts left on smaller viewports */}
       {minimizedIds.size > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] flex flex-wrap gap-2 justify-center max-w-[90vw]"
+          transition={{ duration: 0.2 }}
+          className="fixed bottom-3 left-3 md:left-1/2 md:-translate-x-1/2 z-[100] flex flex-wrap gap-1.5 justify-start md:justify-center max-w-[calc(100vw-2rem)] md:max-w-[90vw]"
         >
           {openWindows
             .filter((w) => minimizedIds.has(w.id))
@@ -425,35 +458,23 @@ export default function Hero() {
               <button
                 key={w.id}
                 onClick={() => restoreWindow(w.id)}
-                className="bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-700/90 transition-all duration-200 shadow-lg"
+                className="group/btn bg-gray-800/95 backdrop-blur-xl border border-white/10 rounded-lg px-2.5 py-1.5 flex items-center gap-2 hover:bg-gray-700/95 hover:border-white/20 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98]"
                 title={`Restore ${WINDOW_LABELS[w.type]}`}
               >
-                <div className="w-4 h-4 rounded bg-gray-600" />
-                <span className="text-sm text-gray-300">{WINDOW_LABELS[w.type]}</span>
+                <div className="w-5 h-5 rounded-md bg-gray-600/90 group-hover/btn:bg-gray-500/90 flex items-center justify-center shrink-0">
+                  {w.type === 'home' && <Home className="w-3 h-3 text-blue-400" strokeWidth={2.5} />}
+                  {w.type === 'features' && <FileText className="w-3 h-3 text-green-400" strokeWidth={2.5} />}
+                  {w.type === 'subscription' && <Calculator className="w-3 h-3 text-purple-400" strokeWidth={2.5} />}
+                  {w.type === 'docs' && <BookOpen className="w-3 h-3 text-cyan-400" strokeWidth={2.5} />}
+                  {w.type === 'social' && <Sparkles className="w-3 h-3 text-teal-400" strokeWidth={2.5} />}
+                  {w.type === 'contact' && <Mail className="w-3 h-3 text-orange-400" strokeWidth={2.5} />}
+                  {w.type === 'appDirectory' && <FolderOpen className="w-3 h-3 text-indigo-400" strokeWidth={2.5} />}
+                </div>
+                <span className="text-xs font-medium text-gray-300 group-hover/btn:text-white">{WINDOW_LABELS[w.type]}</span>
               </button>
             ))}
         </motion.div>
       )}
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="w-6 h-10 border-2 border-gray-400/50 rounded-full flex justify-center"
-        >
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="w-1 h-3 bg-gray-400/50 rounded-full mt-2"
-          />
-        </motion.div>
-      </motion.div>
 
       <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
     </section>

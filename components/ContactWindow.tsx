@@ -169,9 +169,12 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
         {/* Content */}
         <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 dark:bg-gray-900/50 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           <div className="max-w-md mx-auto p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <Mail className="w-5 h-5 text-orange-500" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Get in Touch</h2>
+            <div className="text-center pb-6 mb-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 mb-3">
+                <Mail className="w-5 h-5 text-orange-500" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Get in Touch</h2>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Drop us a line — we&apos;ll respond soon</p>
             </div>
 
             <AnimatePresence mode="wait">

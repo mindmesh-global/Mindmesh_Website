@@ -1,27 +1,31 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Linkedin, Share2 } from 'lucide-react';
+import {
+  Mail,
+  Server,
+  FolderOpen,
+} from 'lucide-react';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
-interface SocialWindowProps {
+const CONNECTED_APPS = [
+  { icon: Mail, name: 'Gmail', description: 'Sync emails, labels, and threads', color: 'from-red-500 to-red-600' },
+  { icon: Mail, name: 'Outlook', description: 'Microsoft 365 email & calendar', color: 'from-indigo-500 to-indigo-600' },
+  { icon: Server, name: 'SMTP', description: 'Custom SMTP mailbox integration', color: 'from-green-500 to-green-600' },
+];
+
+interface AppDirectoryWindowProps {
   dragControls?: DragControls;
   onClose?: () => void;
   onMinimize?: () => void;
 }
 
-const SOCIAL_LINKS = [
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/mindmesh', color: 'text-blue-600 hover:text-blue-700' },
-];
-
-export default function SocialWindow({ dragControls, onClose, onMinimize }: SocialWindowProps) {
+export default function AppDirectoryWindow({ dragControls, onClose, onMinimize }: AppDirectoryWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const handleClose = () => {
-    onClose?.();
-  };
+  const handleClose = () => onClose?.();
 
   const handleFullscreen = async () => {
     if (!windowRef.current) return;
@@ -49,10 +53,10 @@ export default function SocialWindow({ dragControls, onClose, onMinimize }: Soci
       <div
         ref={windowRef}
         className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
-          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[1600px] min-h-0 flex-1'
+          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[1400px] min-h-0 flex-1'
         }`}
       >
-        {/* Title bar */}
+        {/* Mac-style title bar */}
         <div
           className={`bg-gray-800/80 border-b border-gray-700/50 px-4 py-3 flex items-center gap-2 flex-shrink-0 select-none ${dragControls ? 'cursor-grab active:cursor-grabbing' : ''}`}
           onPointerDown={dragControls ? (e) => { if ((e.target as HTMLElement).closest('button')) return; dragControls.start(e); } : undefined}
@@ -79,38 +83,47 @@ export default function SocialWindow({ dragControls, onClose, onMinimize }: Soci
             />
           </div>
           <div className="flex-1 text-center">
-            <span className="text-sm text-gray-400 font-medium">Social</span>
+            <span className="text-sm text-gray-400 font-medium">App Directory</span>
           </div>
         </div>
 
-        {/* Content - Social links */}
+        {/* Content - Connected apps */}
         <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 dark:bg-gray-900/50 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
-          <div className="max-w-md mx-auto p-6">
-            {/* Header - same style as Contact */}
-            <div className="text-center pb-6 mb-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 mb-3">
-                <Share2 className="w-5 h-5 text-teal-500" />
+          <div className="max-w-4xl mx-auto px-6 py-8">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center mb-4">
+                <FolderOpen className="w-8 h-8 text-indigo-500 dark:text-indigo-400" strokeWidth={1.5} />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Connect with us</h2>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Follow us on social for updates</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">App Directory</h2>
+              <p className="mt-2 text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+                Apps that connect with MindMesh
+              </p>
             </div>
 
-            {/* Social link cards */}
-            <div className="flex flex-col gap-4">
-              {SOCIAL_LINKS.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800/80 shadow-sm hover:shadow-md hover:border-teal-300 dark:hover:border-teal-600 transition-colors duration-200"
-                >
-                  <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700">
-                    <item.icon className={`w-6 h-6 ${item.color}`} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {CONNECTED_APPS.map((app, index) => {
+                const Icon = app.icon;
+                return (
+                  <div
+                    key={index}
+                    className="group p-4 rounded-xl border transition-all duration-200 bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-lg"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-10 h-10 rounded-lg bg-gradient-to-br ${app.color} flex items-center justify-center flex-shrink-0`}
+                      >
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-gray-900 dark:text-white truncate">{app.name}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                          {app.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-lg font-medium text-gray-900 dark:text-white">{item.label}</span>
-                </a>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
