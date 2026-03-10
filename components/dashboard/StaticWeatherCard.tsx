@@ -42,8 +42,6 @@ export function StaticWeatherCard() {
   const [low, setLow] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number>(0);
   const [loading, setLoading] = useState(true);
-  const [locationDenied, setLocationDenied] = useState(false);
-
   // Update time & date every minute - format: "01:02 PM", "SAT MAR 7"
   useEffect(() => {
     const updateTime = () => {
@@ -119,10 +117,7 @@ export function StaticWeatherCard() {
           }
         },
         () => {
-          if (!cancelled) {
-            setLocationDenied(true);
-            fetchWeather(28.6139, 77.2090); // Delhi as fallback for India
-          }
+          if (!cancelled) fetchWeather(28.6139, 77.2090); // Delhi as fallback for India
         },
         { timeout: 5000, maximumAge: 300000 }
       );
@@ -132,35 +127,6 @@ export function StaticWeatherCard() {
 
     return () => { cancelled = true; };
   }, []);
-
-  const requestLocation = () => {
-    if (typeof navigator !== 'undefined' && navigator.geolocation) {
-      setLocationDenied(false);
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setLocationDenied(false);
-          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`)
-            .then((r) => r.json())
-            .then((d) => {
-              if (d?.current) {
-                setTemp(Math.round(d.current.temperature_2m));
-                setWeatherCode(d.current.weather_code ?? 0);
-              }
-              if (d?.daily?.temperature_2m_max?.[0] != null) setHigh(Math.round(d.daily.temperature_2m_max[0]));
-              if (d?.daily?.temperature_2m_min?.[0] != null) setLow(Math.round(d.daily.temperature_2m_min[0]));
-            });
-          fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=en`)
-            .then((r) => r.json())
-            .then((g) => {
-              if (g?.city) setLocation(g.city);
-              else if (g?.locality) setLocation(g.locality);
-              else if (g?.principalSubdivision) setLocation(g.principalSubdivision);
-            });
-        },
-        () => setLocationDenied(true)
-      );
-    }
-  };
 
   const weather = getWeatherInfo(weatherCode);
   const isClearOrSunny = weatherCode === 0 || weatherCode === 1;
@@ -320,30 +286,6 @@ export function StaticWeatherCard() {
               <div style={{ fontSize: '15px', fontWeight: 500 }}>
                 {location === null ? 'Loading...' : location}
               </div>
-              {locationDenied && (
-                <button
-                  onClick={requestLocation}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    background: '#3A3A3A',
-                    color: 'white',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E53935" strokeWidth="2" strokeLinecap="round" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  Enable Location
-                </button>
-              )}
             </div>
           </div>
         </section>
