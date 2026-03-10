@@ -32,6 +32,14 @@ export default function ConditionalOverlays() {
     }
   }, [pathname, overlay]);
 
+  // Prevent user scroll during mascot tour (so programmatic scroll works) but allow programmatic scroll
+  useEffect(() => {
+    if (!overlay?.mascotTooltipVisible) return;
+    const preventScroll = (e: WheelEvent) => e.preventDefault();
+    document.body.addEventListener('wheel', preventScroll, { passive: false });
+    return () => document.body.removeEventListener('wheel', preventScroll);
+  }, [overlay?.mascotTooltipVisible]);
+
   if (!overlay || !onboarding) return null;
   const { showMascot, showSensorBar, activeWindowType } = overlay;
 

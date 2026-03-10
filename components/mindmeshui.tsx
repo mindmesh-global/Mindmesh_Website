@@ -20,6 +20,7 @@ interface MindMeshUIProps {
 export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMeshUIProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const contentScrollRef = useRef<HTMLDivElement>(null);
   const uiOverlay = useUIOverlay();
   const onboarding = useOnboardingTour();
   const [isMinimized, setIsMinimized] = useState(false);
@@ -89,6 +90,15 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
+
+  // Prevent user scroll (wheel) when mascot tooltip is visible, but allow programmatic scroll
+  useEffect(() => {
+    const el = contentScrollRef.current;
+    if (!el || !uiOverlay?.mascotTooltipVisible) return;
+    const preventScroll = (e: WheelEvent) => e.preventDefault();
+    el.addEventListener('wheel', preventScroll, { passive: false });
+    return () => el.removeEventListener('wheel', preventScroll);
+  }, [uiOverlay?.mascotTooltipVisible]);
 
   // If closed, don't render anything
   if (isClosed) {
@@ -206,8 +216,13 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
           </div>
         </div>
         
-        {/* Main Content */}
-        <div className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+        {/* Main Content - overflow-y-auto so mascot tour can programmatically scroll; scroll lock when tour active */}
+        <div
+          ref={contentScrollRef}
+          data-mindmesh-scroll
+          className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}
+          style={uiOverlay?.mascotTooltipVisible ? { overscrollBehavior: 'contain', touchAction: 'none' } as React.CSSProperties : undefined}
+        >
           <DashboardPage />
         </div>
       </div>

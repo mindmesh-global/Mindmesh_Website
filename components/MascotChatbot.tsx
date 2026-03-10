@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls, useSpring } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { usePathname } from 'next/navigation';
 import { useHomeSection } from '@/context/HomeSectionContext';
@@ -17,6 +17,12 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
+const MASCOT_INTRO = {
+  id: 'mascot_intro',
+  title: 'Your MindMesh Assistant Mascot ',
+  summary: 'This is your AI assistant. Click on it anytime to open the chat and ask questions about your schedule, tasks, or get quick insights. Use Next to explore the dashboard sections.',
+};
+
 const SECTION_ORDER: HomeSectionId[] = [
   'time_clash',
   'inferred_facts',
@@ -27,6 +33,8 @@ const SECTION_ORDER: HomeSectionId[] = [
   'daily_narrative',
   'connected_apps',
 ];
+
+const TOTAL_STEPS = SECTION_ORDER.length + 1; // +1 for mascot intro
 
 function getNextSection(current: HomeSectionId | null): HomeSectionId {
   if (!current) return SECTION_ORDER[0];
@@ -65,11 +73,23 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   const sectionConfig = homeSection?.sectionConfig;
   const setActiveSection = homeSection?.setActiveSection;
   const [userDismissed, setUserDismissed] = useState(false);
+  const [mascotIntroShown, setMascotIntroShown] = useState(false);
   const isDashboard = pathname === '/dashboard';
   const displaySection = userDismissed ? null : (isDashboard && !activeSection ? SECTION_ORDER[0] : activeSection);
-  const activeInfo = showTooltipProp && displaySection && sectionConfig ? sectionConfig[displaySection] : null;
+  const activeInfo = showTooltipProp
+    ? !mascotIntroShown
+      ? MASCOT_INTRO
+      : displaySection && sectionConfig
+        ? sectionConfig[displaySection]
+        : null
+    : null;
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [spotlightRect, setSpotlightRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const springConfig = { stiffness: 300, damping: 30 };
+  const spotlightX = useSpring(0, springConfig);
+  const spotlightY = useSpring(0, springConfig);
+  const spotlightW = useSpring(0, springConfig);
+  const spotlightH = useSpring(0, springConfig);
   const dragControls = useDragControls();
   const modalRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -77,7 +97,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   const PADDING = 12;
 
   const updateSpotlight = useCallback(() => {
-    if (!displaySection) {
+    if (!mascotIntroShown || !displaySection) {
       setSpotlightRect(null);
       return;
     }
@@ -93,7 +113,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
       w: sectionRect.width + PADDING * 2,
       h: sectionRect.height + PADDING * 2,
     });
-  }, [displaySection]);
+  }, [mascotIntroShown, displaySection]);
 
   useEffect(() => {
     if (!activeInfo) {
@@ -109,15 +129,45 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
       window.removeEventListener('scroll', run, true);
       window.removeEventListener('resize', run);
     };
-  }, [displaySection, activeInfo, updateSpotlight]);
+  }, [mascotIntroShown, displaySection, activeInfo, updateSpotlight]);
+
+  // Sync spotlight rect to springs for smooth animation
+  useEffect(() => {
+    if (spotlightRect) {
+      spotlightX.set(spotlightRect.x);
+      spotlightY.set(spotlightRect.y);
+      spotlightW.set(spotlightRect.w);
+      spotlightH.set(spotlightRect.h);
+    }
+  }, [spotlightRect, spotlightX, spotlightY, spotlightW, spotlightH]);
 
   const scrollToSection = useCallback((sectionId: HomeSectionId) => {
     const el = document.querySelector(`[data-home-section="${sectionId}"]`);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!el) return;
+    // Prefer MindMesh scroll container (on home page); fallback to scrollIntoView (works for /dashboard body scroll)
+    const scrollRoot = document.querySelector('[data-mindmesh-scroll]') as HTMLElement | null;
+    if (scrollRoot) {
+      const rect = el.getBoundingClientRect();
+      const rootRect = scrollRoot.getBoundingClientRect();
+      const elementTopInContent = scrollRoot.scrollTop + (rect.top - rootRect.top);
+      const scrollTop = elementTopInContent - rootRect.height / 2 + rect.height / 2;
+      scrollRoot.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
+    } else {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }, []);
 
   const handleTooltipNext = useCallback(() => {
     if (!setActiveSection) return;
+    // Mascot intro step: transition to section tour
+    if (!mascotIntroShown) {
+      setMascotIntroShown(true);
+      setActiveSection(SECTION_ORDER[0]);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => scrollToSection(SECTION_ORDER[0]));
+      });
+      return;
+    }
     const idx = displaySection ? SECTION_ORDER.indexOf(displaySection) : -1;
     if (idx >= 0 && idx === SECTION_ORDER.length - 1) {
       setUserDismissed(true);
@@ -131,7 +181,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     requestAnimationFrame(() => {
       requestAnimationFrame(() => scrollToSection(nextSection));
     });
-  }, [displaySection, setActiveSection, scrollToSection, onboarding, uiOverlay]);
+  }, [mascotIntroShown, displaySection, setActiveSection, scrollToSection, onboarding, uiOverlay]);
 
   const handleTooltipSkip = useCallback(() => {
     if (!setActiveSection) return;
@@ -144,6 +194,13 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Lock MindMesh window scroll when mascot tooltip is visible
+  useEffect(() => {
+    const visible = Boolean(!isExpanded && activeInfo);
+    uiOverlay?.setMascotTooltipVisible(visible);
+    return () => uiOverlay?.setMascotTooltipVisible(false);
+  }, [isExpanded, activeInfo, uiOverlay]);
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const [inputValue, setInputValue] = useState('');
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null);
@@ -200,13 +257,25 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     setMessages([]);
   }, []);
 
-  const currentStep = getSectionIndex(displaySection);
-  const totalSteps = SECTION_ORDER.length;
+  const currentStep = mascotIntroShown ? getSectionIndex(displaySection) + 1 : 1;
+  const totalSteps = TOTAL_STEPS;
 
   const content = (
     <>
-      {/* Spotlight overlay - dim background, highlight section */}
-      {!isExpanded && activeInfo && spotlightRect && (
+      {/* Spotlight overlay - mascot intro: full dark overlay, mascot + tooltip on top (no cutout = no white area) */}
+      {!isExpanded && !mascotIntroShown && activeInfo && (
+        <div
+          className="fixed inset-0 w-full h-full pointer-events-none"
+          style={{
+            zIndex: 2147483644,
+            backgroundColor: 'rgba(0,0,0,0.85)',
+          }}
+          aria-hidden
+        />
+      )}
+
+      {/* Spotlight overlay - section tour: dim all, highlight section */}
+      {!isExpanded && mascotIntroShown && activeInfo && spotlightRect && (
         <svg
           className="fixed inset-0 w-full h-full pointer-events-none"
           style={{ zIndex: 2147483644, width: '100vw', height: '100vh' }}
@@ -215,11 +284,11 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
           <defs>
             <mask id="mascot-spotlight-mask">
               <rect width="100%" height="100%" fill="white" />
-              <rect
-                x={spotlightRect.x}
-                y={spotlightRect.y}
-                width={spotlightRect.w}
-                height={spotlightRect.h}
+              <motion.rect
+                x={spotlightX}
+                y={spotlightY}
+                width={spotlightW}
+                height={spotlightH}
                 rx="8"
                 ry="8"
                 fill="black"
@@ -232,11 +301,11 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
             fill="rgba(0,0,0,0.4)"
             mask="url(#mascot-spotlight-mask)"
           />
-          <rect
-            x={spotlightRect.x}
-            y={spotlightRect.y}
-            width={spotlightRect.w}
-            height={spotlightRect.h}
+          <motion.rect
+            x={spotlightX}
+            y={spotlightY}
+            width={spotlightW}
+            height={spotlightH}
             rx="8"
             ry="8"
             fill="none"
@@ -257,7 +326,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
               width: COLLAPSED_SIZE,
               height: COLLAPSED_SIZE,
               bottom: 10,
-              right: 80,
+              right: 20,
               left: 'auto',
               top: 'auto',
             }}
@@ -298,9 +367,11 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                       }}
                     />
                     <div className="relative p-4 space-y-3 max-h-[300px] overflow-y-auto">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium text-white">{currentStep} / {totalSteps}</span>
-                      </div>
+                      {mascotIntroShown && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-medium text-white">{currentStep} / {totalSteps}</span>
+                        </div>
+                      )}
                       <div className="space-y-2">
                         <h3 className="text-lg font-extrabold text-white">{activeInfo.title}</h3>
                         {activeInfo.summary && (

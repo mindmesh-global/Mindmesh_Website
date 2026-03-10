@@ -9,6 +9,7 @@ import { StaticWeatherCard } from '@/components/dashboard/StaticWeatherCard';
 import { StaticConnectedApps } from '@/components/dashboard/StaticConnectedApps';
 import { useHomeSection } from '@/context/HomeSectionContext';
 import { useUIOverlay } from '@/context/UIOverlayContext';
+import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import type { HomeSectionId } from '@/context/HomeSectionContext';
 
 const SECTION_IDS: HomeSectionId[] = [
@@ -25,6 +26,7 @@ const SECTION_IDS: HomeSectionId[] = [
 export default function DashboardPage() {
   const setActiveSection = useHomeSection()?.setActiveSection;
   const uiOverlay = useUIOverlay();
+  const onboarding = useOnboardingTour();
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomSentinelRef = useRef<HTMLDivElement>(null);
   const timeClashRef = useRef<HTMLDivElement>(null);
@@ -54,6 +56,7 @@ export default function DashboardPage() {
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (onboarding?.introCompleted && !onboarding?.mascotTourCompleted) return; // Don't override during mascot tour
         let best: { id: HomeSectionId; ratio: number } | null = null;
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
@@ -77,7 +80,7 @@ export default function DashboardPage() {
     });
 
     return () => observer.disconnect();
-  }, [setActiveSection]);
+  }, [setActiveSection, onboarding?.introCompleted, onboarding?.mascotTourCompleted]);
 
   useEffect(() => {
     if (!setActiveSection) return;
