@@ -21,7 +21,7 @@ import React, { useId, useMemo, useRef, useEffect, useCallback } from 'react';
 // Hex edges catch neutral white light only — chamfer physics.
 // ─────────────────────────────────────────────────────────────────────────────
 
-type Variant = 'silver' | 'space-gray' | 'gold' | 'midnight';
+type Variant = 'silver' | 'space-gray' | 'gold' | 'midnight' | 'metallic';
 
 interface HoneycombProps extends React.HTMLAttributes<HTMLDivElement> {
   hexSize?: number;
@@ -85,6 +85,18 @@ const VARIANTS: Record<Variant, {
       [84, 16, 218, 35, 65, 0.10, 0.48],
       [76, 80, 235, 40, 62, 0.09, 0.52],
       [18, 76, 222, 32, 66, 0.08, 0.50],
+    ],
+  },
+  metallic: {
+    bg: 'linear-gradient(158deg,#1a1c22 0%,#14161a 55%,#101214 100%)',
+    litFull:    'rgba(240,245,255,0.75)',
+    litPartial: 'rgba(200,215,240,0.38)',
+    grazing:    'rgba(160,180,210,0.15)',
+    lights: [
+      [18, 22, 220, 20, 78, 0.14, 0.55],
+      [82, 18, 210, 18, 75, 0.11, 0.48],
+      [75, 80, 230, 22, 72, 0.10, 0.52],
+      [20, 75, 215, 18, 76, 0.09, 0.50],
     ],
   },
 };
