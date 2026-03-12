@@ -172,13 +172,13 @@ export default function PricingWindow({
             </motion.div>
 
             {/* Plans grid */}
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3 md:items-stretch">
               {/* Free plan */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-md hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/95"
+                className="flex flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-md hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/95"
               >
                 <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200">
                   Free
@@ -186,10 +186,10 @@ export default function PricingWindow({
                 <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                   2 accounts, basic inbox & calendar view.
                 </p>
-                <ul className="mt-4 space-y-2">
+                <ul className="mt-4 flex-1 space-y-2">
                   <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
                     <FeatureCheck variant="blue" />
-                    <span>Up to 2 email addresses</span>
+                    <span>Up to 2 email addresses (e.g. Gmail + SMTP, or 2 Gmail)</span>
                   </li>
                   <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
                     <FeatureCheck variant="blue" />
@@ -201,7 +201,15 @@ export default function PricingWindow({
                   </li>
                   <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
                     <FeatureCross />
+                    <span>No email/calendar memory or semantic search</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <FeatureCross />
                     <span>No Mascot or Sensor</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <FeatureCross />
+                    <span>No Today&apos;s Overview or daily narrative</span>
                   </li>
                 </ul>
                 <div className="mt-5">
@@ -229,23 +237,25 @@ export default function PricingWindow({
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.15 }}
-                className="relative rounded-xl bg-gradient-to-b from-blue-300 to-blue-500 p-5 shadow-xl dark:from-blue-400 dark:to-blue-600"
+                className="relative flex flex-col rounded-xl bg-gradient-to-b from-blue-300 to-blue-500 p-5 shadow-xl dark:from-blue-400 dark:to-blue-600"
               >
                 <span className="absolute right-3 top-3 rounded-full bg-blue-200 px-3 py-1 text-[10px] font-bold uppercase text-blue-800 dark:bg-blue-300/90 dark:text-blue-900">
-                  Most popular
+                  MOST POPULAR
                 </span>
                 <h3 className="text-lg font-bold text-white">Pro</h3>
                 <p className="mt-0.5 text-xs text-white/90">
                   Unlimited accounts, AI insights, Mascot & Sensor.
                 </p>
-                <ul className="mt-4 space-y-2">
+                <ul className="mt-4 flex-1 space-y-2">
                   {[
                     'Unlimited connected accounts',
                     'AI email & calendar enrichment',
-                    'Encrypted AI memory',
-                    'Semantic search',
-                    "Today's Overview & Morning Juice",
-                    'Mascot & Sensor Bar AI',
+                    'Encrypted AI memory for your inbox & calendar',
+                    'Search your emails and events naturally — in your own words',
+                    'Inferred facts & todos from emails and events',
+                    "Today's Overview & Morning Juice (daily summary)",
+                    "Yesterday's narrative (daily narrative)",
+                    'Mascot & Sensor Bar AI assistant',
                   ].map((f) => (
                     <li
                       key={f}
@@ -279,15 +289,15 @@ export default function PricingWindow({
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-md hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/95"
+                className="flex flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-md hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/95"
               >
                 <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200">
                   Enterprise
                 </h3>
                 <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                  Custom integrations and dedicated support.
+                  For teams that need custom integrations and dedicated support.
                 </p>
-                <ul className="mt-4 space-y-2">
+                <ul className="mt-4 flex-1 space-y-2">
                   <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
                     <FeatureCheck variant="blue" />
                     <span>Everything in Pro</span>
