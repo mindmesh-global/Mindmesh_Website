@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X } from 'lucide-react';
+import { trackButtonClick, trackContactClick } from '@/utils/trackEvent';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 type BillingCycle = 'monthly' | 'yearly';
@@ -277,6 +278,7 @@ export default function PricingWindow({
                   )}
                   <button
                     type="button"
+                    onClick={() => trackButtonClick('Upgrade')}
                     className="mt-3 w-full rounded-lg bg-blue-400 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
                   >
                     Upgrade
@@ -318,6 +320,7 @@ export default function PricingWindow({
                 <div className="mt-5">
                   <a
                     href="mailto:sales@mindmesh.global?subject=Enterprise%20plan%20inquiry"
+                    onClick={() => trackContactClick('email')}
                     className="block w-full rounded-lg bg-gray-100 py-2.5 text-center text-sm font-medium text-blue-800 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-blue-200 dark:hover:bg-gray-600"
                   >
                     Contact sales

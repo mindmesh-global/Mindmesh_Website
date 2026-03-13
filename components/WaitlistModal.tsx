@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { User, Mail, Check } from 'lucide-react';
+import { trackButtonClick } from '@/utils/trackEvent';
 
 type ModalState = 'form' | 'loading' | 'success';
 
@@ -157,7 +158,13 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                         {submitError}
                       </p>
                     )}
-                    <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+                    <form
+                      onSubmit={(e) => {
+                        trackButtonClick('Join Waitlist');
+                        handleSubmit(e);
+                      }}
+                      className="mt-6 space-y-5"
+                    >
                       {/* Name input - optional */}
                       <div>
                         <label
@@ -372,7 +379,13 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                 {submitError && (
                   <p className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200">{submitError}</p>
                 )}
-                <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+                <form
+                  onSubmit={(e) => {
+                    trackButtonClick('Join Waitlist');
+                    handleSubmit(e);
+                  }}
+                  className="mt-6 space-y-5"
+                >
                   <div>
                     <label htmlFor="waitlist-name" className="block text-sm font-medium text-slate-700 mb-1.5">Name</label>
                     <div className={`relative flex items-center rounded-lg border transition-all duration-200 ${focusedInput === 'name' ? 'border-slate-400 bg-white ring-2 ring-slate-200/80' : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'}`}>

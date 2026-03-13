@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { trackNavClick } from '@/utils/trackEvent';
 
 const navItems = [
   { label: 'MindMesh', href: '/', icon: '/images/Logo/mindmesh-logo-tight.png' },
@@ -32,6 +33,7 @@ export default function DesktopNav({ activeHref }: DesktopNavProps) {
           <Link
             key={item.href}
             href={item.href}
+            onClick={() => trackNavClick(item.label)}
             className={`flex flex-col items-center gap-2 w-24 transition-opacity hover:opacity-100 ${
               activeHref === item.href ? 'opacity-100' : 'opacity-80'
             }`}
@@ -55,6 +57,7 @@ export default function DesktopNav({ activeHref }: DesktopNavProps) {
           <Link
             key={item.href}
             href={item.href}
+            onClick={() => trackNavClick(item.label)}
             className={`flex flex-col items-center gap-2 w-24 transition-opacity hover:opacity-100 ${
               activeHref === item.href ? 'opacity-100' : 'opacity-80'
             }`}
