@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Inter } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import ConditionalOverlays from '@/components/ConditionalOverlays';
 import Logo from '@/components/Logo';
@@ -85,6 +86,7 @@ export default function RootLayout({
             </OnboardingTourProvider>
           </UIOverlayProvider>
         </HomeSectionProvider>
+        <GoogleAnalytics gaId="G-NWRP4F6JWN" />
       </body>
     </html>
   );

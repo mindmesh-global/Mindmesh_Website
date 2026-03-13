@@ -191,7 +191,7 @@ export default function Hero() {
   }, [searchParams, router, openWindow]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-visible bg-black pt-16">
       {/* Lazy-loaded background — never blocks SSR; Google sees content first */}
       <div className="absolute inset-0">
         <AnimatedBackground />

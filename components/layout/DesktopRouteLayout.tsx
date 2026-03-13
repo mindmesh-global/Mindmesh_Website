@@ -16,7 +16,7 @@ export default function DesktopRouteLayout({
   activeHref?: string;
 }) {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-visible bg-black pt-16">
       <div className="absolute inset-0">
         <AnimatedBackground />
       </div>

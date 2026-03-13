@@ -8,7 +8,7 @@ const navItems = [
   { label: 'Join Waitlist', href: '/waitlist', icon: '/images/join-waitlist-icon.png' },
   { label: 'Subscription', href: '/subscription', icon: '/images/subscription-icon.png' },
   { label: 'Features', href: '/features', icon: '/images/features-icon.png' },
-  { label: 'App Directory', href: '/app-directory', icon: '/images/features-icon.png' },
+  { label: 'App Directory', href: '/app-directory', icon: '/images/app-directory-icon.png' },
   { label: 'Social', href: '/social', icon: '/images/social-icon.png' },
   { label: 'Demo.mov', href: '/demo', icon: '/images/demo-icon.png' },
   { label: 'Docs', href: '/docs', icon: '/images/docs-icon.png' },
@@ -27,7 +27,7 @@ export default function DesktopNav({ activeHref }: DesktopNavProps) {
 
   return (
     <>
-      <div className="absolute left-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20">
+      <div className="absolute left-12 top-[18%] -translate-y-1/2 flex flex-col gap-6 z-[50]">
         {leftItems.map((item) => (
           <Link
             key={item.href}
@@ -36,21 +36,21 @@ export default function DesktopNav({ activeHref }: DesktopNavProps) {
               activeHref === item.href ? 'opacity-100' : 'opacity-80'
             }`}
           >
-            <div className="w-11 h-11 rounded-lg flex items-center justify-center overflow-hidden bg-gray-800/50 border border-gray-700/50">
+            <div className="w-12 h-12 flex items-center justify-center">
               <Image
                 src={item.icon}
                 alt={item.label}
-                width={44}
-                height={44}
-                className="object-contain"
+                width={48}
+                height={48}
+                className="desktop-nav-icon-glow object-contain"
               />
             </div>
-            <span className="text-sm font-semibold text-white text-center">{item.label}</span>
+            <span className="desktop-nav-label-glow text-sm font-semibold text-white text-center">{item.label}</span>
           </Link>
         ))}
       </div>
 
-      <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20">
+      <div className="absolute right-12 top-[18%] -translate-y-1/2 flex flex-col gap-6 z-[50]">
         {rightItems.map((item) => (
           <Link
             key={item.href}
@@ -59,16 +59,16 @@ export default function DesktopNav({ activeHref }: DesktopNavProps) {
               activeHref === item.href ? 'opacity-100' : 'opacity-80'
             }`}
           >
-            <div className="w-11 h-11 rounded-lg flex items-center justify-center overflow-hidden bg-gray-800/50 border border-gray-700/50">
+            <div className="w-12 h-12 flex items-center justify-center">
               <Image
                 src={item.icon}
                 alt={item.label}
-                width={44}
-                height={44}
-                className="object-contain"
+                width={48}
+                height={48}
+                className="desktop-nav-icon-glow object-contain"
               />
             </div>
-            <span className="text-sm font-semibold text-white text-center">{item.label}</span>
+            <span className="desktop-nav-label-glow text-sm font-semibold text-white text-center">{item.label}</span>
           </Link>
         ))}
       </div>
