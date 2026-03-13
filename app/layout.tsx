@@ -21,11 +21,11 @@ function ThemeScript() {
 export const metadata: Metadata = {
   metadataBase: new URL('https://mindmesh.global'),
   title: {
-    default: 'MindMesh — AI-Powered Productivity Assistant',
+    default: 'MindMesh — AI-Powered Productivity Assistant App',
     template: '%s | MindMesh',
   },
   description:
-    'MindMesh automates your meeting notes, tasks and calendar using AI. Join thousands of professionals saving 2+ hours daily.',
+    'MindMesh uses AI to automate your meeting notes, manage tasks, and detect calendar conflicts. Join thousands of professionals saving 2+ hours daily. Start free today.',
   keywords: [
     'AI productivity',
     'meeting notes',
@@ -40,21 +40,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://mindmesh.global',
     siteName: 'MindMesh',
-    title: 'MindMesh — AI-Powered Productivity Assistant',
-    description: 'Automate notes, tasks & meetings with AI',
+    title: 'MindMesh — AI-Powered Productivity Assistant App',
+    description: 'MindMesh uses AI to automate your meeting notes, manage tasks, and detect calendar conflicts. Join thousands of professionals saving 2+ hours daily. Start free today.',
     images: [
       {
         url: 'https://mindmesh.global/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MindMesh — AI Powered Productivity Assistant',
+        alt: 'MindMesh AI Productivity Assistant',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MindMesh — AI Productivity Assistant',
-    description: 'Automate notes, tasks & meetings with AI',
+    title: 'MindMesh — AI-Powered Productivity Assistant App',
+    description: 'MindMesh uses AI to automate your meeting notes, manage tasks, and detect calendar conflicts. Join thousands of professionals saving 2+ hours daily. Start free today.',
     images: ['https://mindmesh.global/og-image.png'],
   },
   robots: {
