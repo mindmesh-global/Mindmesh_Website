@@ -1,5 +1,7 @@
-import { Metadata } from 'next';
-import WaitlistPageClient from './WaitlistPageClient';
+import { Suspense } from 'react';
+import Hero from '@/components/Hero';
+import type { Metadata } from 'next';
+import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Join Waitlist',
@@ -10,11 +12,22 @@ export const metadata: Metadata = {
     description:
       'Get early access to MindMesh. AI-powered productivity for meeting notes, tasks and calendar.',
     url: 'https://mindmesh.global/waitlist',
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Join MindMesh Waitlist — Early Access',
+    description: 'Get early access to MindMesh. AI-powered productivity for meeting notes, tasks and calendar.',
+    images: [OG_IMAGE_URL],
   },
 };
 
 export default function WaitlistPage() {
   return (
-    <WaitlistPageClient />
+    <main className="min-h-screen bg-white">
+      <Suspense fallback={<div className="min-h-screen" />}>
+        <Hero />
+      </Suspense>
+    </main>
   );
 }

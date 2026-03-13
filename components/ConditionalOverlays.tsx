@@ -9,7 +9,18 @@ import DropdownOverlayTooltip from '@/components/DropdownOverlayTooltip';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 
-const MINDMESH_PAGES = ['/', '/dashboard'];
+const MINDMESH_PAGES = [
+  '/',
+  '/dashboard',
+  '/features',
+  '/docs',
+  '/app-directory',
+  '/demo',
+  '/subscription',
+  '/social',
+  '/contact',
+  '/waitlist',
+];
 
 export default function ConditionalOverlays() {
   const overlay = useUIOverlay();

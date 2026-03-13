@@ -1,18 +1,23 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import {
-  Mail,
-  Server,
-  FolderOpen,
-} from 'lucide-react';
+import Image from 'next/image';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
+// Static imports ensure icons are bundled and always load
+import gmailIcon from '@/public/images/icons/gmail.png';
+import googleCalendarIcon from '@/public/images/icons/google-calendar.png';
+import outlookIcon from '@/public/images/icons/outlook.png';
+import outlookCalendarIcon from '@/public/images/icons/outlook-calendar.png';
+import smtpIcon from '@/public/images/icons/smtp.png';
+
 const CONNECTED_APPS = [
-  { icon: Mail, name: 'Gmail', description: 'Sync emails, labels, and threads', color: 'from-red-500 to-red-600' },
-  { icon: Mail, name: 'Outlook', description: 'Microsoft 365 email & calendar', color: 'from-indigo-500 to-indigo-600' },
-  { icon: Server, name: 'SMTP', description: 'Custom SMTP mailbox integration', color: 'from-green-500 to-green-600' },
+  { icon: gmailIcon, name: 'Gmail', description: 'Sync emails, labels, and threads', iconBg: 'bg-red-50' },
+  { icon: googleCalendarIcon, name: 'Gmail Calendar', description: 'Sync events, meetings, and reminders', iconBg: 'bg-blue-50' },
+  { icon: outlookIcon, name: 'Outlook', description: 'Microsoft 365 email integration', iconBg: 'bg-blue-50' },
+  { icon: outlookCalendarIcon, name: 'Outlook Calendar', description: 'Sync Outlook events and meetings', iconBg: 'bg-blue-50' },
+  { icon: smtpIcon, name: 'SMTP', description: 'Custom SMTP mailbox integration', iconBg: 'bg-green-50' },
 ];
 
 interface AppDirectoryWindowProps {
@@ -87,43 +92,60 @@ export default function AppDirectoryWindow({ dragControls, onClose, onMinimize }
           </div>
         </div>
 
-        {/* Content - Connected apps */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 dark:bg-gray-900/50 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
-          <div className="max-w-4xl mx-auto px-6 py-8">
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center mb-4">
-                <FolderOpen className="w-8 h-8 text-indigo-500 dark:text-indigo-400" strokeWidth={1.5} />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">App Directory</h2>
-              <p className="mt-2 text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+        {/* Content - App Store style */}
+        <div className={`flex-1 min-h-0 overflow-y-auto bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+          <div className="max-w-5xl mx-auto px-6">
+            {/* Header */}
+            <div className="text-center py-12 mb-10">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                App Directory
+              </h1>
+              <p className="text-gray-600">
                 Apps that connect with MindMesh
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {CONNECTED_APPS.map((app, index) => {
-                const Icon = app.icon;
-                return (
+            {/* Category label */}
+            <div className="max-w-3xl mx-auto mb-6">
+              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Connected Apps
+              </h2>
+            </div>
+
+            {/* Icon grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-6 max-w-3xl mx-auto pb-16">
+              {CONNECTED_APPS.map((app, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center text-center group cursor-pointer"
+                >
                   <div
-                    key={index}
-                    className="group p-4 rounded-xl border transition-all duration-200 bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-lg"
+                    className={`w-20 h-20 rounded-2xl shadow-md border border-gray-100 flex items-center justify-center mb-3 group-hover:shadow-lg group-hover:scale-105 transition-all duration-200 overflow-hidden p-3 ${app.iconBg}`}
                   >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-lg bg-gradient-to-br ${app.color} flex items-center justify-center flex-shrink-0`}
-                      >
-                        <Icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-gray-900 dark:text-white truncate">{app.name}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
-                          {app.description}
-                        </p>
-                      </div>
-                    </div>
+                    {typeof app.icon === 'string' ? (
+                      <img
+                        src={app.icon}
+                        alt={app.name}
+                        className="w-14 h-14 object-contain"
+                      />
+                    ) : (
+                      <Image
+                        src={app.icon}
+                        alt={app.name}
+                        width={56}
+                        height={56}
+                        className="object-contain"
+                      />
+                    )}
                   </div>
-                );
-              })}
+                  <span className="text-sm font-semibold text-gray-900 mb-1">
+                    {app.name}
+                  </span>
+                  <span className="text-xs text-gray-600 leading-tight max-w-[90px]">
+                    {app.description}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

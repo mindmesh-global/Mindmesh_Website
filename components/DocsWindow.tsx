@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { FileText, ChevronDown, ChevronRight, Shield, Scale, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
@@ -14,10 +13,10 @@ interface DocsWindowProps {
 
 type DocId = 'faq' | 'privacy' | 'terms';
 
-const docItems: { id: DocId; label: string; icon: typeof Shield }[] = [
-  { id: 'faq', label: 'FAQ', icon: HelpCircle },
-  { id: 'privacy', label: 'Privacy Policy', icon: Shield },
-  { id: 'terms', label: 'Terms and Conditions', icon: Scale },
+const navItems: { id: DocId; label: string; icon: string; title: string; subtitle: string }[] = [
+  { id: 'faq', label: 'FAQ', icon: '?', title: 'MindMesh FAQ', subtitle: 'Frequently asked questions' },
+  { id: 'privacy', label: 'Privacy Policy', icon: '🔒', title: 'Privacy Policy', subtitle: 'How we collect, use, and protect your information' },
+  { id: 'terms', label: 'Terms & Conditions', icon: '📋', title: 'Terms and Conditions', subtitle: 'Terms of service for MindMesh' },
 ];
 
 const accordionItems: { title: string; content: React.ReactNode }[] = [
@@ -252,57 +251,55 @@ const accordionItems: { title: string; content: React.ReactNode }[] = [
   },
 ];
 
+const privacyPolicySections = [
+  { id: 'collect', title: '1. Information We Collect', content: 'We collect information you provide directly (e.g., account details, support requests) and usage data to improve our services. We do not sell your personal information.' },
+  { id: 'use', title: '2. How We Use Your Information', content: 'Your data is used to deliver and improve MindMesh, personalize your experience, send updates, and ensure security. We use industry-standard encryption and store data locally when you choose local-first mode.' },
+  { id: 'sharing', title: '3. Data Sharing', content: 'We do not share your personal information with third parties for marketing. We may share data only as required by law or with your consent for service operations.' },
+  { id: 'rights', title: '4. Your Rights', content: 'You can access, correct, or delete your data through your account settings or by contacting us. You may also opt out of marketing communications at any time.' },
+  { id: 'contact', title: '5. Contact', content: 'For privacy-related questions, contact us at privacy@mindmesh.example.com.' },
+];
+
 const privacyPolicyContent = (
-  <div className="prose prose-sm prose-gray max-w-none">
-    <h2 className="text-xl font-semibold text-gray-900 mb-4">Privacy Policy</h2>
-    <p className="text-gray-600 mb-4">Last updated: {new Date().toLocaleDateString()}</p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">1. Information We Collect</h3>
-    <p className="text-gray-600 mb-4">
-      We collect information you provide directly (e.g., account details, support requests) and usage data to improve our services. We do not sell your personal information.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">2. How We Use Your Information</h3>
-    <p className="text-gray-600 mb-4">
-      Your data is used to deliver and improve MindMesh, personalize your experience, send updates, and ensure security. We use industry-standard encryption and store data locally when you choose local-first mode.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">3. Data Sharing</h3>
-    <p className="text-gray-600 mb-4">
-      We do not share your personal information with third parties for marketing. We may share data only as required by law or with your consent for service operations.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">4. Your Rights</h3>
-    <p className="text-gray-600 mb-4">
-      You can access, correct, or delete your data through your account settings or by contacting us. You may also opt out of marketing communications at any time.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">5. Contact</h3>
-    <p className="text-gray-600">
-      For privacy-related questions, contact us at privacy@mindmesh.example.com.
-    </p>
+  <div className="prose prose-sm max-w-none">
+    <p className="text-sm text-gray-400 mb-4">Last updated: {new Date().toLocaleDateString()}</p>
+    <div className="space-y-0">
+      {privacyPolicySections.map((section) => (
+        <div key={section.id} className="border-b border-gray-50 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
+          <h2 className="text-sm font-semibold text-gray-700 mb-1">
+            {section.title}
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed mb-4">
+            {section.content}
+          </p>
+        </div>
+      ))}
+    </div>
   </div>
 );
 
+const termsSections = [
+  { id: 'acceptance', title: '1. Acceptance of Terms', content: 'By accessing or using MindMesh, you agree to these Terms and Conditions. If you do not agree, please do not use our services.' },
+  { id: 'use', title: '2. Use of Service', content: 'You may use MindMesh for lawful purposes only. You are responsible for keeping your account secure and for all activity under your account. You may not misuse the service, attempt to gain unauthorized access, or interfere with other users.' },
+  { id: 'ip', title: '3. Intellectual Property', content: 'MindMesh and its content, features, and functionality are owned by us and are protected by copyright, trademark, and other laws. You may not copy, modify, or create derivative works without permission.' },
+  { id: 'liability', title: '4. Limitation of Liability', content: 'To the fullest extent permitted by law, MindMesh shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the service.' },
+  { id: 'changes', title: '5. Changes', content: 'We may update these terms from time to time. We will notify you of material changes by posting the new terms and updating the "Last updated" date. Continued use after changes constitutes acceptance.' },
+];
+
 const termsContent = (
-  <div className="prose prose-sm prose-gray max-w-none">
-    <h2 className="text-xl font-semibold text-gray-900 mb-4">Terms and Conditions</h2>
-    <p className="text-gray-600 mb-4">Last updated: {new Date().toLocaleDateString()}</p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">1. Acceptance of Terms</h3>
-    <p className="text-gray-600 mb-4">
-      By accessing or using MindMesh, you agree to these Terms and Conditions. If you do not agree, please do not use our services.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">2. Use of Service</h3>
-    <p className="text-gray-600 mb-4">
-      You may use MindMesh for lawful purposes only. You are responsible for keeping your account secure and for all activity under your account. You may not misuse the service, attempt to gain unauthorized access, or interfere with other users.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">3. Intellectual Property</h3>
-    <p className="text-gray-600 mb-4">
-      MindMesh and its content, features, and functionality are owned by us and are protected by copyright, trademark, and other laws. You may not copy, modify, or create derivative works without permission.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">4. Limitation of Liability</h3>
-    <p className="text-gray-600 mb-4">
-      To the fullest extent permitted by law, MindMesh shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the service.
-    </p>
-    <h3 className="text-lg font-medium text-gray-900 mt-6 mb-2">5. Changes</h3>
-    <p className="text-gray-600">
-      We may update these terms from time to time. We will notify you of material changes by posting the new terms and updating the &quot;Last updated&quot; date. Continued use after changes constitutes acceptance.
-    </p>
+  <div className="prose prose-sm max-w-none">
+    <p className="text-sm text-gray-400 mb-4">Last updated: {new Date().toLocaleDateString()}</p>
+    <div className="space-y-0">
+      {termsSections.map((section) => (
+        <div key={section.id} className="border-b border-gray-50 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
+          <h2 className="text-sm font-semibold text-gray-700 mb-1">
+            {section.title}
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed mb-4">
+            {section.content}
+          </p>
+        </div>
+      ))}
+    </div>
   </div>
 );
 
@@ -377,92 +374,111 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
         </div>
 
         {/* Content */}
-        <div className={`flex-1 min-h-0 flex overflow-hidden ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+        <div className={`flex-1 min-h-0 flex overflow-hidden bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           {/* Sidebar */}
-          <nav className="w-52 flex-shrink-0 bg-gray-800/80 border-r border-gray-700/50 p-3 flex flex-col gap-1">
-            <div className="flex items-center gap-2 px-2 py-1.5 text-gray-200 text-xs font-medium uppercase tracking-wider">
-              <FileText className="w-3.5 h-3.5" />
+          <aside className="w-48 bg-gray-50 border-r-2 border-gray-200 py-6 flex-shrink-0 min-h-full flex flex-col">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest px-4 mb-4">
               Documents
-            </div>
-            {docItems.map((item) => {
-              const Icon = item.icon;
+            </p>
+            {navItems.map((item) => {
               const isActive = activeDoc === item.id;
               return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveDoc(item.id)}
-                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-cyan-500/30 text-white border border-cyan-400/50'
-                      : 'text-gray-300 hover:bg-gray-700/50 hover:text-white border border-transparent'
-                  }`}
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {item.label}
-                </button>
+                <div key={item.id} className="relative border-b border-gray-100 last:border-b-0">
+                  {isActive && (
+                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-600 rounded-r-full" />
+                  )}
+                  <button
+                    onClick={() => setActiveDoc(item.id)}
+                    className={`
+                      w-full text-left px-4 py-3
+                      flex items-center gap-3
+                      text-sm transition-all duration-150
+                      ${isActive
+                        ? 'bg-purple-50 text-purple-700 font-semibold pl-5'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800 font-normal'
+                      }
+                    `}
+                  >
+                    <div className={`
+                      w-6 h-6 rounded-md flex items-center
+                      justify-center text-xs flex-shrink-0
+                      ${isActive
+                        ? 'bg-purple-200 text-purple-700'
+                        : 'bg-gray-200 text-gray-500'
+                      }`}
+                    >
+                      {item.icon}
+                    </div>
+                    {item.label}
+                  </button>
+                </div>
               );
             })}
-          </nav>
+          </aside>
           {/* Document body */}
-          <div className="flex-1 min-h-0 overflow-y-auto bg-white">
-            {activeDoc === 'faq' && (
-              <div className="max-w-2xl mx-auto px-6 py-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <HelpCircle className="w-5 h-5 text-cyan-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">MindMesh FAQ</h2>
-                </div>
-                <div className="space-y-2">
-                  {accordionItems.map((item, index) => {
-                    const isExpanded = expandedIndex === index;
-                    return (
-                      <div
-                        key={index}
-                        className="border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition-colors"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setExpandedIndex(isExpanded ? null : index)}
-                          className="w-full flex items-center justify-between gap-4 px-4 py-3.5 text-left bg-gray-50 hover:bg-gray-100 transition-colors"
-                        >
-                          <span className="font-medium text-gray-900">{item.title}</span>
-                          {isExpanded ? (
-                            <ChevronDown className="w-5 h-5 shrink-0 text-gray-500" />
-                          ) : (
-                            <ChevronRight className="w-5 h-5 shrink-0 text-gray-500" />
-                          )}
-                        </button>
-                        <AnimatePresence initial={false}>
-                          {isExpanded && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="px-4 py-3 border-t border-gray-200 bg-white text-gray-600 text-sm leading-relaxed">
-                                {item.content}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+          <main className="flex-1 overflow-y-auto px-8 pt-6 pb-4">
+            {(() => {
+              const currentSection = navItems.find((i) => i.id === activeDoc)!;
+              return (
+                <>
+                  <h1 className="text-xl font-bold text-gray-900 mb-1">
+                    {currentSection.title}
+                  </h1>
+                  <p className="text-xs text-gray-400 mb-6 pb-4 border-b border-gray-100">
+                    {currentSection.subtitle}
+                  </p>
+                  {activeDoc === 'faq' && (
+                    <div className="max-w-2xl">
+                      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden px-4">
+                        {accordionItems.map((item, index) => {
+                          const isOpen = expandedIndex === index;
+                          const toggleItem = () => setExpandedIndex(isOpen ? null : index);
+                          return (
+                            <div key={index} className="border-b border-gray-100 last:border-b-0">
+                              <button
+                                onClick={toggleItem}
+                                className="w-full text-left py-4 px-2 flex items-center justify-between text-sm font-medium text-gray-800 hover:text-purple-700 transition-colors"
+                              >
+                                <span>{item.title}</span>
+                                <span className={`text-gray-400 text-xs transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>
+                                  ▼
+                                </span>
+                              </button>
+                              <AnimatePresence initial={false}>
+                                {isOpen && (
+                                  <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="overflow-hidden"
+                                  >
+                                    <div className="pb-4 px-2 text-sm text-gray-500 leading-relaxed">
+                                      {item.content}
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-            {activeDoc === 'privacy' && (
-              <div className="max-w-3xl mx-auto px-6 py-8">
-                {privacyPolicyContent}
-              </div>
-            )}
-            {activeDoc === 'terms' && (
-              <div className="max-w-3xl mx-auto px-6 py-8">
-                {termsContent}
-              </div>
-            )}
-          </div>
+                    </div>
+                  )}
+                  {activeDoc === 'privacy' && (
+                    <div className="max-w-2xl">
+                      {privacyPolicyContent}
+                    </div>
+                  )}
+                  {activeDoc === 'terms' && (
+                    <div className="max-w-2xl">
+                      {termsContent}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </main>
         </div>
       </div>
     </div>
