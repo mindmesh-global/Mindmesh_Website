@@ -44,10 +44,10 @@ export const metadata: Metadata = {
     description: 'Automate notes, tasks & meetings with AI',
     images: [
       {
-        url: '/og-image.png',
+        url: 'https://mindmesh.global/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MindMesh AI Productivity Assistant',
+        alt: 'MindMesh — AI Powered Productivity Assistant',
       },
     ],
   },
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'MindMesh — AI Productivity Assistant',
     description: 'Automate notes, tasks & meetings with AI',
-    images: ['/og-image.png'],
+    images: ['https://mindmesh.global/og-image.png'],
   },
   robots: {
     index: true,
