@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, useDragControls } from 'framer-motion';
-import { Home, FileText, Mail, BookOpen, Play, Calculator, FolderOpen, Sparkles } from 'lucide-react';
+import { Home, FileText, Mail, BookOpen, Calculator, FolderOpen, Sparkles } from 'lucide-react';
 import MindMeshUI from './mindmeshui';
 import { useUIOverlay, type ActiveWindowType } from '@/context/UIOverlayContext';
 import FeaturesWindow from './FeaturesWindow';
@@ -111,8 +111,6 @@ function StackedWindow({
   );
 }
 
-export const OPEN_WINDOW_EVENT = 'mindmesh-open-window';
-
 export default function Hero() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -175,15 +173,6 @@ export default function Hero() {
     const top = visible[visible.length - 1];
     uiOverlay.setActiveWindowType((top?.type ?? null) as ActiveWindowType);
   }, [openWindows, minimizedIds, uiOverlay]);
-
-  // Listen for open-window from Navbar (when on home) and handle ?open= URL param
-  useEffect(() => {
-    const handleOpen = (e: CustomEvent<WindowType>) => {
-      openWindow(e.detail);
-    };
-    window.addEventListener(OPEN_WINDOW_EVENT, handleOpen as EventListener);
-    return () => window.removeEventListener(OPEN_WINDOW_EVENT, handleOpen as EventListener);
-  }, [openWindow]);
 
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
