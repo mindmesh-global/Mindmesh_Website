@@ -31,6 +31,9 @@ export const metadata = {
     description: 'Automate notes, tasks & meetings with AI',
     url: 'https://mindmesh.global',
   },
+  other: {
+    'google-site-verification': '',
+  },
 };
 
 export default function HomePage() {

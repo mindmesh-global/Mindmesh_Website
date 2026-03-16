@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Mail, Send, Paperclip, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
@@ -167,16 +167,8 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
         </div>
 
         {/* Content */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 dark:bg-gray-900/50 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
-          <div className="max-w-md mx-auto p-6">
-            <div className="text-center pb-6 mb-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 mb-3">
-                <Mail className="w-5 h-5 text-orange-500" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Get in Touch</h2>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Drop us a line — we&apos;ll respond soon</p>
-            </div>
-
+        <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 flex items-start justify-center px-4 py-10 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+          <div className="w-full max-w-md bg-white rounded-3xl shadow-sm border border-gray-100 px-8 py-10">
             <AnimatePresence mode="wait">
               {isSuccess ? (
                 <motion.div
@@ -184,17 +176,17 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="rounded-xl border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20 p-6 text-center"
+                  className="rounded-xl border border-green-200 bg-green-50 p-6 text-center"
                 >
                   <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Message Sent!</h3>
-                  <p className="mt-2 text-sm text-green-700 dark:text-green-300">
+                  <h3 className="text-lg font-semibold text-green-800">Message Sent!</h3>
+                  <p className="mt-2 text-sm text-green-700">
                     We&apos;ll get back to you soon.
                   </p>
                   <button
                     type="button"
                     onClick={() => setIsSuccess(false)}
-                    className="mt-4 text-sm font-medium text-green-600 dark:text-green-400 hover:underline"
+                    className="mt-4 text-sm font-medium text-green-600 hover:underline"
                   >
                     Send another message
                   </button>
@@ -206,17 +198,30 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onSubmit={handleSubmit}
-                  className="space-y-4"
                 >
+                  <div className="text-center mb-8">
+                    <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-purple-100">
+                      <span className="text-purple-600 text-xl">✉</span>
+                    </div>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                      Get in Touch
+                    </h1>
+                    <p className="text-sm text-gray-400">
+                      Drop us a line — we&apos;ll respond soon
+                    </p>
+                  </div>
+
+                  <div className="border-t border-gray-100 mb-8" />
+
                   {error && (
-                    <div className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-3 py-2 text-sm text-red-700 dark:text-red-300">
+                    <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-400 mb-6">
                       {error}
                     </div>
                   )}
 
-                  <div>
-                    <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Your Email <span className="text-red-500">*</span>
+                  <div className="mb-6">
+                    <label htmlFor="contact-email" className="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">
+                      Your Email <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="contact-email"
@@ -224,14 +229,14 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
                       value={formData.email}
                       onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                       placeholder="you@example.com"
-                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white focus:ring-2 focus:ring-purple-100 transition-all duration-200 ${error ? 'border-red-300' : 'border-gray-200'}`}
                       required
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="contact-query" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Query / Message <span className="text-red-500">*</span>
+                  <div className="mb-6">
+                    <label htmlFor="contact-query" className="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">
+                      Query / Message <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       id="contact-query"
@@ -239,33 +244,35 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
                       onChange={(e) => setFormData((prev) => ({ ...prev, query: e.target.value }))}
                       placeholder="How can we help?"
                       rows={5}
-                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none resize-none"
+                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white focus:ring-2 focus:ring-purple-100 transition-all duration-200 resize-none h-32 ${error ? 'border-red-300' : 'border-gray-200'}`}
                       required
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <div className="mb-6">
+                    <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">
                       Attachment
+                      <span className="text-gray-400 font-normal normal-case tracking-normal ml-1">
+                        (optional)
+                      </span>
                     </label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                       <input
+                        id="contact-attachment"
                         ref={fileInputRef}
                         type="file"
                         accept=".pdf,.doc,.docx,image/jpeg,image/png,image/gif"
                         onChange={handleFileChange}
                         className="hidden"
                       />
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      <label
+                        htmlFor="contact-attachment"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-600 hover:border-gray-300 hover:bg-gray-100 cursor-pointer transition-all duration-200"
                       >
-                        <Paperclip className="w-4 h-4" />
-                        Choose file
-                      </button>
+                        📎 Choose file
+                      </label>
                       {formData.attachment && (
-                        <span className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 truncate max-w-[180px]">
+                        <span className="flex items-center gap-1 text-sm text-gray-600 truncate max-w-[180px]">
                           {formData.attachment.name}
                           <button
                             type="button"
@@ -278,7 +285,7 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-400 mt-2">
                       PDF, Word, or images. Max 5MB.
                     </p>
                   </div>
@@ -286,14 +293,14 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 py-3 text-white font-semibold shadow-md border border-blue-700/30 transition-colors"
+                    className="w-full bg-purple-600 text-white font-semibold text-sm py-3.5 rounded-xl hover:bg-purple-700 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-purple-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:active:scale-100"
                   >
                     {isSubmitting ? (
                       'Sending...'
                     ) : (
                       <>
-                        <Send className="w-4 h-4 text-white" />
-                        <span className="text-white">Send</span>
+                        <span>✈</span>
+                        Send Message
                       </>
                     )}
                   </button>

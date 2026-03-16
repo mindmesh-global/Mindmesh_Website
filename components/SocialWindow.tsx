@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Linkedin, Share2 } from 'lucide-react';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -11,9 +10,7 @@ interface SocialWindowProps {
   onMinimize?: () => void;
 }
 
-const SOCIAL_LINKS = [
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/mindmesh', color: 'text-blue-600 hover:text-blue-700' },
-];
+const LINKEDIN_URL = 'https://www.linkedin.com/company/mindmesh';
 
 export default function SocialWindow({ dragControls, onClose, onMinimize }: SocialWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
@@ -83,34 +80,43 @@ export default function SocialWindow({ dragControls, onClose, onMinimize }: Soci
           </div>
         </div>
 
-        {/* Content - Social links */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 dark:bg-gray-900/50 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
-          <div className="max-w-md mx-auto p-6">
-            {/* Header - same style as Contact */}
-            <div className="text-center pb-6 mb-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 mb-3">
-                <Share2 className="w-5 h-5 text-teal-500" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Connect with us</h2>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Follow us on social for updates</p>
+        {/* Content - full page layout */}
+        <div className={`flex-1 min-h-0 overflow-y-auto bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+          <div className="min-h-full bg-white">
+            {/* HERO SECTION - gradient top */}
+            <div className="bg-gradient-to-b from-purple-50 to-white px-8 pt-10 pb-8 text-center">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Stay in the loop
+              </h1>
+              <p className="text-sm text-gray-600 max-w-xs mx-auto leading-relaxed">
+                Follow MindMesh for product updates, tips, and behind the scenes
+              </p>
             </div>
 
-            {/* Social link cards */}
-            <div className="flex flex-col gap-4">
-              {SOCIAL_LINKS.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800/80 shadow-sm hover:shadow-md hover:border-teal-300 dark:hover:border-teal-600 transition-colors duration-200"
-                >
-                  <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700">
-                    <item.icon className={`w-6 h-6 ${item.color}`} />
-                  </div>
-                  <span className="text-lg font-medium text-gray-900 dark:text-white">{item.label}</span>
-                </a>
-              ))}
+            <div className="px-6 pb-10 max-w-lg mx-auto">
+              {/* LINKEDIN CARD - big and prominent */}
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-widest mb-3">
+                Follow us
+              </p>
+
+              <a
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-5 rounded-2xl text-white hover:opacity-95 transition-all duration-200 group shadow-lg shadow-blue-200 mb-8"
+                style={{ backgroundColor: '#0A66C2' }}
+              >
+                <div className="w-14 h-14 bg-white/25 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 font-bold text-white">
+                  in
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-base mb-0.5 text-white">LinkedIn</div>
+                  <div className="text-white/95 text-xs">@mindmesh — Follow for updates</div>
+                </div>
+                <span className="text-white/80 group-hover:translate-x-1 transition-transform text-lg flex-shrink-0">
+                  →
+                </span>
+              </a>
             </div>
           </div>
         </div>

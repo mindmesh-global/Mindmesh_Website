@@ -323,7 +323,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed bottom-3 left-3 md:left-1/2 md:-translate-x-1/2 z-[100] flex flex-wrap gap-1.5 justify-start md:justify-center max-w-[calc(100vw-2rem)] md:max-w-[90vw]"
+          className="fixed bottom-14 left-3 md:left-1/2 md:-translate-x-1/2 z-[100] flex flex-wrap gap-1.5 justify-start md:justify-center max-w-[calc(100vw-2rem)] md:max-w-[90vw]"
         >
           {openWindows.map((w) => {
             const isMinimized = minimizedIds.has(w.id);
@@ -361,6 +361,26 @@ export default function Hero() {
       )}
 
       <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
+
+      {/* Trust & Compliance strip — fixed at very bottom */}
+      <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-6 flex-wrap py-3 px-6 bg-black/40 backdrop-blur-md z-10">
+        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          <span>🔒</span>
+          <span>AES-256 Encrypted</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          <span>🛡</span>
+          <span>TLS 1.2 Secure Transport</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          <span>✓</span>
+          <span>Google API Limited Use Policy Compliant</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          <span>🚫</span>
+          <span>We never sell your data</span>
+        </div>
+      </div>
     </section>
   );
 }

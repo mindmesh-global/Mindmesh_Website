@@ -14,6 +14,32 @@ export default function PrivacyPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
             <hr className="my-8 border-gray-300" />
 
+            <section id="google-api-compliance" className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Google API Limited Use Disclosure</h2>
+              <p className="text-gray-700 mb-4">
+                MindMesh&apos;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.
+              </p>
+              <p className="text-gray-700 mb-4">
+                We only request access to data that is necessary for the app to function. We do not use Google user data to serve advertisements, and we do not allow humans to read your data unless you give explicit permission or it is required for security purposes.
+              </p>
+              <p className="text-gray-700 mb-4">
+                For more information, visit:{' '}
+                <a href="https://developers.google.com/terms/api-services-user-data-policy" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                  https://developers.google.com/terms/api-services-user-data-policy
+                </a>
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Data Encryption &amp; Security</h2>
+              <p className="text-gray-700 mb-4">
+                All data transmitted between your device and MindMesh servers is encrypted using TLS 1.2 or higher. Stored data is encrypted at rest using AES-256 encryption.
+              </p>
+              <p className="text-gray-700 mb-4">
+                We do not use your data to train AI or LLM models. Your data is never sold to third parties.
+              </p>
+            </section>
+
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Introduction</h2>
               <p className="text-gray-700 mb-4">

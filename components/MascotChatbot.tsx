@@ -53,7 +53,7 @@ const LOTTIE_CAT_URL =
   'https://lottie.host/7ac5c67a-7983-42a0-b290-2e0429865911/uvdYl2wxbT.lottie';
 
 const DRAG_THRESHOLD = 5;
-const COLLAPSED_SIZE = 360;
+const COLLAPSED_SIZE = 280;
 const CHAT_WIDTH = 1360;
 const CHAT_HEIGHT = 930;
 const CHAT_MIN_WIDTH = 800;
@@ -325,8 +325,8 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
               zIndex: 2147483647,
               width: COLLAPSED_SIZE,
               height: COLLAPSED_SIZE,
-              bottom: 10,
-              right: 20,
+              bottom: 40,
+              right: 60,
               left: 'auto',
               top: 'auto',
             }}
@@ -423,7 +423,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
               <div className="flex-shrink-0 flex items-center justify-center pointer-events-none" aria-hidden>
               <div
                 className="relative flex items-center justify-center cursor-pointer pointer-events-auto mascot-glow-wrapper"
-                style={{ width: 320, height: 220, minWidth: 320, minHeight: 220 }}
+                style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -544,19 +544,22 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                 data-mascot-scroll
                 className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-6 space-y-4"
               >
-                {messages.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center mb-4">
-                      <Sparkles className="w-8 h-8 text-purple-500" />
+                {messages.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center min-h-[200px] px-4 pt-28 pb-8">
+                    <div className="flex flex-col items-center max-w-md text-center">
+                      <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-blue-500/20 dark:from-emerald-500/15 dark:via-teal-500/15 dark:to-blue-500/15 border border-emerald-200/60 dark:border-emerald-500/30">
+                        <span className="text-2xl">🔒</span>
+                      </div>
+                      <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                        Your privacy matters
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                        MindMesh does not use your data to train any AI or LLM models. All your data is encrypted at rest (AES-256) and in transit (TLS 1.2+). We are fully compliant with Google API Limited Use requirements.
+                      </p>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm max-w-sm">
-                      Hi! I&apos;m your MindMesh assistant. Ask me anything about your schedule,
-                      tasks, or get quick insights.
-                    </p>
                   </div>
-                )}
-
-                {messages.map((msg, i) => (
+                ) : (
+                messages.map((msg, i) => (
                   <div
                     key={i}
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -571,7 +574,8 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                       <p className="text-sm leading-relaxed">{msg.content}</p>
                     </div>
                   </div>
-                ))}
+                ))
+                )}
                 <div ref={messagesEndRef} />
               </div>
 
