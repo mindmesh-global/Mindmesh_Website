@@ -56,18 +56,24 @@ export default function ConditionalOverlays() {
 
   const isMindmeshPage = pathname && MINDMESH_PAGES.includes(pathname);
   const isMindmeshWindowOnTop = pathname !== '/' || activeWindowType === 'home';
-  const showTooltips = Boolean(isMindmeshPage && isTabVisible && isMindmeshWindowOnTop);
-  const showMascotTooltip = showTooltips && onboarding.introCompleted && !onboarding.mascotTourCompleted;
-  const showSensorBarTooltip = Boolean(showSensorBar && showTooltips && onboarding.mascotTourCompleted && !onboarding.sensorBarCompleted);
-  const showDropdownTooltip = Boolean(showTooltips && onboarding.sensorBarCompleted && !onboarding.dropdownTooltipCompleted);
+  // HIDE ONBOARDING TOUR - comment out line below and uncomment the next block to restore
+  const showTooltips = false;
+  // const showTooltips = Boolean(isMindmeshPage && isTabVisible && isMindmeshWindowOnTop);
+  // const showMascotTooltip = showTooltips && onboarding.introCompleted && !onboarding.mascotTourCompleted;
+  // const showSensorBarTooltip = Boolean(showSensorBar && showTooltips && onboarding.mascotTourCompleted && !onboarding.sensorBarCompleted);
+  // const showDropdownTooltip = Boolean(showTooltips && onboarding.sensorBarCompleted && !onboarding.dropdownTooltipCompleted);
+  const showMascotTooltip = false;
+  const showSensorBarTooltip = false;
 
   if (!isMindmeshPage) return null;
 
   return (
     <>
-      {pathname === '/' && <IntroGreetingTooltip />}
-      {showSensorBar && showTooltips && <SensorBarSpotlight showTooltip={showSensorBarTooltip} />}
-      {showDropdownTooltip && <DropdownOverlayTooltip />}
+      {/* HIDE ONBOARDING TOUR - uncomment to restore intro greeting */}
+      {/* {pathname === '/' && <IntroGreetingTooltip />} */}
+      {showSensorBar && <SensorBarSpotlight showTooltip={showSensorBarTooltip} />}
+      {/* HIDE ONBOARDING TOUR - uncomment to restore dropdown tooltip */}
+      {/* {showDropdownTooltip && <DropdownOverlayTooltip />} */}
       {showMascot && <MascotChatbot showTooltip={showMascotTooltip} />}
     </>
   );
