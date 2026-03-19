@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Inter } from 'next/font/google';
+import { Inter, Asul } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import ConditionalOverlays from '@/components/ConditionalOverlays';
@@ -10,6 +10,7 @@ import { UIOverlayProvider } from '@/context/UIOverlayContext';
 import { OnboardingTourProvider } from '@/context/OnboardingTourContext';
 
 const inter = Inter({ subsets: ['latin'] });
+const asul = Asul({ weight: '700', subsets: ['latin'] });
 
 function ThemeScript() {
   return (
@@ -80,7 +81,7 @@ export default function RootLayout({
         <HomeSectionProvider>
           <UIOverlayProvider>
             <OnboardingTourProvider>
-            <Logo />
+            <Logo fontClassName={asul.className} />
             {children}
             <ConditionalOverlays />
             </OnboardingTourProvider>

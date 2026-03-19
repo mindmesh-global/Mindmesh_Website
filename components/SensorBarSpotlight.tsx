@@ -135,7 +135,7 @@ export default function SensorBarSpotlight({ showTooltip = false }: SensorBarSpo
           {[...Array(11)].map((_, i) => (
             <div
               key={i}
-              className="w-2.5 h-2.5 rounded-full bg-amber-400/90 shadow-[0_0_8px_rgba(251,191,36,0.8)] flex-shrink-0"
+              className="w-2.5 h-2.5 rounded-full bg-amber-400/90 flex-shrink-0"
               style={{
                 opacity: 0.7 + (Math.sin(i * 0.5) * 0.15),
               }}

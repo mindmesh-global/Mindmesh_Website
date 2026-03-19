@@ -4,31 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { trackNavClick } from '@/utils/trackEvent';
 
-type GlowVariant = 'rainbow' | 'cyan' | 'emerald' | 'amber' | 'purple' | 'blue' | 'orange' | 'rose' | 'violet';
-
-const navItems: { label: string; href: string; icon: string; glow: GlowVariant }[] = [
-  { label: 'MindMesh', href: '/', icon: '/images/Logo/mindmesh-logo-tight.png', glow: 'rainbow' },
-  { label: 'Join Waitlist', href: '/waitlist', icon: '/images/join-waitlist-icon.png', glow: 'cyan' },
-  { label: 'Subscription', href: '/subscription', icon: '/images/subscription-icon.png', glow: 'emerald' },
-  { label: 'Features', href: '/features', icon: '/images/features-icon.png', glow: 'amber' },
-  { label: 'App Directory', href: '/app-directory', icon: '/images/app-directory-icon.png', glow: 'purple' },
-  { label: 'Social', href: '/social', icon: '/images/social-icon.png', glow: 'blue' },
-  { label: 'Demo.mov', href: '/demo', icon: '/images/demo-icon.png', glow: 'orange' },
-  { label: 'Docs', href: '/docs', icon: '/images/docs-icon.png', glow: 'rose' },
-  { label: 'Contact Us', href: '/contact', icon: '/images/contact-us-icon.png', glow: 'violet' },
+const navItems: { label: string; href: string; icon: string }[] = [
+  { label: 'MindMesh', href: '/', icon: '/images/Logo/mindmesh-logo-tight.png' },
+  { label: 'Join Waitlist', href: '/waitlist', icon: '/images/join-waitlist-icon.png' },
+  { label: 'Subscription', href: '/subscription', icon: '/images/subscription-icon.png' },
+  { label: 'Features', href: '/features', icon: '/images/features-icon.png' },
+  { label: 'App Directory', href: '/app-directory', icon: '/images/app-directory-icon.png' },
+  { label: 'Social', href: '/social', icon: '/images/social-icon.png' },
+  { label: 'Demo.mov', href: '/demo', icon: '/images/demo-icon.png' },
+  { label: 'Docs', href: '/docs', icon: '/images/docs-icon.png' },
+  { label: 'Contact Us', href: '/contact', icon: '/images/contact-us-icon.png' },
 ];
-
-const GLOW_CLASSES: Record<GlowVariant, string> = {
-  rainbow: 'desktop-nav-glow-rainbow',
-  cyan: 'desktop-nav-glow-cyan',
-  emerald: 'desktop-nav-glow-emerald',
-  amber: 'desktop-nav-glow-amber',
-  purple: 'desktop-nav-glow-purple',
-  blue: 'desktop-nav-glow-blue',
-  orange: 'desktop-nav-glow-orange',
-  rose: 'desktop-nav-glow-rose',
-  violet: 'desktop-nav-glow-violet',
-};
 
 const LEFT_COUNT = 5;
 
@@ -49,11 +35,11 @@ function NavItemContent({ item }: { item: (typeof navItems)[0]; isActive?: boole
           alt={item.label}
           width={48}
           height={48}
-          className={`${GLOW_CLASSES[item.glow]} object-contain`}
+          className="object-contain"
         />
       </div>
-      <div className="desktop-nav-label-bg inline-block rounded-sm px-px py-0 w-fit bg-transparent transition-all duration-200">
-        <span className="desktop-nav-label-glow text-sm font-semibold text-white text-center block whitespace-nowrap">{item.label}</span>
+      <div className="desktop-nav-label-bg inline-block rounded-md px-2 py-1 w-fit bg-transparent transition-all duration-200">
+        <span className="text-sm font-semibold text-slate-900 text-center block whitespace-nowrap">{item.label}</span>
       </div>
     </>
   );

@@ -352,7 +352,7 @@ export default function Hero() {
                   {w.type === 'appDirectory' && <FolderOpen className="w-3 h-3 text-indigo-400" strokeWidth={2.5} />}
                   {w.type === 'demo' && <Video className="w-3 h-3 text-amber-400" strokeWidth={2.5} />}
                 </div>
-                <span className="text-xs font-medium text-gray-300 group-hover/btn:text-white">{WINDOW_LABELS[w.type]}</span>
+                <span className="text-xs font-medium text-gray-200 group-hover/btn:text-white">{WINDOW_LABELS[w.type]}</span>
                 {isFront && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-white/90" />}
               </button>
             );
@@ -361,26 +361,6 @@ export default function Hero() {
       )}
 
       <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
-
-      {/* Trust & Compliance strip — fixed at very bottom */}
-      <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-6 flex-wrap py-3 px-6 bg-black/40 backdrop-blur-md z-10">
-        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-          <span>🔒</span>
-          <span>AES-256 Encrypted</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-          <span>🛡</span>
-          <span>TLS 1.2 Secure Transport</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-          <span>✓</span>
-          <span>Google API Limited Use Policy Compliant</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-          <span>🚫</span>
-          <span>We never sell your data</span>
-        </div>
-      </div>
     </section>
   );
 }

@@ -422,7 +422,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
               {/* Mascot - always at bottom, fixed position */}
               <div className="flex-shrink-0 flex items-center justify-center pointer-events-none" aria-hidden>
               <div
-                className="relative flex items-center justify-center cursor-pointer pointer-events-auto mascot-glow-wrapper"
+                className="relative flex items-center justify-center cursor-pointer pointer-events-auto"
                 style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
@@ -431,7 +431,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
                   if (pointerDownRef.current) hasMovedRef.current = true;
                 }}
               >
-                <div className="mascot-body-glow w-full h-full relative z-10">
+                <div className="w-full h-full relative z-10">
                   <DotLottieReact
                     src={LOTTIE_CAT_URL}
                     loop

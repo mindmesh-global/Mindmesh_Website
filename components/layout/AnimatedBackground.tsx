@@ -12,7 +12,7 @@ export default function AnimatedBackground() {
     <>
       <div className="absolute inset-0">
         <Image
-          src="/images/mindmesh-bg.png"
+          src="/images/hero-sec-bg.png"
           alt=""
           fill
           quality={95}
