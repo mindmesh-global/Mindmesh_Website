@@ -8,6 +8,9 @@ import Logo from '@/components/Logo';
 import { HomeSectionProvider } from '@/context/HomeSectionContext';
 import { UIOverlayProvider } from '@/context/UIOverlayContext';
 import { OnboardingTourProvider } from '@/context/OnboardingTourContext';
+import CursorProvider from '@/components/CursorProvider';
+import { CustomCursorProvider } from '@/context/CustomCursorContext';
+import CustomContextMenu from '@/components/CustomContextMenu';
 
 const inter = Inter({ subsets: ['latin'] });
 const asul = Asul({ weight: '700', subsets: ['latin'] });
@@ -81,9 +84,14 @@ export default function RootLayout({
         <HomeSectionProvider>
           <UIOverlayProvider>
             <OnboardingTourProvider>
+            <CustomCursorProvider>
+            <CursorProvider>
             {children}
             <Logo fontClassName={asul.className} />
             <ConditionalOverlays />
+            <CustomContextMenu />
+            </CursorProvider>
+            </CustomCursorProvider>
             </OnboardingTourProvider>
           </UIOverlayProvider>
         </HomeSectionProvider>

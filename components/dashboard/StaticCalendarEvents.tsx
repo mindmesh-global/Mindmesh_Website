@@ -1,12 +1,16 @@
+'use client';
+
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+import { useSectionHover } from '@/context/SectionHoverContext';
 
 export function StaticCalendarEvents() {
+  const sectionHover = useSectionHover();
   return (
     <div className="calendar-events bg-white dark:bg-gray-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-800 p-6 transition-shadow">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="font-bold text-lg text-black dark:text-white">
-            <HoverTypingTooltip text="Future calendar events. You can join meeting from here" speed={35}>
+            <HoverTypingTooltip text="Future calendar events. You can join meeting from here" speed={35} controlledHover={sectionHover?.hoveredSectionId === 'upcoming_events'}>
               Upcoming Events (2)
             </HoverTypingTooltip>
           </h3>

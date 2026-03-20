@@ -2,6 +2,8 @@
 
 import { useState, type RefObject } from 'react';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+import { useSectionHover } from '@/context/SectionHoverContext';
+import type { HomeSectionId } from '@/context/HomeSectionContext';
 
 interface StaticDailySummaryPanelProps {
   timeClashRef?: RefObject<HTMLDivElement | null>;
@@ -12,6 +14,18 @@ interface StaticDailySummaryPanelProps {
 
 export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosRef, eventsRef }: StaticDailySummaryPanelProps) {
   const [checkedTodos, setCheckedTodos] = useState<Set<number>>(new Set());
+  const sectionHover = useSectionHover();
+
+  const createSectionHandlers = (sectionId: HomeSectionId, ref: RefObject<HTMLDivElement | null> | undefined) => ({
+    onMouseEnter: () => {
+      const rect = ref?.current?.getBoundingClientRect();
+      if (rect) sectionHover?.setHoveredSection(sectionId, rect);
+    },
+    onMouseLeave: () => sectionHover?.clearHoveredSection(),
+  });
+
+  const sectionHighlight = (id: HomeSectionId) =>
+    sectionHover?.hoveredSectionId === id ? 'ring-2 ring-amber-400 ring-offset-2 shadow-xl scale-[1.01]' : '';
 
   const handleTodoToggle = (index: number) => {
     setCheckedTodos((prev) => {
@@ -26,7 +40,7 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-700 p-6 mb-6 transition-shadow text-slate-900 dark:text-slate-100">
+    <div className="relative bg-white dark:bg-slate-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-700 p-6 mb-6 transition-shadow text-slate-900 dark:text-slate-100 overflow-visible">
       <div className="flex justify-between items-center mb-2 bg-white z-10 pb-2">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Today's Overview</h2>
         <div className="flex items-center gap-2">
@@ -41,11 +55,16 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
       </div>
 
       {/* Time Clashes */}
-      <div ref={timeClashRef} data-home-section="time_clash" className="mb-4">
-        <div className="rounded-lg border border-red-200 shadow-sm bg-gradient-to-br from-red-50 via-white to-red-50 overflow-visible">
+      <div
+        ref={timeClashRef}
+        data-home-section="time_clash"
+        className={`mb-4 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('time_clash')}`}
+        {...createSectionHandlers('time_clash', timeClashRef)}
+      >
+        <div className="rounded-lg border border-red-200 shadow-sm bg-gradient-to-br from-red-50 via-white to-red-50 overflow-visible dark:from-red-950/30 dark:via-slate-800 dark:to-red-950/30">
         <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 text-white font-semibold tracking-wide rounded-t-lg">
           <span className="text-xl">⏰</span>
-          <HoverTypingTooltip text="Overlapping events that conflict." speed={35} variant="dark">
+          <HoverTypingTooltip text="Overlapping events that conflict." speed={35} variant="dark" controlledHover={sectionHover?.hoveredSectionId === 'time_clash'}>
             Time Clash Alert
           </HoverTypingTooltip>
         </div>
@@ -65,9 +84,14 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
       </div>
 
       {/* Inferred Facts */}
-      <div ref={inferredFactsRef} data-home-section="inferred_facts" className="mb-4">
+      <div
+        ref={inferredFactsRef}
+        data-home-section="inferred_facts"
+        className={`mb-4 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('inferred_facts')}`}
+        {...createSectionHandlers('inferred_facts', inferredFactsRef)}
+      >
         <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
-          <HoverTypingTooltip text="AI highlights from your emails and events." speed={35}>
+          <HoverTypingTooltip text="AI highlights from your emails and events." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'inferred_facts'}>
             Inferred Facts
           </HoverTypingTooltip>
         </h3>
@@ -92,9 +116,14 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
       </div>
 
       {/* Todos */}
-      <div ref={todosRef} data-home-section="todos" className="mb-4">
+      <div
+        ref={todosRef}
+        data-home-section="todos"
+        className={`mb-4 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('todos')}`}
+        {...createSectionHandlers('todos', todosRef)}
+      >
         <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
-          <HoverTypingTooltip text="Action items from emails." speed={35}>
+          <HoverTypingTooltip text="Action items from emails." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'todos'}>
             Todos
           </HoverTypingTooltip>
         </h3>
@@ -155,9 +184,14 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
       </div>
 
       {/* Events Timeline */}
-      <div ref={eventsRef} data-home-section="events">
+      <div
+        ref={eventsRef}
+        data-home-section="events"
+        className={`relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('events')}`}
+        {...createSectionHandlers('events', eventsRef)}
+      >
         <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
-          <HoverTypingTooltip text="Calendar meetings and appointments." speed={35}>
+          <HoverTypingTooltip text="Calendar meetings and appointments." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'events'}>
             Events
           </HoverTypingTooltip>
         </h3>

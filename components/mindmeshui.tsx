@@ -1,12 +1,12 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Cat, Sun } from 'lucide-react';
-import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardPage from '@/app/dashboard/page';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import { useSplitView } from '@/context/SplitViewContext';
+import { MindMeshContainerProvider } from '@/context/MindMeshContainerContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -21,6 +21,7 @@ interface MindMeshUIProps {
 
 export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMeshUIProps) {
   const windowRef = useRef<HTMLDivElement>(null);
+  const overlayRootRef = useRef<HTMLDivElement>(null);
   const isSplitView = useSplitView();
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentScrollRef = useRef<HTMLDivElement>(null);
@@ -129,7 +130,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
       {/* Mac Window Container - centered vertically */}
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+        className={`relative w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
           isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[1600px] min-h-0 flex-1 rounded-lg'
         }`}
       >
@@ -189,13 +190,6 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
                       transition={{ duration: 0.15 }}
                       className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 py-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50"
                     >
-                      <HoverTypingTooltip
-                        text="Your MindMesh AI assistant. Click to open chat — ask questions about your email, calendar, and saved memory in natural language."
-                        showHint={false}
-                        variant="dark"
-                        placement="right"
-                        wrap
-                      >
                         <button
                           type="button"
                           onClick={() => uiOverlay.setShowMascot(!uiOverlay.showMascot)}
@@ -207,7 +201,6 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
                             <span className="ml-auto text-[10px] text-green-400">On</span>
                           )}
                         </button>
-                      </HoverTypingTooltip>
                       <button
                         type="button"
                         onClick={() => uiOverlay.setShowSensorBar(!uiOverlay.showSensorBar)}
@@ -227,15 +220,23 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
           </div>
         </div>
         
-        {/* Main Content - overflow-y-auto so mascot tour can programmatically scroll; scroll lock when tour active */}
+        {/* Overlay root: must render first so ref is available for SectionDimOverlay portal */}
         <div
-          ref={contentScrollRef}
-          data-mindmesh-scroll
-          className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}
-          style={{ overscrollBehavior: 'contain', ...(uiOverlay?.mascotTooltipVisible ? { touchAction: 'none' } : {}) } as React.CSSProperties}
-        >
-          <DashboardPage />
-        </div>
+          ref={overlayRootRef}
+          className="absolute inset-0 overflow-hidden pointer-events-none z-[100]"
+          aria-hidden
+        />
+        {/* Main Content - overflow-y-auto so mascot tour can programmatically scroll; scroll lock when tour active */}
+        <MindMeshContainerProvider containerRef={overlayRootRef}>
+          <div
+            ref={contentScrollRef}
+            data-mindmesh-scroll
+            className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}
+            style={{ overscrollBehavior: 'contain', ...(uiOverlay?.mascotTooltipVisible ? { touchAction: 'none' } : {}) } as React.CSSProperties}
+          >
+            <DashboardPage />
+          </div>
+        </MindMeshContainerProvider>
       </div>
     </div>
   );

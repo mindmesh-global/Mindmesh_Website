@@ -1,11 +1,14 @@
+'use client';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+import { useSectionHover } from '@/context/SectionHoverContext';
 
 export function StaticConnectedApps() {
+  const sectionHover = useSectionHover();
   return (
     <div className="p-6 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 bg-white transition-shadow mb-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-bold text-lg text-black">
-          <HoverTypingTooltip text="Linked email and calendar accounts." speed={35}>
+          <HoverTypingTooltip text="Linked email and calendar accounts." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'connected_apps'}>
             Connected Apps
           </HoverTypingTooltip>
         </h2>

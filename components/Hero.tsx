@@ -30,7 +30,7 @@ interface OpenWindowItem {
 
 const CASCADE_OFFSET = 28; // px offset per window for stacked look (like Windows/macOS)
 const BASE_Z = 20;
-const SNAP_ZONE_FRACTION = 0.25; // left/right 25% of screen triggers snap
+const SNAP_ZONE_FRACTION = 0.06; // full top only (~6% of screen) — header must touch top edge
 
 type DragConstraints = React.RefObject<HTMLElement | null>;
 type SplitView = { left: OpenWindowItem | null; right: OpenWindowItem | null };
@@ -208,7 +208,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
 
   // Multiple windows stack (last in array = on top, like Windows/macOS)
-  // On load/refresh, home.mdx window is open by default
+  // On load/refresh, home window is open by default (synced with URL in effect below)
   const [openWindows, setOpenWindows] = useState<OpenWindowItem[]>(() => [
     { id: 'home-default', type: 'home' },
   ]);
@@ -280,7 +280,12 @@ export default function Hero() {
       if (!section) return;
       const rect = section.getBoundingClientRect();
       const x = info.point.x - rect.left;
-      const frac = x / rect.width;
+      const y = info.point.y - rect.top;
+      const fracX = x / rect.width;
+      const fracY = y / rect.height;
+
+      // Split only triggers when header is dragged to TOP of screen (top 25%)
+      const headerAtTop = fracY < SNAP_ZONE_FRACTION;
 
       if (splitView) {
         const isLeft = splitView.left?.id === draggedItem.id;
@@ -290,18 +295,20 @@ export default function Hero() {
           setSplitView({ left: null, right: splitView.right });
         } else if (isRight && splitView.left) {
           setSplitView({ left: splitView.left, right: null });
-        } else if (isStacked) {
-          if (frac < SNAP_ZONE_FRACTION && splitView.right) {
+        } else if (isStacked && headerAtTop) {
+          if (fracX < 0.5 && splitView.right) {
             setSplitView({ left: draggedItem, right: splitView.right });
-          } else if (frac > 1 - SNAP_ZONE_FRACTION && splitView.left) {
+          } else if (fracX >= 0.5 && splitView.left) {
             setSplitView({ left: splitView.left, right: draggedItem });
-          } else if (splitView.left === null && splitView.right && frac > 0.7) {
+          } else if (splitView.left === null && splitView.right && fracX >= 0.5) {
             setSplitView({ left: splitView.right, right: draggedItem });
-          } else if (splitView.right === null && splitView.left && frac < 0.3) {
+          } else if (splitView.right === null && splitView.left && fracX < 0.5) {
             setSplitView({ left: draggedItem, right: splitView.left });
           } else {
             setSplitView(null);
           }
+        } else if (!headerAtTop) {
+          setSplitView(null);
         } else {
           setSplitView(null);
         }
@@ -312,12 +319,16 @@ export default function Hero() {
       const visible = openWindows.filter((w) => !minimizedIds.has(w.id));
       if (visible.length < 2) return;
 
-      if (frac < SNAP_ZONE_FRACTION) {
-        const other = visible.find((w) => w.id !== draggedItem.id);
-        if (other) setSplitView({ left: draggedItem, right: other });
-      } else if (frac > 1 - SNAP_ZONE_FRACTION) {
-        const other = visible.find((w) => w.id !== draggedItem.id);
-        if (other) setSplitView({ left: other, right: draggedItem });
+      const other = visible.find((w) => w.id !== draggedItem.id);
+      if (!other) return;
+
+      // Only split when header is at top; use x to decide left vs right
+      if (headerAtTop) {
+        if (fracX < 0.5) {
+          setSplitView({ left: draggedItem, right: other });
+        } else {
+          setSplitView({ left: other, right: draggedItem });
+        }
       }
     },
     [splitView, openWindows, minimizedIds, bringToFront]
@@ -368,15 +379,36 @@ export default function Hero() {
   }, [searchParams, router, openWindow]);
 
   // Open window from pathname (e.g. /features, /contact) — for SEO, direct links
+  // On refresh: always show MindMesh Dashboard window. On direct link: show that route's window.
+  const hasSyncedFromPathname = useRef(false);
   useEffect(() => {
-    if (!pathname || pathname === '/') return;
+    if (!pathname) return;
     if (pathname === '/waitlist') {
       setIsWaitlistOpen(true);
       return;
     }
     const type = HREF_TO_WINDOW_TYPE[pathname];
-    if (type) openWindow(type);
-  }, [pathname, openWindow]);
+    if (!type) return;
+
+    const navEntry = performance.getEntriesByType?.('navigation')?.[0] as PerformanceNavigationTiming | undefined;
+    const isRefresh = navEntry?.type === 'reload';
+
+    if (!hasSyncedFromPathname.current) {
+      hasSyncedFromPathname.current = true;
+      if (isRefresh) {
+        // On refresh: always show MindMesh Dashboard (home window) and navigate to /
+        setOpenWindows([{ id: 'home-default', type: 'home' }]);
+        router.replace('/');
+      } else if (pathname !== '/') {
+        // Direct link (e.g. /features): show that window only
+        setOpenWindows([{ id: `${type}-${Date.now()}`, type }]);
+        updateUrl(WINDOW_TYPE_TO_HREF[type], false);
+      }
+      return;
+    }
+
+    if (pathname !== '/' && !isRefresh) openWindow(type);
+  }, [pathname, openWindow, updateUrl, router]);
 
   // Browser back button: close topmost window (URL already changed by browser)
   useEffect(() => {
@@ -418,7 +450,7 @@ export default function Hero() {
         }}
       />
 
-      {/* Split view (Mac-style side by side) or stacked windows */}
+      {/* Split view (vertical side-by-side only) or stacked windows */}
       {splitView ? (
         <motion.div
           className="absolute inset-0 flex"
@@ -432,18 +464,18 @@ export default function Hero() {
                 <SplitPanel
                   key={splitView.left.id}
                   item={splitView.left}
-                  onClose={() => closeWindow(splitView!.left!.id)}
+                  onClose={() => closeWindow(splitView.left!.id)}
                   onMinimize={() => {
-                    minimizeWindow(splitView!.left!.id);
+                    minimizeWindow(splitView.left!.id);
                     setSplitView(null);
                   }}
-                  onDragEnd={(info) => handleDragEnd(splitView!.left!, info)}
+                  onDragEnd={(info) => handleDragEnd(splitView.left!, info)}
                   dragConstraintsRef={sectionRef}
                 />
               </SplitViewProvider>
             ) : (
               (() => {
-                const stackedItem = openWindows.find((w) => !minimizedIds.has(w.id) && w.id !== splitView!.right!.id);
+                const stackedItem = openWindows.find((w) => !minimizedIds.has(w.id) && w.id !== splitView.right!.id);
                 return stackedItem ? (
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center"
@@ -474,18 +506,18 @@ export default function Hero() {
                 <SplitPanel
                   key={splitView.right.id}
                   item={splitView.right}
-                  onClose={() => closeWindow(splitView!.right!.id)}
+                  onClose={() => closeWindow(splitView.right!.id)}
                   onMinimize={() => {
-                    minimizeWindow(splitView!.right!.id);
+                    minimizeWindow(splitView.right!.id);
                     setSplitView(null);
                   }}
-                  onDragEnd={(info) => handleDragEnd(splitView!.right!, info)}
+                  onDragEnd={(info) => handleDragEnd(splitView.right!, info)}
                   dragConstraintsRef={sectionRef}
                 />
               </SplitViewProvider>
             ) : (
               (() => {
-                const stackedItem = openWindows.find((w) => !minimizedIds.has(w.id) && w.id !== splitView!.left!.id);
+                const stackedItem = openWindows.find((w) => !minimizedIds.has(w.id) && w.id !== splitView.left!.id);
                 return stackedItem ? (
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center"

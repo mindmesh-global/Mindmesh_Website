@@ -7,6 +7,8 @@ import { StaticInboxList } from '@/components/dashboard/StaticInboxList';
 import { StaticDailyNarrativeCard } from '@/components/dashboard/StaticDailyNarrativeCard';
 import { StaticWeatherCard } from '@/components/dashboard/StaticWeatherCard';
 import { StaticConnectedApps } from '@/components/dashboard/StaticConnectedApps';
+import { SectionDimOverlay } from '@/components/dashboard/SectionDimOverlay';
+import { SectionHoverProvider, useSectionHover } from '@/context/SectionHoverContext';
 import { useHomeSection } from '@/context/HomeSectionContext';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
@@ -137,10 +139,88 @@ export default function DashboardPage() {
   }, [uiOverlay]);
 
   return (
+    <SectionHoverProvider>
+      <SectionDimOverlay />
+      <DashboardContent
+        containerRef={containerRef}
+        bottomSentinelRef={bottomSentinelRef}
+        timeClashRef={timeClashRef}
+        inferredFactsRef={inferredFactsRef}
+        todosRef={todosRef}
+        eventsRef={eventsRef}
+        upcomingEventsRef={upcomingEventsRef}
+        inboxRef={inboxRef}
+        dailyNarrativeRef={dailyNarrativeRef}
+        connectedAppsRef={connectedAppsRef}
+        sectionRefsMap={sectionRefsMap}
+        setActiveSection={setActiveSection}
+        uiOverlay={uiOverlay}
+        onboarding={onboarding}
+      />
+    </SectionHoverProvider>
+  );
+}
+
+function DashboardContent({
+  containerRef,
+  bottomSentinelRef,
+  timeClashRef,
+  inferredFactsRef,
+  todosRef,
+  eventsRef,
+  upcomingEventsRef,
+  inboxRef,
+  dailyNarrativeRef,
+  connectedAppsRef,
+  sectionRefsMap,
+  setActiveSection,
+  uiOverlay,
+  onboarding,
+}: {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  bottomSentinelRef: React.RefObject<HTMLDivElement | null>;
+  timeClashRef: React.RefObject<HTMLDivElement | null>;
+  inferredFactsRef: React.RefObject<HTMLDivElement | null>;
+  todosRef: React.RefObject<HTMLDivElement | null>;
+  eventsRef: React.RefObject<HTMLDivElement | null>;
+  upcomingEventsRef: React.RefObject<HTMLDivElement | null>;
+  inboxRef: React.RefObject<HTMLDivElement | null>;
+  dailyNarrativeRef: React.RefObject<HTMLDivElement | null>;
+  connectedAppsRef: React.RefObject<HTMLDivElement | null>;
+  sectionRefsMap: Record<HomeSectionId, React.RefObject<HTMLDivElement | null>>;
+  setActiveSection: ((id: HomeSectionId | null) => void) | undefined;
+  uiOverlay: ReturnType<typeof useUIOverlay>;
+  onboarding: ReturnType<typeof useOnboardingTour>;
+}) {
+  const sectionHover = useSectionHover();
+
+  useEffect(() => {
+    if (!sectionHover?.hoveredSectionId || !sectionHover?.updateCutoutRect) return;
+    const ref = sectionRefsMap[sectionHover.hoveredSectionId];
+    if (!ref?.current) return;
+    const update = () => ref.current && sectionHover?.updateCutoutRect(ref.current.getBoundingClientRect());
+    update();
+    window.addEventListener('scroll', update, true);
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update, true);
+      window.removeEventListener('resize', update);
+    };
+  }, [sectionHover?.hoveredSectionId, sectionRefsMap, sectionHover?.updateCutoutRect]);
+
+  const createSectionHandlers = (sectionId: HomeSectionId, ref: React.RefObject<HTMLDivElement | null>) => ({
+    onMouseEnter: () => {
+      const rect = ref?.current?.getBoundingClientRect();
+      if (rect) sectionHover?.setHoveredSection(sectionId, rect);
+    },
+    onMouseLeave: () => sectionHover?.clearHoveredSection(),
+  });
+
+  return (
     <div ref={containerRef} className="min-h-screen bg-gray-200 dark:bg-slate-800 text-gray-900 dark:text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8 flex items-start justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Header */}
+          <div className="mb-8 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Dashboard</h1>
             <p className="text-slate-600 dark:text-slate-400 mt-2">Welcome back, User</p>
@@ -156,22 +236,42 @@ export default function DashboardPage() {
         </div>
 
         {/* Upcoming Events */}
-        <div ref={upcomingEventsRef} data-home-section="upcoming_events" className="mb-8">
+        <div
+          ref={upcomingEventsRef}
+          data-home-section="upcoming_events"
+          className={`mb-8 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHover?.hoveredSectionId === 'upcoming_events' ? 'ring-2 ring-amber-400 ring-offset-2 shadow-xl scale-[1.01]' : ''}`}
+          {...createSectionHandlers('upcoming_events', upcomingEventsRef)}
+        >
           <StaticCalendarEvents />
         </div>
 
         {/* Primary Inbox */}
-        <div ref={inboxRef} data-home-section="inbox" className="mb-8">
+        <div
+          ref={inboxRef}
+          data-home-section="inbox"
+          className={`mb-8 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHover?.hoveredSectionId === 'inbox' ? 'ring-2 ring-amber-400 ring-offset-2 shadow-xl scale-[1.01]' : ''}`}
+          {...createSectionHandlers('inbox', inboxRef)}
+        >
           <StaticInboxList />
         </div>
 
         {/* Yesterday's Narrative */}
-        <div ref={dailyNarrativeRef} data-home-section="daily_narrative" className="mb-8">
+        <div
+          ref={dailyNarrativeRef}
+          data-home-section="daily_narrative"
+          className={`mb-8 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHover?.hoveredSectionId === 'daily_narrative' ? 'ring-2 ring-amber-400 ring-offset-2 shadow-xl scale-[1.01]' : ''}`}
+          {...createSectionHandlers('daily_narrative', dailyNarrativeRef)}
+        >
           <StaticDailyNarrativeCard />
         </div>
 
         {/* Connected Apps */}
-        <div ref={connectedAppsRef} data-home-section="connected_apps" className="mb-8">
+        <div
+          ref={connectedAppsRef}
+          data-home-section="connected_apps"
+          className={`mb-8 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHover?.hoveredSectionId === 'connected_apps' ? 'ring-2 ring-amber-400 ring-offset-2 shadow-xl scale-[1.01]' : ''}`}
+          {...createSectionHandlers('connected_apps', connectedAppsRef)}
+        >
           <StaticConnectedApps />
         </div>
         {/* Sentinel for scroll-to-bottom detection (sensor bar shows only when this is visible) */}

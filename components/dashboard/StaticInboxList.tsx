@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+import { useSectionHover } from '@/context/SectionHoverContext';
 
 type BodyBlock =
   | { type: 'paragraph'; text: string }
@@ -65,6 +66,7 @@ const MESSAGES: InboxMessage[] = [
 ];
 
 export function StaticInboxList() {
+  const sectionHover = useSectionHover();
   const [selectedAccount, setSelectedAccount] = useState('All Accounts');
   const [isOpen, setIsOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -101,7 +103,7 @@ export function StaticInboxList() {
             <div>
               <div className="flex items-center gap-6">
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                  <HoverTypingTooltip text="Your unified email inbox." speed={35}>
+                  <HoverTypingTooltip text="Your unified email inbox." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'inbox'}>
                     Inbox
                   </HoverTypingTooltip>
                 </h2>

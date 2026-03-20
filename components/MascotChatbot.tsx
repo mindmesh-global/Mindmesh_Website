@@ -94,6 +94,7 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
   const dragControls = useDragControls();
   const modalRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [mascotHovered, setMascotHovered] = useState(false);
 
   const PADDING = 12;
 
@@ -258,11 +259,23 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
     setMessages([]);
   }, []);
 
+  const handleMascotMouseEnter = useCallback(() => setMascotHovered(true), []);
+  const handleMascotMouseLeave = useCallback(() => setMascotHovered(false), []);
+
   const currentStep = mascotIntroShown ? getSectionIndex(displaySection) + 1 : 1;
   const totalSteps = TOTAL_STEPS;
 
   const content = (
     <>
+      {/* Mascot hover dim overlay - full dim, mascot + tooltip stay on top */}
+      {!isExpanded && mascotHovered && (
+        <div
+          className="fixed inset-0 pointer-events-none transition-opacity duration-200"
+          style={{ zIndex: 2147483645, backgroundColor: 'rgba(0,0,0,0.65)' }}
+          aria-hidden
+        />
+      )}
+
       {/* Spotlight overlay - mascot intro: full dark overlay, mascot + tooltip on top (no cutout = no white area) */}
       {!isExpanded && !mascotIntroShown && activeInfo && (
         <div
@@ -422,35 +435,41 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
 
               {/* Mascot - always at bottom, fixed position */}
               <div className="flex-shrink-0 flex items-center justify-center pointer-events-none" aria-hidden>
-              <HoverTypingTooltip
-                text="Your MindMesh AI assistant. Click to open chat — ask questions."
-                showHint={false}
-                variant="dark"
-                placement="top"
-                wrap
+              <div
+                onMouseEnter={handleMascotMouseEnter}
+                onMouseLeave={handleMascotMouseLeave}
                 className="pointer-events-auto"
               >
-                <div
-                  className="relative flex items-center justify-center cursor-pointer"
-                  style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
-                  onPointerDown={handlePointerDown}
-                  onPointerMove={handlePointerMove}
-                  onPointerUp={handlePointerUp}
-                  onPointerLeave={() => {
-                    if (pointerDownRef.current) hasMovedRef.current = true;
-                  }}
+                <HoverTypingTooltip
+                  text="Your MindMesh AI assistant. Click to open chat — ask questions."
+                  showHint={false}
+                  variant="dark"
+                  placement="top"
+                  wrap
+                  className=""
                 >
-                  <div className="w-full h-full relative z-10">
-                    <DotLottieReact
-                      src={LOTTIE_CAT_URL}
-                      loop
-                      autoplay
-                      speed={0.3}
-                      className="w-full h-full"
-                    />
+                  <div
+                    className="relative flex items-center justify-center cursor-pointer"
+                    style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerLeave={() => {
+                      if (pointerDownRef.current) hasMovedRef.current = true;
+                    }}
+                  >
+                    <div className="w-full h-full relative z-10">
+                      <DotLottieReact
+                        src={LOTTIE_CAT_URL}
+                        loop
+                        autoplay
+                        speed={0.3}
+                        className="w-full h-full"
+                      />
+                    </div>
                   </div>
-                </div>
-              </HoverTypingTooltip>
+                </HoverTypingTooltip>
+              </div>
             </div>
             </div>
           </motion.div>
