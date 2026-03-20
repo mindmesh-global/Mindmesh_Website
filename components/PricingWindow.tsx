@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { trackButtonClick, trackContactClick } from '@/utils/trackEvent';
+import { useSplitView } from '@/context/SplitViewContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 type BillingCycle = 'monthly' | 'yearly';
@@ -44,6 +45,7 @@ export default function PricingWindow({
   currentPlan = 'free',
 }: PricingWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
+  const isSplitView = useSplitView();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [billing, setBilling] = useState<BillingCycle>('monthly');
   const [showDowngradeModal, setShowDowngradeModal] = useState(false);
@@ -74,10 +76,10 @@ export default function PricingWindow({
     <div className="w-full min-h-0 flex-1 flex flex-col">
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
           isFullscreen
             ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen'
-            : 'max-w-[1400px] min-h-0 flex-1'
+            : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[1400px] min-h-0 flex-1 rounded-lg'
         }`}
       >
         {/* Mac-style title bar */}
@@ -120,7 +122,7 @@ export default function PricingWindow({
 
         {/* Content - Pricing plans */}
         <div
-          className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 dark:bg-[linear-gradient(to_bottom_right,rgb(3,7,18),rgb(17,24,39))] ${
+          className={`flex-1 min-h-0 overflow-y-auto overscroll-contain bg-gray-50 dark:bg-[linear-gradient(to_bottom_right,rgb(3,7,18),rgb(17,24,39))] ${
             isFullscreen ? 'h-[calc(100vh-3rem)]' : ''
           }`}
         >
@@ -132,10 +134,10 @@ export default function PricingWindow({
               className="mb-6 text-center"
             >
               <h2 className="text-2xl font-bold text-blue-800 dark:text-blue-200">
-                Upgrade to Pro
+                Choose your plan
               </h2>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Unlock AI insights, unlimited accounts, and more.
+                Connect your email and calendar. Unlock AI-powered insights.
               </p>
             </motion.header>
 
@@ -185,32 +187,24 @@ export default function PricingWindow({
                   Free
                 </h3>
                 <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                  2 accounts, basic inbox & calendar view.
+                  Connect your email and calendar in one place.
                 </p>
                 <ul className="mt-4 flex-1 space-y-2">
                   <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
                     <FeatureCheck variant="blue" />
-                    <span>Up to 2 email addresses (e.g. Gmail + SMTP, or 2 Gmail)</span>
+                    <span>Connect up to 2 email accounts (Gmail or SMTP)</span>
                   </li>
                   <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
                     <FeatureCheck variant="blue" />
-                    <span>Inbox & calendar (fetch only)</span>
+                    <span>Unified inbox — see all your mail in one view</span>
                   </li>
-                  <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-                    <FeatureCross />
-                    <span>No AI enrichment</span>
+                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
+                    <FeatureCheck variant="blue" />
+                    <span>Calendar view — see your schedule at a glance</span>
                   </li>
-                  <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-                    <FeatureCross />
-                    <span>No email/calendar memory or semantic search</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-                    <FeatureCross />
-                    <span>No Mascot or Sensor</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-                    <FeatureCross />
-                    <span>No Today&apos;s Overview or daily narrative</span>
+                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
+                    <FeatureCheck variant="blue" />
+                    <span>Works with Gmail, Outlook, and any SMTP provider</span>
                   </li>
                 </ul>
                 <div className="mt-5">
@@ -240,23 +234,28 @@ export default function PricingWindow({
                 transition={{ duration: 0.3, delay: 0.15 }}
                 className="relative flex flex-col rounded-xl bg-gradient-to-b from-blue-300 to-blue-500 p-5 shadow-xl dark:from-blue-400 dark:to-blue-600"
               >
-                <span className="absolute right-3 top-3 rounded-full bg-blue-200 px-3 py-1 text-[10px] font-bold uppercase text-blue-800 dark:bg-blue-300/90 dark:text-blue-900">
+                <span className="absolute right-3 top-3 rounded-full bg-blue-200 px-3 py-1 text-[6px] font-bold uppercase text-blue-800 dark:bg-blue-300/90 dark:text-blue-900">
                   MOST POPULAR
                 </span>
                 <h3 className="text-lg font-bold text-white">Pro</h3>
                 <p className="mt-0.5 text-xs text-white/90">
-                  Unlimited accounts, AI insights, Mascot & Sensor.
+                  Your AI-powered email assistant that reads, remembers, and briefs you.
                 </p>
                 <ul className="mt-4 flex-1 space-y-2">
                   {[
-                    'Unlimited connected accounts',
-                    'AI email & calendar enrichment',
-                    'Encrypted AI memory for your inbox & calendar',
-                    'Search your emails and events naturally — in your own words',
-                    'Inferred facts & todos from emails and events',
-                    "Today's Overview & Morning Juice (daily summary)",
-                    "Yesterday's narrative (daily narrative)",
-                    'Mascot & Sensor Bar AI assistant',
+                    'Unlimited email accounts — connect every inbox you have',
+                    'Inbox syncs every 5 minutes — always stay up to date',
+                    'Morning Juice — a daily briefing of what matters today',
+                    'Yesterday in 60 seconds — a quick recap of what happened',
+                    'Auto-extracted todos with priorities and deadlines',
+                    'Bills, orders, and shipments tracked automatically',
+                    'Calendar clash detection so you never double-book',
+                    "Search your emails in plain English — 'invoices from Acme last month'",
+                    'Mascot — your desktop AI buddy that notifies you of what matters',
+                    'Choose your Mascot — pick from cat, dog, butler, or orb',
+                    'Sensor Bar — intuitive command bar for quick tasks (Cmd+Shift+M)',
+                    'Unlimited memory — your assistant never forgets anything, ever',
+                    'Everything encrypted and processed locally on your device',
                   ].map((f) => (
                     <li
                       key={f}
@@ -269,7 +268,7 @@ export default function PricingWindow({
                 </ul>
                 <div className="mt-5">
                   <p className="text-xl font-bold text-white">
-                    {billing === 'monthly' ? '$20/month' : '$200/year'}
+                    {billing === 'monthly' ? '$20 / month' : '$200 / year'}
                   </p>
                   {billing === 'yearly' && (
                     <p className="mt-0.5 text-xs text-white/75">
@@ -297,34 +296,25 @@ export default function PricingWindow({
                   Enterprise
                 </h3>
                 <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                  For teams that need custom integrations and dedicated support.
+                  Everything in Pro, plus custom integrations, SSO, and dedicated support.
                 </p>
-                <ul className="mt-4 flex-1 space-y-2">
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
-                    <FeatureCheck variant="blue" />
-                    <span>Everything in Pro</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
-                    <FeatureCheck variant="blue" />
-                    <span>Dedicated account manager</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
-                    <FeatureCheck variant="blue" />
-                    <span>Custom integrations & API</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
-                    <FeatureCheck variant="blue" />
-                    <span>SSO and advanced security</span>
-                  </li>
-                </ul>
-                <div className="mt-5">
+                <div className="mt-auto pt-5 space-y-2">
                   <a
-                    href="mailto:sales@mindmesh.global?subject=Enterprise%20plan%20inquiry"
+                    href="mailto:support@mindmesh.global?subject=Enterprise%20plan%20inquiry"
                     onClick={() => trackContactClick('email')}
-                    className="block w-full rounded-lg bg-gray-100 py-2.5 text-center text-sm font-medium text-blue-800 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-blue-200 dark:hover:bg-gray-600"
+                    className="block w-full rounded-lg bg-gray-100 py-2.5 text-center text-sm font-bold text-blue-800 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-blue-200 dark:hover:bg-gray-600"
                   >
-                    Contact sales
+                    Let&apos;s talk
                   </a>
+                  <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+                    Reach out to{' '}
+                    <a
+                      href="mailto:support@mindmesh.global"
+                      className="underline hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      support@mindmesh.global
+                    </a>
+                  </p>
                 </div>
               </motion.div>
             </div>

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSplitView } from '@/context/SplitViewContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -307,6 +308,7 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeDoc, setActiveDoc] = useState<DocId>('faq');
+  const isSplitView = useSplitView();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
   const handleClose = () => {
@@ -338,8 +340,8 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
     <div className="w-full min-h-0 flex-1 flex flex-col">
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
-          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[1600px] min-h-0 flex-1'
+        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[1600px] min-h-0 flex-1 rounded-lg'
         }`}
       >
         {/* Title bar */}
@@ -416,7 +418,7 @@ export default function DocsWindow({ dragControls, onClose, onMinimize }: DocsWi
             })}
           </aside>
           {/* Document body */}
-          <main className="flex-1 overflow-y-auto px-8 pt-6 pb-4">
+          <main className="flex-1 overflow-y-auto overscroll-contain px-8 pt-6 pb-4">
             {(() => {
               const currentSection = navItems.find((i) => i.id === activeDoc)!;
               return (

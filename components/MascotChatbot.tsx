@@ -16,6 +16,7 @@ import {
   Send,
   ChevronRight,
 } from 'lucide-react';
+import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
 
 const MASCOT_INTRO = {
   id: 'mascot_intro',
@@ -421,26 +422,35 @@ export default function MascotChatbot({ showTooltip: showTooltipProp = true }: M
 
               {/* Mascot - always at bottom, fixed position */}
               <div className="flex-shrink-0 flex items-center justify-center pointer-events-none" aria-hidden>
-              <div
-                className="relative flex items-center justify-center cursor-pointer pointer-events-auto"
-                style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={() => {
-                  if (pointerDownRef.current) hasMovedRef.current = true;
-                }}
+              <HoverTypingTooltip
+                text="Your MindMesh AI assistant. Click to open chat — ask questions."
+                showHint={false}
+                variant="dark"
+                placement="top"
+                wrap
+                className="pointer-events-auto"
               >
-                <div className="w-full h-full relative z-10">
-                  <DotLottieReact
-                    src={LOTTIE_CAT_URL}
-                    loop
-                    autoplay
-                    speed={0.3}
-                    className="w-full h-full"
-                  />
+                <div
+                  className="relative flex items-center justify-center cursor-pointer"
+                  style={{ width: 260, height: 180, minWidth: 260, minHeight: 180 }}
+                  onPointerDown={handlePointerDown}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerLeave={() => {
+                    if (pointerDownRef.current) hasMovedRef.current = true;
+                  }}
+                >
+                  <div className="w-full h-full relative z-10">
+                    <DotLottieReact
+                      src={LOTTIE_CAT_URL}
+                      loop
+                      autoplay
+                      speed={0.3}
+                      className="w-full h-full"
+                    />
+                  </div>
                 </div>
-              </div>
+              </HoverTypingTooltip>
             </div>
             </div>
           </motion.div>

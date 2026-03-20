@@ -58,12 +58,12 @@ export default function DesktopNav({ activeHref, useWindowMode, onOpenWindow }: 
 
   const itemClass = (href: string) =>
     `desktop-nav-item flex flex-col items-center gap-2 w-28 transition-opacity hover:opacity-100 ${
-      activeHref === href ? 'opacity-100' : 'opacity-80'
+      activeHref === href ? 'opacity-100' : 'opacity-95'
     }`;
 
   return (
     <>
-      <div className="absolute left-12 top-[18%] -translate-y-1/2 flex flex-col gap-6 z-[50]">
+      <div className="absolute left-12 top-[36%] -translate-y-1/2 flex flex-col gap-6 z-[50]">
         {leftItems.map((item) =>
           useWindowMode && onOpenWindow ? (
             <button
@@ -87,7 +87,7 @@ export default function DesktopNav({ activeHref, useWindowMode, onOpenWindow }: 
         )}
       </div>
 
-      <div className="absolute right-12 top-[18%] -translate-y-1/2 flex flex-col gap-6 z-[50]">
+      <div className="absolute right-12 top-[36%] -translate-y-1/2 flex flex-col gap-6 z-[50]">
         {rightItems.map((item) =>
           useWindowMode && onOpenWindow ? (
             <button

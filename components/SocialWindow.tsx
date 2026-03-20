@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { useSplitView } from '@/context/SplitViewContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -15,6 +16,7 @@ const LINKEDIN_URL = 'https://www.linkedin.com/company/mindmesh';
 export default function SocialWindow({ dragControls, onClose, onMinimize }: SocialWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const isSplitView = useSplitView();
 
   const handleClose = () => {
     onClose?.();
@@ -45,8 +47,8 @@ export default function SocialWindow({ dragControls, onClose, onMinimize }: Soci
     <div className="w-full min-h-0 flex-1 flex flex-col">
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
-          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[1600px] min-h-0 flex-1'
+        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[1600px] min-h-0 flex-1 rounded-lg'
         }`}
       >
         {/* Title bar */}
@@ -81,7 +83,7 @@ export default function SocialWindow({ dragControls, onClose, onMinimize }: Soci
         </div>
 
         {/* Content - full page layout */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           <div className="min-h-full bg-white">
             {/* HERO SECTION - gradient top */}
             <div className="bg-gradient-to-b from-purple-50 to-white px-8 pt-10 pb-8 text-center">

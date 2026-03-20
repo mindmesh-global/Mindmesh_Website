@@ -168,5 +168,11 @@ html, body {
 .desktop-nav-item:hover .desktop-nav-label-bg,
 .desktop-nav-label-bg:hover {
   background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.desktop-nav-item:hover .desktop-nav-label-bg span,
+.desktop-nav-label-bg:hover span {
+  color: rgb(15 23 42) !important; /* slate-900 for contrast on white hover bg */
 }
 

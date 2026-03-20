@@ -43,7 +43,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen h-screen overflow-hidden bg-white">
         <Suspense fallback={<div className="min-h-screen" />}>
           <Hero />
         </Suspense>

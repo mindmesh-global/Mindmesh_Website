@@ -6,6 +6,7 @@ import { motion, useDragControls } from 'framer-motion';
 import { Home, FileText, Mail, BookOpen, Calculator, FolderOpen, Sparkles, Video } from 'lucide-react';
 import MindMeshUI from './mindmeshui';
 import { useUIOverlay, type ActiveWindowType } from '@/context/UIOverlayContext';
+import { SplitViewProvider, useSplitView } from '@/context/SplitViewContext';
 import FeaturesWindow from './FeaturesWindow';
 import DocsWindow from './DocsWindow';
 import SocialWindow from './SocialWindow';
@@ -29,8 +30,10 @@ interface OpenWindowItem {
 
 const CASCADE_OFFSET = 28; // px offset per window for stacked look (like Windows/macOS)
 const BASE_Z = 20;
+const SNAP_ZONE_FRACTION = 0.25; // left/right 25% of screen triggers snap
 
 type DragConstraints = React.RefObject<HTMLElement | null>;
+type SplitView = { left: OpenWindowItem | null; right: OpenWindowItem | null };
 
 const WINDOW_LABELS: Record<WindowType, string> = {
   home: 'MindMesh',
@@ -65,20 +68,69 @@ const WINDOW_TYPE_TO_HREF: Record<WindowType, string> = {
   contact: '/contact',
 };
 
+function WindowContent({
+  item,
+  dragControls,
+  onClose,
+  onMinimize,
+}: {
+  item: OpenWindowItem;
+  dragControls: ReturnType<typeof useDragControls>;
+  onClose: () => void;
+  onMinimize: () => void;
+}) {
+  const isSplitView = useSplitView();
+  return (
+    <div
+      className={`bg-gray-900/90 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col h-full min-h-0 ${isSplitView ? 'rounded-none' : 'rounded-lg'}`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {item.type === 'home' && (
+        <MindMeshUI dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'features' && (
+        <FeaturesWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'docs' && (
+        <DocsWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'social' && (
+        <SocialWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'subscription' && (
+        <PricingWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'contact' && (
+        <ContactWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'appDirectory' && (
+        <AppDirectoryWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+      {item.type === 'demo' && (
+        <MovieWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+      )}
+    </div>
+  );
+}
+
 function StackedWindow({
   item,
   stackIndex,
   onFocus,
   onClose,
   onMinimize,
+  onDragEnd,
   dragConstraintsRef,
+  elevatedInSplit,
 }: {
   item: OpenWindowItem;
   stackIndex: number;
   onFocus: () => void;
   onClose: () => void;
   onMinimize: () => void;
+  onDragEnd?: (info: { point: { x: number; y: number } }) => void;
   dragConstraintsRef: DragConstraints;
+  elevatedInSplit?: boolean;
 }) {
   const dragControls = useDragControls();
   const offset = stackIndex * CASCADE_OFFSET;
@@ -89,6 +141,8 @@ function StackedWindow({
       dragListener={false}
       dragConstraints={dragConstraintsRef}
       dragElastic={0}
+      dragMomentum={false}
+      onDragEnd={(_e, info) => onDragEnd?.(info)}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.25 }}
@@ -100,40 +154,47 @@ function StackedWindow({
         top: `calc(50% + ${offset}px)`,
         x: '-50%',
         y: '-50%',
-        zIndex: BASE_Z + stackIndex,
+        zIndex: elevatedInSplit ? BASE_Z + 2 : BASE_Z + stackIndex,
         height: 'min(80vh, calc(100vh - 7rem))',
         maxHeight: 'calc(100vh - 7rem)',
       }}
     >
-      <div 
-        className="bg-gray-900/90 backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden flex flex-col h-full min-h-0"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {item.type === 'home' && (
-          <MindMeshUI dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'features' && (
-          <FeaturesWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'docs' && (
-          <DocsWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'social' && (
-          <SocialWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'subscription' && (
-          <PricingWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'contact' && (
-          <ContactWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'appDirectory' && (
-          <AppDirectoryWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-        {item.type === 'demo' && (
-          <MovieWindow dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
-        )}
-      </div>
+      <WindowContent item={item} dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
+    </motion.div>
+  );
+}
+
+function SplitPanel({
+  item,
+  onClose,
+  onMinimize,
+  onDragEnd,
+  dragConstraintsRef,
+}: {
+  item: OpenWindowItem;
+  onClose: () => void;
+  onMinimize: () => void;
+  onDragEnd?: (info: { point: { x: number; y: number } }) => void;
+  dragConstraintsRef: DragConstraints;
+}) {
+  const dragControls = useDragControls();
+  return (
+    <motion.div
+      layout
+      drag
+      dragControls={dragControls}
+      dragListener={false}
+      dragConstraints={dragConstraintsRef}
+      dragElastic={0}
+      dragMomentum={false}
+      onDragEnd={(_e, info) => onDragEnd?.(info)}
+      onPointerDown={() => {}}
+      whileDrag={{ cursor: 'grabbing' }}
+      className="absolute inset-0 flex flex-col min-h-0"
+      style={{ zIndex: BASE_Z + 1 }}
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
+    >
+      <WindowContent item={item} dragControls={dragControls} onClose={onClose} onMinimize={onMinimize} />
     </motion.div>
   );
 }
@@ -180,6 +241,7 @@ export default function Hero() {
   }, [updateUrl]);
 
   const [minimizedIds, setMinimizedIds] = useState<Set<string>>(new Set());
+  const [splitView, setSplitView] = useState<SplitView | null>(null);
 
   const minimizeWindow = (id: string) => {
     setMinimizedIds((prev) => new Set([...prev, id]));
@@ -196,6 +258,7 @@ export default function Hero() {
   }, [bringToFront, updateUrl]);
 
   const closeWindow = useCallback((id: string) => {
+    setSplitView((prev) => (prev && (prev.left?.id === id || prev.right?.id === id) ? null : prev));
     setOpenWindows((prev) => {
       const next = prev.filter((w) => w.id !== id);
       const newFront = next.filter((w) => !minimizedIds.has(w.id)).pop();
@@ -211,6 +274,55 @@ export default function Hero() {
     });
   }, [minimizedIds]);
 
+  const handleDragEnd = useCallback(
+    (draggedItem: OpenWindowItem, info: { point: { x: number; y: number } }) => {
+      const section = sectionRef.current;
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const x = info.point.x - rect.left;
+      const frac = x / rect.width;
+
+      if (splitView) {
+        const isLeft = splitView.left?.id === draggedItem.id;
+        const isRight = splitView.right?.id === draggedItem.id;
+        const isStacked = !isLeft && !isRight;
+        if (isLeft && splitView.right) {
+          setSplitView({ left: null, right: splitView.right });
+        } else if (isRight && splitView.left) {
+          setSplitView({ left: splitView.left, right: null });
+        } else if (isStacked) {
+          if (frac < SNAP_ZONE_FRACTION && splitView.right) {
+            setSplitView({ left: draggedItem, right: splitView.right });
+          } else if (frac > 1 - SNAP_ZONE_FRACTION && splitView.left) {
+            setSplitView({ left: splitView.left, right: draggedItem });
+          } else if (splitView.left === null && splitView.right && frac > 0.7) {
+            setSplitView({ left: splitView.right, right: draggedItem });
+          } else if (splitView.right === null && splitView.left && frac < 0.3) {
+            setSplitView({ left: draggedItem, right: splitView.left });
+          } else {
+            setSplitView(null);
+          }
+        } else {
+          setSplitView(null);
+        }
+        bringToFront(draggedItem.id, draggedItem.type);
+        return;
+      }
+
+      const visible = openWindows.filter((w) => !minimizedIds.has(w.id));
+      if (visible.length < 2) return;
+
+      if (frac < SNAP_ZONE_FRACTION) {
+        const other = visible.find((w) => w.id !== draggedItem.id);
+        if (other) setSplitView({ left: draggedItem, right: other });
+      } else if (frac > 1 - SNAP_ZONE_FRACTION) {
+        const other = visible.find((w) => w.id !== draggedItem.id);
+        if (other) setSplitView({ left: other, right: draggedItem });
+      }
+    },
+    [splitView, openWindows, minimizedIds, bringToFront]
+  );
+
   // Update active window type for tooltip visibility (tooltips only when MindMesh 'home' is on top)
   useEffect(() => {
     if (!uiOverlay) return;
@@ -218,6 +330,10 @@ export default function Hero() {
     const top = visible[visible.length - 1];
     uiOverlay.setActiveWindowType((top?.type ?? null) as ActiveWindowType);
   }, [openWindows, minimizedIds, uiOverlay]);
+
+  useEffect(() => {
+    uiOverlay?.setIsSplitView(!!splitView);
+  }, [splitView, uiOverlay]);
 
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
@@ -278,7 +394,7 @@ export default function Hero() {
   }, [minimizedIds]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-visible bg-black pt-16">
+    <section ref={sectionRef} className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
       {/* Lazy-loaded background — never blocks SSR; Google sees content first */}
       <div className="absolute inset-0">
         <AnimatedBackground />
@@ -302,20 +418,114 @@ export default function Hero() {
         }}
       />
 
-      {/* Stacked windows (Windows/macOS style – multiple open, click to bring to front) */}
-      {openWindows
-        .filter((item) => !minimizedIds.has(item.id))
-        .map((item, index) => (
-          <StackedWindow
-            key={item.id}
-            item={item}
-            stackIndex={index}
-            onFocus={() => bringToFront(item.id, item.type)}
-            onClose={() => closeWindow(item.id)}
-            onMinimize={() => minimizeWindow(item.id)}
-            dragConstraintsRef={sectionRef}
-          />
-        ))}
+      {/* Split view (Mac-style side by side) or stacked windows */}
+      {splitView ? (
+        <motion.div
+          className="absolute inset-0 flex"
+          initial={false}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25, ease: 'easeInOut' }}
+        >
+          <div className={`flex-1 min-w-0 relative ${splitView.left ? 'overflow-hidden' : 'overflow-visible'}`} style={splitView.left ? undefined : { zIndex: BASE_Z + 2 }}>
+            {splitView.left ? (
+              <SplitViewProvider value={true}>
+                <SplitPanel
+                  key={splitView.left.id}
+                  item={splitView.left}
+                  onClose={() => closeWindow(splitView!.left!.id)}
+                  onMinimize={() => {
+                    minimizeWindow(splitView!.left!.id);
+                    setSplitView(null);
+                  }}
+                  onDragEnd={(info) => handleDragEnd(splitView!.left!, info)}
+                  dragConstraintsRef={sectionRef}
+                />
+              </SplitViewProvider>
+            ) : (
+              (() => {
+                const stackedItem = openWindows.find((w) => !minimizedIds.has(w.id) && w.id !== splitView!.right!.id);
+                return stackedItem ? (
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  >
+                    <StackedWindow
+                      key={stackedItem.id}
+                      item={stackedItem}
+                      stackIndex={0}
+                      onFocus={() => bringToFront(stackedItem.id, stackedItem.type)}
+                      onClose={() => closeWindow(stackedItem.id)}
+                      onMinimize={() => minimizeWindow(stackedItem.id)}
+                      onDragEnd={(info) => handleDragEnd(stackedItem, info)}
+                      dragConstraintsRef={sectionRef}
+                      elevatedInSplit
+                    />
+                  </motion.div>
+                ) : null;
+              })()
+            )}
+          </div>
+          <div className="w-px flex-shrink-0 bg-white/20" />
+          <div className={`flex-1 min-w-0 relative ${splitView.right ? 'overflow-hidden' : 'overflow-visible'}`} style={splitView.right ? undefined : { zIndex: BASE_Z + 2 }}>
+            {splitView.right ? (
+              <SplitViewProvider value={true}>
+                <SplitPanel
+                  key={splitView.right.id}
+                  item={splitView.right}
+                  onClose={() => closeWindow(splitView!.right!.id)}
+                  onMinimize={() => {
+                    minimizeWindow(splitView!.right!.id);
+                    setSplitView(null);
+                  }}
+                  onDragEnd={(info) => handleDragEnd(splitView!.right!, info)}
+                  dragConstraintsRef={sectionRef}
+                />
+              </SplitViewProvider>
+            ) : (
+              (() => {
+                const stackedItem = openWindows.find((w) => !minimizedIds.has(w.id) && w.id !== splitView!.left!.id);
+                return stackedItem ? (
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  >
+                    <StackedWindow
+                      key={stackedItem.id}
+                      item={stackedItem}
+                      stackIndex={0}
+                      onFocus={() => bringToFront(stackedItem.id, stackedItem.type)}
+                      onClose={() => closeWindow(stackedItem.id)}
+                      onMinimize={() => minimizeWindow(stackedItem.id)}
+                      onDragEnd={(info) => handleDragEnd(stackedItem, info)}
+                      dragConstraintsRef={sectionRef}
+                      elevatedInSplit
+                    />
+                  </motion.div>
+                ) : null;
+              })()
+            )}
+          </div>
+        </motion.div>
+      ) : (
+        openWindows
+          .filter((item) => !minimizedIds.has(item.id))
+          .map((item, index) => (
+            <StackedWindow
+              key={item.id}
+              item={item}
+              stackIndex={index}
+              onFocus={() => bringToFront(item.id, item.type)}
+              onClose={() => closeWindow(item.id)}
+              onMinimize={() => minimizeWindow(item.id)}
+              onDragEnd={(info) => handleDragEnd(item, info)}
+              dragConstraintsRef={sectionRef}
+            />
+          ))
+      )}
 
       {/* Mac-style dock — shows ALL open windows; click to bring to front or restore */}
       {openWindows.length > 0 && (
@@ -323,7 +533,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed bottom-14 left-3 md:left-1/2 md:-translate-x-1/2 z-[100] flex flex-wrap gap-1.5 justify-start md:justify-center max-w-[calc(100vw-2rem)] md:max-w-[90vw]"
+          className="fixed bottom-5 left-3 md:left-1/2 md:-translate-x-1/2 z-[100] flex flex-wrap gap-1.5 justify-start md:justify-center max-w-[calc(100vw-2rem)] md:max-w-[90vw]"
         >
           {openWindows.map((w) => {
             const isMinimized = minimizedIds.has(w.id);
@@ -333,12 +543,12 @@ export default function Hero() {
               <button
                 key={w.id}
                 onClick={() => (isMinimized ? restoreWindow(w.id, w.type) : bringToFront(w.id, w.type))}
-                className={`group/btn relative backdrop-blur-xl border rounded-lg px-2.5 py-1.5 flex items-center gap-2 transition-all duration-200 shadow-lg hover:scale-[1.03] active:scale-[0.98] ${
+                className={`group/btn relative backdrop-blur-xl border-2 rounded-lg px-2.5 py-1.5 flex items-center gap-2 transition-all duration-200 shadow-2xl hover:scale-[1.03] active:scale-[0.98] ${
                   isFront
-                    ? 'bg-gray-700/95 border-white/30 ring-1 ring-white/20'
+                    ? 'bg-gray-700 border-white/60 ring-2 ring-white/30'
                     : isMinimized
-                      ? 'bg-gray-800/80 border-white/10 hover:bg-gray-700/90 hover:border-white/20'
-                      : 'bg-gray-800/95 border-white/15 hover:bg-gray-700/95 hover:border-white/25'
+                      ? 'bg-gray-800/95 border-white/35 hover:bg-gray-700 hover:border-white/50'
+                      : 'bg-gray-800 border-white/40 hover:bg-gray-700 hover:border-white/55'
                 }`}
                 title={isMinimized ? `Restore ${WINDOW_LABELS[w.type]}` : `Bring ${WINDOW_LABELS[w.type]} to front`}
               >
@@ -352,7 +562,7 @@ export default function Hero() {
                   {w.type === 'appDirectory' && <FolderOpen className="w-3 h-3 text-indigo-400" strokeWidth={2.5} />}
                   {w.type === 'demo' && <Video className="w-3 h-3 text-amber-400" strokeWidth={2.5} />}
                 </div>
-                <span className="text-xs font-medium text-gray-200 group-hover/btn:text-white">{WINDOW_LABELS[w.type]}</span>
+                <span className="text-xs font-bold text-white group-hover/btn:text-white drop-shadow-md">{WINDOW_LABELS[w.type]}</span>
                 {isFront && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-white/90" />}
               </button>
             );

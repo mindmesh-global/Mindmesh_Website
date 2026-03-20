@@ -1,8 +1,14 @@
+import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+
 export function StaticConnectedApps() {
   return (
     <div className="p-6 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 bg-white transition-shadow mb-4">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="font-bold text-lg text-black">Connected Apps</h2>
+        <h2 className="font-bold text-lg text-black">
+          <HoverTypingTooltip text="Linked email and calendar accounts." speed={35}>
+            Connected Apps
+          </HoverTypingTooltip>
+        </h2>
         <div className="flex items-center gap-3">
           <button className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -81,8 +81,8 @@ export default function RootLayout({
         <HomeSectionProvider>
           <UIOverlayProvider>
             <OnboardingTourProvider>
-            <Logo fontClassName={asul.className} />
             {children}
+            <Logo fontClassName={asul.className} />
             <ConditionalOverlays />
             </OnboardingTourProvider>
           </UIOverlayProvider>

@@ -1,9 +1,15 @@
+import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+
 export function StaticCalendarEvents() {
   return (
     <div className="calendar-events bg-white dark:bg-gray-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-800 p-6 transition-shadow">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="font-bold text-lg text-black">Upcoming Events (2)</h3>
+          <h3 className="font-bold text-lg text-black dark:text-white">
+            <HoverTypingTooltip text="Future calendar events. You can join meeting from here" speed={35}>
+              Upcoming Events (2)
+            </HoverTypingTooltip>
+          </h3>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-xs text-blue-600 dark:text-blue-400">
               📅 1 Google

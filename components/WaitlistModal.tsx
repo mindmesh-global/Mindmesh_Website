@@ -112,6 +112,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
             dragControls={dragControls}
             dragListener={false}
             dragElastic={0}
+            dragMomentum={false}
             dragConstraints={containerRef}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}

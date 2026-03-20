@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type RefObject } from 'react';
+import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
 
 interface StaticDailySummaryPanelProps {
   timeClashRef?: RefObject<HTMLDivElement | null>;
@@ -40,10 +41,13 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
       </div>
 
       {/* Time Clashes */}
-      <div ref={timeClashRef} data-home-section="time_clash" className="mb-4 rounded-lg border border-red-200 shadow-sm bg-gradient-to-br from-red-50 via-white to-red-50 overflow-hidden">
-        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 text-white font-semibold tracking-wide">
+      <div ref={timeClashRef} data-home-section="time_clash" className="mb-4">
+        <div className="rounded-lg border border-red-200 shadow-sm bg-gradient-to-br from-red-50 via-white to-red-50 overflow-visible">
+        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 text-white font-semibold tracking-wide rounded-t-lg">
           <span className="text-xl">⏰</span>
-          <span>Time Clash Alert</span>
+          <HoverTypingTooltip text="Overlapping events that conflict." speed={35} variant="dark">
+            Time Clash Alert
+          </HoverTypingTooltip>
         </div>
         <ul className="list-disc marker:text-red-400 px-6 py-4 space-y-3 text-sm text-red-800">
           <li className="flex items-start justify-between gap-2 leading-relaxed">
@@ -57,11 +61,16 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
             </div>
           </li>
         </ul>
+        </div>
       </div>
 
       {/* Inferred Facts */}
       <div ref={inferredFactsRef} data-home-section="inferred_facts" className="mb-4">
-        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">Inferred Facts</h3>
+        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
+          <HoverTypingTooltip text="AI highlights from your emails and events." speed={35}>
+            Inferred Facts
+          </HoverTypingTooltip>
+        </h3>
         <ul className="space-y-1">
           <li className="group flex items-start justify-between p-2 bg-gray-50 dark:bg-slate-700/50 rounded border border-slate-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700">
             <div className="flex-1 pr-3">
@@ -84,7 +93,11 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
 
       {/* Todos */}
       <div ref={todosRef} data-home-section="todos" className="mb-4">
-        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">Todos</h3>
+        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
+          <HoverTypingTooltip text="Action items from emails." speed={35}>
+            Todos
+          </HoverTypingTooltip>
+        </h3>
         <ul className="space-y-2">
           <li className="group flex items-start p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
             <div className="flex items-center mr-3">
@@ -143,7 +156,11 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
 
       {/* Events Timeline */}
       <div ref={eventsRef} data-home-section="events">
-        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">Events</h3>
+        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
+          <HoverTypingTooltip text="Calendar meetings and appointments." speed={35}>
+            Events
+          </HoverTypingTooltip>
+        </h3>
         <ul className="space-y-2">
           <li className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
             <div className="flex items-center gap-2 flex-1 min-w-0">

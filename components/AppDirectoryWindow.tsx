@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useSplitView } from '@/context/SplitViewContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -29,6 +30,7 @@ interface AppDirectoryWindowProps {
 export default function AppDirectoryWindow({ dragControls, onClose, onMinimize }: AppDirectoryWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const isSplitView = useSplitView();
 
   const handleClose = () => onClose?.();
 
@@ -57,8 +59,8 @@ export default function AppDirectoryWindow({ dragControls, onClose, onMinimize }
     <div className="w-full min-h-0 flex-1 flex flex-col">
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
-          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[1400px] min-h-0 flex-1'
+        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[1400px] min-h-0 flex-1 rounded-lg'
         }`}
       >
         {/* Mac-style title bar */}
@@ -93,7 +95,7 @@ export default function AppDirectoryWindow({ dragControls, onClose, onMinimize }
         </div>
 
         {/* Content - App Store style */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           <div className="max-w-5xl mx-auto px-6">
             {/* Header */}
             <div className="text-center py-12 mb-10">

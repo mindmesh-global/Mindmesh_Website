@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useSplitView } from '@/context/SplitViewContext';
 import {
   Layers,
   MessageCircle,
@@ -12,6 +13,7 @@ import {
   BookOpen,
   ClipboardList,
   MousePointerClick,
+  Shield,
 } from 'lucide-react';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
@@ -26,6 +28,7 @@ const features = [
   { icon: BookOpen, title: 'Start with the story, not the search', description: 'Yesterday’s Narrative gives you a clean recap of what happened, what changed, and what still needs attention.', color: 'from-cyan-500 to-cyan-600' },
   { icon: ClipboardList, title: 'Turn activity into action', description: 'MindMesh extracts inferred facts and to-dos from emails and meetings, so important details do not stay buried in threads and calendar events.', color: 'from-orange-500 to-orange-600' },
   { icon: MousePointerClick, title: 'Capture context instantly', description: 'Use the Sensor Bar to check, launch, ask, and capture things the moment they matter, without breaking your flow.', color: 'from-red-500 to-red-600' },
+  { icon: Shield, title: 'Your privacy matters', description: 'MindMesh is built with privacy at its core. Your data stays under your control—encrypted locally, with clear choices about what gets synced. No selling your data, no hidden tracking.', color: 'from-slate-500 to-slate-600' },
 ];
 
 // Bento layout: cardIndex -> { gridClass, bg, border, isDark, iconBg, iconColor, cardColor? }
@@ -38,7 +41,8 @@ const BENTO_LAYOUT = [
   { gridClass: 'md:col-span-1', bg: 'bg-orange-50', border: 'border-2 border-orange-200', isDark: false, iconBg: 'bg-amber-600', iconColor: '#d97706' },
   { gridClass: 'md:col-span-1', bg: 'bg-pink-50', border: 'border-2 border-pink-200', isDark: false, iconBg: 'bg-indigo-600', iconColor: '#4f46e5' },
   { gridClass: 'md:col-span-1', bg: 'bg-sky-50', border: 'border-2 border-blue-200', isDark: false, iconBg: 'bg-orange-600', iconColor: '#ea580c', cardColor: '#e0f2fe' },
-  { gridClass: 'md:col-span-2', bg: 'bg-purple-50', border: 'border-2 border-purple-200', isDark: false, iconBg: 'bg-red-500', iconColor: '#ef4444', cardColor: '#f3e8ff' },
+  { gridClass: 'md:col-span-1', bg: 'bg-purple-50', border: 'border-2 border-purple-200', isDark: false, iconBg: 'bg-red-500', iconColor: '#ef4444', cardColor: '#f3e8ff' },
+  { gridClass: 'md:col-span-2', bg: 'bg-slate-50', border: 'border-2 border-slate-200', isDark: false, iconBg: 'bg-slate-600', iconColor: '#475569', cardColor: '#f8fafc' },
 ];
 
 // Per-icon infinite animations (pulse, float, bounce, etc.)
@@ -52,6 +56,7 @@ const ICON_ANIMATIONS = [
   { animate: { rotate: [0, -3, 3, 0] }, transition: { repeat: Infinity, duration: 4 } },
   { animate: { scale: [1, 1.05, 1] }, transition: { repeat: Infinity, duration: 2.3 } },
   { animate: { y: [0, -2, 0] }, transition: { repeat: Infinity, duration: 1.8 } },
+  { animate: { scale: [1, 1.04, 1] }, transition: { repeat: Infinity, duration: 2.4 } },
 ];
 
 interface FeaturesWindowProps {
@@ -63,6 +68,7 @@ interface FeaturesWindowProps {
 export default function FeaturesWindow({ dragControls, onClose, onMinimize }: FeaturesWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const isSplitView = useSplitView();
 
   const handleClose = () => {
     onClose?.();
@@ -93,8 +99,8 @@ export default function FeaturesWindow({ dragControls, onClose, onMinimize }: Fe
     <div className="w-full min-h-0 flex-1 flex flex-col">
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
-          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[1600px] min-h-0 flex-1'
+        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[1600px] min-h-0 flex-1 rounded-lg'
         }`}
       >
         {/* Title bar */}
@@ -129,7 +135,7 @@ export default function FeaturesWindow({ dragControls, onClose, onMinimize }: Fe
         </div>
 
         {/* Content — Bento grid, white background */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain bg-white ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           {/* Hero */}
           <section className="pt-12 pb-8 text-center max-w-4xl mx-auto px-6">
             <motion.h1

@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSplitView } from '@/context/SplitViewContext';
 
 type DragControls = ReturnType<typeof import('framer-motion').useDragControls>;
 
@@ -19,6 +20,7 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
   const windowRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const isSplitView = useSplitView();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -124,8 +126,8 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
     <div className="w-full min-h-0 flex-1 flex flex-col">
       <div
         ref={windowRef}
-        className={`w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
-          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : 'max-w-[600px] min-h-0 flex-1'
+        className={`w-full bg-gray-900 overflow-hidden shadow-2xl transition-all duration-300 flex flex-col ${
+          isFullscreen ? 'fixed inset-0 z-[9999] rounded-none max-w-none h-screen' : isSplitView ? 'max-w-none min-h-0 flex-1 rounded-none' : 'max-w-[600px] min-h-0 flex-1 rounded-lg'
         }`}
       >
         {/* Title bar */}
@@ -167,7 +169,7 @@ export default function ContactWindow({ dragControls, onClose, onMinimize }: Con
         </div>
 
         {/* Content */}
-        <div className={`flex-1 min-h-0 overflow-y-auto bg-gray-50 flex items-start justify-center px-4 py-10 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
+        <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain bg-gray-50 flex items-start justify-center px-4 py-10 ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}>
           <div className="w-full max-w-md bg-white rounded-3xl shadow-sm border border-gray-100 px-8 py-10">
             <AnimatePresence mode="wait">
               {isSuccess ? (

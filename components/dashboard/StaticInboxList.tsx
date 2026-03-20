@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
 
 type BodyBlock =
   | { type: 'paragraph'; text: string }
@@ -100,7 +101,9 @@ export function StaticInboxList() {
             <div>
               <div className="flex items-center gap-6">
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                  Inbox
+                  <HoverTypingTooltip text="Your unified email inbox." speed={35}>
+                    Inbox
+                  </HoverTypingTooltip>
                 </h2>
                 <span className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

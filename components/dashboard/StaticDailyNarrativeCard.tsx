@@ -1,8 +1,14 @@
+import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
+
 export function StaticDailyNarrativeCard() {
   return (
     <div className="p-6 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 bg-white transition-shadow mb-4">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="font-bold text-lg text-black">Yesterday's Narrative</h2>
+        <h2 className="font-bold text-lg text-black">
+          <HoverTypingTooltip text="Summary of yesterday's emails." speed={35}>
+            Yesterday&apos;s Narrative
+          </HoverTypingTooltip>
+        </h2>
         <button className="flex items-center justify-center w-9 h-9 rounded-full text-sm transition-all duration-200 bg-blue-600 text-white hover:bg-blue-500">
           <span>▼</span>
         </button>
