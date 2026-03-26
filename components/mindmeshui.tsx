@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Cat, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardPage from '@/app/dashboard/page';
+import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import { useSplitView } from '@/context/SplitViewContext';
@@ -20,6 +21,7 @@ interface MindMeshUIProps {
 }
 
 export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMeshUIProps) {
+  const dashboardVm = useOptionalDashboardViewMode();
   const windowRef = useRef<HTMLDivElement>(null);
   const overlayRootRef = useRef<HTMLDivElement>(null);
   const isSplitView = useSplitView();
@@ -42,7 +44,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Open dropdown when requested (e.g. from DropdownOverlayTooltip)
+  // Open dropdown when requested (e.g. from overlay tooling)
   useEffect(() => {
     if (uiOverlay?.openOverlayDropdown) {
       setIsOverlayDropdownOpen(true);
@@ -103,6 +105,10 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
     el.addEventListener('wheel', preventScroll, { passive: false });
     return () => el.removeEventListener('wheel', preventScroll);
   }, [uiOverlay?.mascotTooltipVisible]);
+
+  if (dashboardVm?.viewMode === 'desktop') {
+    return null;
+  }
 
   // If closed, don't render anything
   if (isClosed) {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Inter, Asul } from 'next/font/google';
+import { Inter, Asul, Syne } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import ConditionalOverlays from '@/components/ConditionalOverlays';
@@ -11,9 +11,11 @@ import { OnboardingTourProvider } from '@/context/OnboardingTourContext';
 import CursorProvider from '@/components/CursorProvider';
 import { CustomCursorProvider } from '@/context/CustomCursorContext';
 import CustomContextMenu from '@/components/CustomContextMenu';
+import { DashboardViewModeRoot } from '@/components/DashboardViewModeRoot';
 
 const inter = Inter({ subsets: ['latin'] });
 const asul = Asul({ weight: '700', subsets: ['latin'] });
+const syne = Syne({ subsets: ['latin'], variable: '--font-syne' });
 
 function ThemeScript() {
   return (
@@ -79,16 +81,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${inter.className} text-gray-900 bg-white dark:text-slate-100 dark:bg-slate-950 antialiased`}>
+      <body
+        className={`${inter.className} ${syne.variable} text-gray-900 bg-white dark:text-slate-100 dark:bg-slate-950 antialiased`}
+      >
         <ThemeScript />
         <HomeSectionProvider>
           <UIOverlayProvider>
             <OnboardingTourProvider>
             <CustomCursorProvider>
             <CursorProvider>
-            {children}
-            <Logo fontClassName={asul.className} />
-            <ConditionalOverlays />
+            <DashboardViewModeRoot>
+              {children}
+              <Logo fontClassName={asul.className} />
+              <ConditionalOverlays />
+            </DashboardViewModeRoot>
             <CustomContextMenu />
             </CursorProvider>
             </CustomCursorProvider>

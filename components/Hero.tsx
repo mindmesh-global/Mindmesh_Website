@@ -16,6 +16,7 @@ import AppDirectoryWindow from './AppDirectoryWindow';
 import MovieWindow from './MovieWindow';
 import WaitlistModal from './WaitlistModal';
 import DesktopNav from './layout/DesktopNav';
+import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
 
 const AnimatedBackground = dynamic(
   () => import('@/components/layout/AnimatedBackground'),
@@ -203,6 +204,7 @@ export default function Hero() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const dashboardVm = useOptionalDashboardViewMode();
   const uiOverlay = useUIOverlay();
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -424,6 +426,10 @@ export default function Hero() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, [minimizedIds]);
+
+  if (dashboardVm?.viewMode === 'desktop' && pathname === '/') {
+    return <div className="min-h-screen w-full bg-[#0a0a0f]" aria-hidden />;
+  }
 
   return (
     <section ref={sectionRef} className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">

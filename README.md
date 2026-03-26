@@ -35,6 +35,11 @@ npm start
 - 🔍 SEO optimized
 - 📊 Download analytics tracking
 
+## Documentation
+
+- **[Naming: layouts vs pages vs dashboard shells](docs/naming-and-folders.md)** — why several files sound similar (`layout.tsx`, `page.tsx`, view mode) and what each one is for.
+- **[Dashboard view switcher](docs/dashboard-view-switcher.md)** — dual view on `/dashboard`, state, files, and embedding notes.
+
 ## Project Structure
 
 ```

@@ -3,10 +3,17 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
 
 export default function Logo({ fontClassName }: { fontClassName?: string }) {
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const dashboardVm = useOptionalDashboardViewMode();
   useEffect(() => setMounted(true), []);
+
+  const hideForFullBleed =
+    dashboardVm?.viewMode === 'desktop' && (pathname === '/' || pathname === '/dashboard');
 
   const logo = (
     <Link
@@ -22,6 +29,6 @@ export default function Logo({ fontClassName }: { fontClassName?: string }) {
     </Link>
   );
 
-  if (!mounted || typeof document === 'undefined') return null;
+  if (!mounted || typeof document === 'undefined' || hideForFullBleed) return null;
   return createPortal(logo, document.body);
 }
