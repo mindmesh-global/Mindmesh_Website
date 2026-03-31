@@ -5,6 +5,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import ConditionalOverlays from '@/components/ConditionalOverlays';
 import Logo from '@/components/Logo';
+import GlobalSiteFooter from '@/components/layout/GlobalSiteFooter';
 import { HomeSectionProvider } from '@/context/HomeSectionContext';
 import { UIOverlayProvider } from '@/context/UIOverlayContext';
 import { OnboardingTourProvider } from '@/context/OnboardingTourContext';
@@ -94,6 +95,7 @@ export default function RootLayout({
               {children}
               <Logo fontClassName={asul.className} />
               <ConditionalOverlays />
+              <GlobalSiteFooter />
             </DashboardViewModeRoot>
             <CustomContextMenu />
             </CursorProvider>

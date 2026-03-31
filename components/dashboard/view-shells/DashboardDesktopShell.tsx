@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import Link from 'next/link';
+import SiteFooter from '@/components/layout/SiteFooter';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
@@ -93,13 +94,10 @@ const seeHowBtn =
 const seeHowBtnStyle: React.CSSProperties = {
   background: 'linear-gradient(90deg,rgb(11, 39, 77) 0%,rgb(19, 42, 79) 50%,rgb(17, 39, 82) 100%)',
   borderRadius: '9999px',
-  
 };
 /** Compact glossy pill for navbar actions. */
 const glossyNavBtn = `rounded-lg ${glossyBlue} px-4 py-2.5 text-sm font-bold sm:px-5`;
-/** Secondary pill: thin blue edge, no white ring (reference UI). */
-const outlineGhostBtn =
-  'rounded-full border border-blue-500/40 bg-zinc-950/30 text-base font-semibold text-white backdrop-blur-sm transition-colors hover:border-blue-400/55 hover:bg-blue-500/10 active:scale-[0.98]';
+const outlineGhostBtn = `text-base ${primaryBtn}`;
 const outlineGhostBtnLg =
   'rounded-full border border-blue-500/40 bg-zinc-950/30 px-10 py-5 text-lg font-semibold text-white backdrop-blur-sm transition-colors hover:border-blue-400/55 hover:bg-blue-500/10 active:scale-[0.98]';
 
@@ -477,7 +475,7 @@ function DashboardDesktopShell() {
   return (
     <div
       ref={rootRef}
-      className={`${inter.className} relative z-10 min-h-full overflow-x-hidden antialiased selection:bg-blue-500/25`}
+      className={`${inter.className} relative z-10 flex min-h-screen flex-col overflow-x-hidden antialiased selection:bg-blue-500/25`}
       style={{ backgroundColor: '#0a0a14', color: '#a1a1aa' }}
       aria-label="MindMesh marketing"
     >
@@ -490,7 +488,7 @@ function DashboardDesktopShell() {
         <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-3 px-4 py-4 tracking-tight sm:px-8">
           <Link href="/" className="flex min-w-0 shrink items-center gap-2.5">
           
-            <span className="text-lg font-bold tracking-tight text-white sm:text-xl">MindMesh</span>
+            <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">MindMesh</span>
           </Link>
           <div className="hidden min-w-0 flex-1 items-center justify-center gap-8 md:flex">
             <ProductMegaMenu />
@@ -500,7 +498,7 @@ function DashboardDesktopShell() {
             <Link href="/privacy" className={navLink}>
               Security
             </Link>
-            <Link href="/docs" className={navLink}>
+            <Link href="/faq" className={navLink}>
               FAQ
             </Link>
           </div>
@@ -518,7 +516,7 @@ function DashboardDesktopShell() {
         </div>
       </nav>
 
-      <main className="relative z-[1]">
+      <main className="relative z-[1] flex-1">
         <section className="relative overflow-hidden pb-32 pt-44 md:pt-52 lg:pt-56">
           <div
             className="pointer-events-none absolute inset-0"
@@ -613,16 +611,16 @@ function DashboardDesktopShell() {
               viewport={inViewOpts}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              <h2 className="mb-8 text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
-                One place for the work that keeps pulling you in.
+<h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
+               Stay ahead with your upcoming events.
               </h2>
               <p className={`mb-10 max-w-2xl text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-                Keep your meetings, priorities, and account context in one calm workspace so you can scan
-                what is next and jump in without bouncing between tools.
+                Track upcoming meetings and important events in one place, with the context you need to stay
+                prepared.
               </p>
               <button
                 type="button"
-                className="group inline-flex items-center gap-2 text-base font-semibold text-blue-400 transition-colors hover:text-blue-300"
+                className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
                 Explore the product
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -639,7 +637,7 @@ function DashboardDesktopShell() {
                 className={`${glassPanel} relative overflow-hidden rounded-[2rem] p-3 sm:p-4`}
                 style={glassPanelStyle}
               >
-                <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white">
+                <div className="overflow-hidden bg-white ">
                   <Image
                     src={upcomingEventsMockup}
                     alt="Upcoming Events panel showing multiple connected calendars and join meeting actions"
@@ -692,17 +690,15 @@ function DashboardDesktopShell() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="order-1 md:order-2 md:self-center"
             >
-              <h2 className="mb-8 text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
-                One place for the work that keeps pulling you in.
+<h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
+All your messages, one focused inbox.
               </h2>
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-                Stop bouncing between email, calendar, tabs, and scattered notes. MindMesh gives you a
-                single desktop workspace to see what matters, ask questions in plain English, and move
-                through your day with more clarity.
+              Bring all your accounts together in one place and you can respond faster and never miss what matters.
               </p>
               <button
                 type="button"
-                className="group inline-flex items-center gap-2 text-base font-semibold text-blue-400 transition-colors hover:text-blue-300"
+                className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
                 Explore the product
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -719,13 +715,11 @@ function DashboardDesktopShell() {
               viewport={inViewOpts}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              <h2 className="mb-8 text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
-                Catch up faster. Think less. Miss less.
-              </h2>
+<h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
+Your yesterday, neatly wrapped up.              </h2>
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-                Open MindMesh and instantly see your Dashboard, consolidated inbox, upcoming meetings,
-                Yesterday&apos;s Narrative, and Connected Apps. It is designed to reduce cognitive load so
-                you can get oriented in minutes instead of spending your morning triaging tools.
+              Instantly review the key meetings, emails, highlights, and decisions from yesterday so you know exactly where things stand.
+              Review the key updates, conversations, and decisions from across your workspace without digging through tools.
               </p>
               <button
                 type="button"
@@ -750,7 +744,7 @@ function DashboardDesktopShell() {
 
                     <div className="h-12 w-full animate-pulse rounded-lg bg-blue-950/50" />
                   </div>
-                  <div className="relative mx-auto aspect-[4/3] w-full max-w-[280px] shrink-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-900/40 md:mx-0 md:w-[min(100%,280px)] md:max-w-[45%]">
+                  <div className="relative mx-auto aspect-[4/3] w-full max-w-[280px] shrink-0 overflow-hidden rounded-xl md:mx-0 md:w-[min(100%,280px)] md:max-w-[45%]">
                     <Image
                       src={yesterdaysNarrativeMockup}
                       alt="Yesterday&apos;s Narrative summary: narrative text, stats, and activity highlights"
@@ -779,13 +773,13 @@ function DashboardDesktopShell() {
                 className={`${glassPanel} relative overflow-hidden rounded-[2rem] p-3 sm:p-4`}
                 style={glassPanelStyle}
               >
-                <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white">
+                <div className="overflow-hidden rounded-[1.5rem] bg-[#1f2430]">
                   <Image
                     src={connectedAppsMockup}
                     alt="Connected Apps settings with linked Gmail, Google Calendar, Outlook, and SMTP Mailbox accounts"
                     width={938}
                     height={360}
-                    className="h-auto w-full object-cover"
+                    className="block h-auto w-full object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
@@ -797,20 +791,18 @@ function DashboardDesktopShell() {
               viewport={inViewOpts}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              <h2 className="mb-8 text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
-                Connect the tools you already rely on.
+<h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
+Bring your essential apps together.
               </h2>
               <p className={`mb-6 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-                Link Gmail, Google Calendar, Outlook, and custom mailboxes in one place so MindMesh can
-                build a clearer picture of your day without making you jump through setup screens.
+              Connect email, calendar, outlook , smtp and other key tools in one place so MindMesh can organize your workflow with less setup and more clarity.
               </p>
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-                The connected apps view keeps account status, refresh controls, and source visibility tidy
-                so your workspace stays organized as you add more context.
+              Link the tools you rely on every day and keep everything synced in one unified workspace.
               </p>
               <button
                 type="button"
-                className="group inline-flex items-center gap-2 text-base font-semibold text-blue-400 transition-colors hover:text-blue-300"
+                className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
                 Explore integrations
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -943,8 +935,8 @@ function DashboardDesktopShell() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="order-1 md:order-1"
             >
-              <h2 className="mb-8 text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
-                Built for focus, not noise.
+<h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
+Built for focus, not noise.
               </h2>
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
                 Sensor gives you instant command-bar access. Mascot gives you a more human, proactive
@@ -1071,7 +1063,7 @@ function DashboardDesktopShell() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="flex flex-col items-center text-center"
             >
-              <h2 className="mb-8 max-w-4xl text-5xl font-black tracking-tight text-blue-100 md:text-6xl ">
+              <h2 className="mb-8 max-w-4xl text-5xl font-semibold tracking-tight text-blue-100 md:text-6xl ">
                 The desktop AI assistant built for people who value clarity and privacy.
               </h2>
               <p className={`mb-12 max-w-2xl text-lg sm:text-xl ${bodyMuted}`}>
@@ -1091,77 +1083,14 @@ function DashboardDesktopShell() {
               </div>
               <p className={`mt-6 flex items-center gap-2 text-sm ${bodyMutedSm}`}>
                 <BadgeCheck className="h-4 w-4 shrink-0" aria-hidden />
-                Available for macOS, Windows, and Linux.
+                Available for macOS, Windows.
               </p>
             </motion.div>
           </div>
         </section>
       </main>
 
-      <footer
-        className="relative z-20 w-full bg-black pt-8 pb-10 backdrop-blur-md"
-        style={{ backgroundColor: 'rgba(4, 13, 46, 0.83)', color: 'white' }}
-      >
-        <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-2 gap-x-8 gap-y-8 px-6 text-sm leading-relaxed sm:px-12 md:grid-cols-4 lg:grid-cols-6">
-          <div className="col-span-2">
-            <div className="mb-3 flex items-center gap-2">
-              <span className="text-xl font-semibold text-blue-200">MindMesh</span>
-            </div>
-            <p className="mb-5 max-w-xs text-sm leading-7 sm:text-base" style={{ color: '#a1a1aa' }}>
-              Elevating productivity through architectural privacy and ambient intelligence.
-            </p>
-            <p className="text-sm  sm:text-base" style={{ color: '#a1a1aa' }}>© 2024 MindMesh AI. Built for focus.</p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Product</h5>
-            <Link href="/features" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Features
-            </Link> 
-            <Link href="/waitlist" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Waitlist
-            </Link>
-            <Link href="/privacy" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Security
-            </Link>
-            <Link href="#" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Status
-            </Link>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Company</h5>
-            <Link href="/about" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              About
-            </Link>
-            <Link href="/blog" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Blog
-            </Link>
-            <Link href="/contact" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Contact
-            </Link>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Social</h5>
-            <a href="https://twitter.com" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              X / Twitter
-            </a>
-            <a href="https://linkedin.com" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              LinkedIn
-            </a>
-            <a href="https://github.com" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              GitHub
-            </a>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Legal</h5>
-            <Link href="/privacy" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Privacy
-            </Link>
-            <Link href="/terms" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-              Terms
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

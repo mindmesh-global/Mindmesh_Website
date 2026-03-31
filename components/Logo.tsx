@@ -13,7 +13,8 @@ export default function Logo({ fontClassName }: { fontClassName?: string }) {
   useEffect(() => setMounted(true), []);
 
   const hideForFullBleed =
-    dashboardVm?.viewMode === 'desktop' && (pathname === '/' || pathname === '/dashboard');
+    (dashboardVm?.viewMode === 'desktop' && (pathname === '/' || pathname === '/dashboard')) ||
+    pathname === '/faq';
 
   const logo = (
     <Link
