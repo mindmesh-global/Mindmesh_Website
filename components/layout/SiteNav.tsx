@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LayoutTemplate } from 'lucide-react';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
 
@@ -20,8 +20,17 @@ const glossyBlue =
   'bg-gradient-to-b from-blue-400 via-blue-600 to-blue-800 text-white shadow-[0_8px_32px_-4px_rgba(37,99,235,0.55),0_4px_16px_-4px_rgba(29,78,216,0.4),inset_0_1px_0_rgba(255,255,255,0.22)] transition-[transform,box-shadow,filter] duration-200 hover:brightness-105 hover:shadow-[0_12px_40px_-4px_rgba(59,130,246,0.5),inset_0_1px_0_rgba(255,255,255,0.28)] active:scale-[0.98]';
 const glossyNavBtn = `rounded-lg ${glossyBlue} px-4 py-2.5 text-sm font-bold sm:px-5`;
 
+const navAliases: Record<string, string[]> = {
+  '/connected-apps': ['/connected-apps', '/app-directory'],
+};
+
+function isNavLinkActive(href: string, activeHref?: string) {
+  const candidates = navAliases[href] ?? [href];
+  return !!activeHref && candidates.includes(activeHref);
+}
+
 function getNavLinkClass(href: string, activeHref?: string) {
-  if (href === activeHref) {
+  if (isNavLinkActive(href, activeHref)) {
     return 'border-b-2 border-blue-400 px-2 py-1 font-semibold text-blue-400 dark:border-blue-300 dark:text-blue-300';
   }
 
@@ -37,7 +46,9 @@ export default function SiteNav({
   navBackgroundColor,
 }: SiteNavProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { setViewMode } = useDashboardViewMode();
+  const resolvedActiveHref = activeHref ?? pathname ?? undefined;
 
   const handleDesktopViewClick = () => {
     setViewMode('desktop');
@@ -55,16 +66,16 @@ export default function SiteNav({
         </Link>
 
         <div className="hidden min-w-0 flex-1 items-center justify-center gap-8 text-sm font-medium md:flex">
-          <Link href="/" className={getNavLinkClass('/', activeHref)}>
+          <Link href="/" className={getNavLinkClass('/', resolvedActiveHref)}>
             Product
           </Link>
-          <Link href="/app-directory" className={getNavLinkClass('/app-directory', activeHref)}>
+          <Link href="/connected-apps" className={getNavLinkClass('/connected-apps', resolvedActiveHref)}>
             Integrations
           </Link>
-          <Link href="/privacy" className={getNavLinkClass('/privacy', activeHref)}>
+          <Link href="/privacy" className={getNavLinkClass('/privacy', resolvedActiveHref)}>
             Security
           </Link>
-          <Link href="/faq" className={getNavLinkClass('/faq', activeHref)}>
+          <Link href="/faq" className={getNavLinkClass('/faq', resolvedActiveHref)}>
             FAQ
           </Link>
         </div>
