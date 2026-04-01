@@ -12,14 +12,13 @@ export default function Logo({ fontClassName }: { fontClassName?: string }) {
   const dashboardVm = useOptionalDashboardViewMode();
   useEffect(() => setMounted(true), []);
 
-  const hideForFullBleed =
-    (dashboardVm?.viewMode === 'desktop' && (pathname === '/' || pathname === '/dashboard')) ||
-    pathname === '/faq';
+  const showOnlyOnDesktopView = pathname === '/' && dashboardVm?.viewMode === 'scrollable';
 
   const logo = (
     <Link
+      id="mindmesh-desktop-logo"
       href="/"
-      className="fixed top-4 left-6 group z-[99990] flex items-center"
+      className="fixed top-4 left-6 group z-[220010] flex items-center"
     >
       <span
         className={`text-3xl md:text-4xl font-bold tracking-tight group-hover:opacity-90 transition-opacity ${fontClassName ?? ''}`}
@@ -30,6 +29,6 @@ export default function Logo({ fontClassName }: { fontClassName?: string }) {
     </Link>
   );
 
-  if (!mounted || typeof document === 'undefined' || hideForFullBleed) return null;
+  if (!mounted || typeof document === 'undefined' || !showOnlyOnDesktopView) return null;
   return createPortal(logo, document.body);
 }

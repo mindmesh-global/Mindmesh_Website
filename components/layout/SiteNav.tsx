@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { LayoutTemplate } from 'lucide-react';
+import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
 
 type SiteNavProps = {
   activeHref?: string;
@@ -28,12 +30,20 @@ function getNavLinkClass(href: string, activeHref?: string) {
 
 export default function SiteNav({
   activeHref,
-  actionLabel = 'Scroll View',
+  actionLabel = 'Desktop View',
   actionHref = '/dashboard',
   onActionClick,
   navClassName,
   navBackgroundColor,
 }: SiteNavProps) {
+  const router = useRouter();
+  const { setViewMode } = useDashboardViewMode();
+
+  const handleDesktopViewClick = () => {
+    setViewMode('desktop');
+    router.push('/');
+  };
+
   return (
     <nav
       className={`fixed top-0 z-50 w-full bg-slate-950/60 shadow-2xl shadow-slate-950/50 backdrop-blur-xl ${navClassName ?? ''}`}
@@ -65,20 +75,21 @@ export default function SiteNav({
               type="button"
               onClick={onActionClick}
               className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label="Switch to scrollable dashboard view"
+              aria-label="Switch to desktop dashboard view"
             >
               <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
               <span className="hidden sm:inline">{actionLabel}</span>
             </button>
           ) : (
-            <Link
-              href={actionHref}
+            <button
+              type="button"
+              onClick={actionLabel === 'Desktop View' ? handleDesktopViewClick : () => router.push(actionHref)}
               className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label="Switch to scrollable dashboard view"
+              aria-label="Switch to desktop dashboard view"
             >
               <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
               <span className="hidden sm:inline">{actionLabel}</span>
-            </Link>
+            </button>
           )}
         </div>
       </div>

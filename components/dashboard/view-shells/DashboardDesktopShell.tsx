@@ -290,7 +290,7 @@ const PRODUCT_LINKS: { title: string; desc: string; href: string }[][] = [
     { title: 'Overview', desc: 'The big picture of your workspace', href: '/features' },
     { title: 'Dashboard', desc: 'Your daily mission control center', href: '/dashboard' },
     { title: 'Inbox', desc: 'Unified communication across apps', href: '#' },
-    { title: 'Connected Apps', desc: 'Seamless third-party integrations', href: '/app-directory' },
+    { title: 'Connected Apps', desc: 'Seamless third-party integrations', href: '/connected-apps' },
   ],
   [
     { title: 'Sensor', desc: 'Instant system-wide command bar', href: '#' },
@@ -492,7 +492,7 @@ function DashboardDesktopShell() {
           </Link>
           <div className="hidden min-w-0 flex-1 items-center justify-center gap-8 md:flex">
             <ProductMegaMenu />
-            <Link href="/app-directory" className={navLink}>
+            <Link href="/connected-apps" className={navLink}>
               Integrations
             </Link>
             <Link href="/privacy" className={navLink}>
@@ -507,10 +507,10 @@ function DashboardDesktopShell() {
               type="button"
               onClick={() => toggleViewMode()}
               className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label="Switch to scrollable dashboard view"
+              aria-label="Switch to desktop dashboard view"
             >
               <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
-              <span className="hidden sm:inline">Scroll view</span>
+              <span className="hidden sm:inline">Desktop view</span>
             </button>
           </div>
         </div>
@@ -800,13 +800,10 @@ Bring your essential apps together.
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
               Link the tools you rely on every day and keep everything synced in one unified workspace.
               </p>
-              <button
-                type="button"
-                className={`group inline-flex items-center gap-2 ${primaryBtn}`}
-              >
-                Explore integrations
+              <Link href="/connected-apps" className={`group inline-flex items-center gap-2 ${primaryBtn}`}>
+                Explore connected apps
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
+              </Link>
             </motion.div>
           </div>
         </section>
