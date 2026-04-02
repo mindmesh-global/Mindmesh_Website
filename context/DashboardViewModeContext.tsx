@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -26,7 +26,8 @@ export function DashboardViewModeProvider({ children }: { children: ReactNode })
   // `desktop` = full-page scroll marketing shell first; `scrollable` = window/Hero. localStorage overrides after hydrate.
   const [viewMode, setViewModeState] = useState<ViewMode>('desktop');
 
-  useEffect(() => {
+  // useLayoutEffect (not useEffect) so we apply saved mode before the browser paints — avoids a flash of desktop when user chose scroll view.
+  useLayoutEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw === 'desktop' || raw === 'scrollable') {
