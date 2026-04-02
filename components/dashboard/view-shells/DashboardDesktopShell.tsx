@@ -14,10 +14,13 @@ import {
   Brain,
   ChevronDown,
   EyeOff,
+  KeyRound,
   LayoutTemplate,
   Lock,
   Monitor,
   Share2,
+  ShieldCheck,
+  Trash2,
 
 } from 'lucide-react';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
@@ -99,8 +102,6 @@ const seeHowBtnStyle: React.CSSProperties = {
 /** Compact glossy pill for navbar actions. */
 const glossyNavBtn = `rounded-lg ${glossyBlue} px-4 py-2.5 text-sm font-bold sm:px-5`;
 const outlineGhostBtn = `text-base ${primaryBtn}`;
-const outlineGhostBtnLg =
-  'rounded-full border border-blue-500/40 bg-zinc-950/30 px-10 py-5 text-lg font-semibold text-white backdrop-blur-sm transition-colors hover:border-blue-400/55 hover:bg-blue-500/10 active:scale-[0.98]';
 
 function LogoMark({ className = 'h-8 w-8' }: { className?: string }) {
   return (
@@ -288,7 +289,7 @@ const inboxPreviewPanelStyle: React.CSSProperties = {
 
 const PRODUCT_LINKS: { title: string; desc: string; href: string }[][] = [
   [
-    { title: 'Overview', desc: 'The big picture of your workspace', href: '/features' },
+    // { title: 'Overview', desc: 'The big picture of your workspace', href: '/features' },
     { title: 'Dashboard', desc: 'Your daily mission control center', href: '/dashboard' },
     { title: 'Inbox', desc: 'Unified communication across apps', href: '/inbox' },
     { title: 'Connected Apps', desc: 'Seamless third-party integrations', href: '/connected-apps' },
@@ -565,9 +566,7 @@ function DashboardDesktopShell() {
               >
                 Get Early Access
               </button>
-              <button type="button" className={seeHowBtn} style={seeHowBtnStyle}>
-                See How It Works
-              </button>
+
             </motion.div>
             <motion.div
               initial={false}
@@ -632,7 +631,7 @@ function DashboardDesktopShell() {
                 href="/upcoming-events"
                 className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
-                Explore the product
+                Explore the upcoming events
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </motion.div>
@@ -710,7 +709,7 @@ All your messages, one focused inbox.
                 href="/inbox"
                 className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
-                Explore the product
+                Explore the inbox
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </motion.div>
@@ -735,7 +734,7 @@ Your yesterday, neatly wrapped up.              </h2>
                 href="/yesterdays-narrative"
                 className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
-                View Core Features <span aria-hidden>⚡</span>
+                View Yesterday's Narrative <span aria-hidden>⚡</span>
               </Link>
             </motion.div>
             <motion.div
@@ -974,40 +973,81 @@ Built for focus, not noise.
               style={glassPanelStyle}
             >
               <div className="relative z-10">
-                <div className="max-w-2xl">
-                  <div className={`mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-widest ${bodyMuted}`}>
-                    <span aria-hidden>🛡️</span>
-                    <span className="text-blue-400">PRIVACY</span>
+                <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
+                  <div className="max-w-2xl lg:max-w-none">
+                    <div className={`mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-widest ${bodyMuted}`}>
+                      <span aria-hidden>🛡️</span>
+                      <span className="text-blue-400">PRIVACY</span>
+                    </div>
+                    <h2 className="mb-8 text-4xl font-black text-white md:text-5xl">
+                      Privacy is built into MindMesh.
+                    </h2>
+                    <p className={`mb-10 text-lg leading-relaxed ${bodyMuted}`}>
+                      Your notes, chats, and workspace data stay protected with secure infrastructure,
+                      encrypted access, and transparent data practices. We never sell your data, and you
+                      stay in control of what gets stored or deleted.
+                    </p>
+                    <Link href="/privacy" className={`inline-block ${primaryBtn}`}>
+                      Read Privacy Policy
+                    </Link>
                   </div>
-                  <h2 className="mb-8 text-4xl font-black text-white md:text-5xl">
-                    Privacy is built into MindMesh.
-                  </h2>
-                  <p className={`mb-10 text-lg leading-relaxed ${bodyMuted}`}>
-                    Your notes, chats, and workspace data stay protected with secure infrastructure,
-                    encrypted access, and transparent data practices. We never sell your data, and you
-                    stay in control of what gets stored or deleted.
-                  </p>
-                  <div className="mb-10 grid gap-3 sm:grid-cols-3">
-                    {[
-                      'Encrypted workspace data',
-                      'No selling of personal data',
-                      'User-controlled deletion',
-                    ].map((item) => (
-                      <div
-                        key={item}
-                        className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm font-medium text-white/90 backdrop-blur-sm"
-                      >
-                        {item}
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={inViewOpts}
+                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.08 }}
+                    className="relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none"
+                  >
+                    <div className="pointer-events-none absolute left-1/2 top-1/2 h-[min(100%,420px)] w-[min(100%,420px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.12] blur-[80px]" />
+                    <div className="relative flex min-h-[320px] flex-col justify-center gap-4 sm:min-h-[360px]">
+                      <div className="relative z-[3] ml-0 rounded-2xl border border-white/10 bg-zinc-950/40 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md sm:ml-4 sm:-rotate-1">
+                        <div className="flex items-start gap-4">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-300 ring-1 ring-blue-400/25">
+                            <KeyRound className="h-5 w-5" strokeWidth={2} aria-hidden />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-white">Encrypted workspace</p>
+                            <p className={`mt-1 text-sm leading-relaxed ${bodyMuted}`}>
+                              Access and storage designed around strong protection for your notes and chats.
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                  <Link href="/privacy" className={`inline-block ${primaryBtn}`}>
-                    Read Privacy Policy
-                  </Link>
+                      <div className="relative z-[2] mr-0 rounded-2xl border border-white/10 bg-zinc-950/50 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md sm:mr-6 sm:rotate-1">
+                        <div className="flex items-start gap-4">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-300/95 ring-1 ring-emerald-400/20">
+                            <ShieldCheck className="h-5 w-5" strokeWidth={2} aria-hidden />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-white">No data resale</p>
+                            <p className={`mt-1 text-sm leading-relaxed ${bodyMuted}`}>
+                              We do not sell personal data. Your workspace is not a product we broker to
+                              advertisers.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="relative z-[1] ml-0 rounded-2xl border border-white/10 bg-zinc-950/35 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md sm:ml-8 sm:-rotate-1">
+                        <div className="flex items-start gap-4">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/12 text-violet-300/95 ring-1 ring-violet-400/20">
+                            <Trash2 className="h-5 w-5" strokeWidth={2} aria-hidden />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-white">You own deletion</p>
+                            <p className={`mt-1 text-sm leading-relaxed ${bodyMuted}`}>
+                              Decide what stays in your workspace and remove it when you are ready—on your
+                              terms.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
-              <div className="pointer-events-none absolute -bottom-20 -right-20 hidden opacity-5 lg:block">
-                <Lock className="h-[400px] w-[400px]" strokeWidth={0.5} aria-hidden />
+              <div className="pointer-events-none absolute -bottom-24 -right-16 hidden opacity-[0.07] lg:block">
+                <Lock className="h-[280px] w-[280px]" strokeWidth={0.5} aria-hidden />
               </div>
             </motion.div>
           </div>
@@ -1053,9 +1093,10 @@ Built for focus, not noise.
               </p>
               <button
                 type="button"
-                className={`rounded-lg ${glossyBlue} px-10 py-4 text-base font-bold`}
+                className={primaryBtnLg}
+                onClick={() => setIsWaitlistOpen(true)}
               >
-                Start with MindMesh
+                Get early access
               </button>
             </motion.div>
           </div>
@@ -1085,9 +1126,9 @@ Built for focus, not noise.
                 >
                   Get Early Access
                 </button>
-                <button type="button" className={outlineGhostBtnLg}>
-                  View Pricing &amp; Core Features
-                </button>
+                <Link href="/billing" className={seeHowBtn} style={seeHowBtnStyle}>
+                  View Billing & Plans
+                </Link>
               </div>
               <p className={`mt-6 flex items-center gap-2 text-sm ${bodyMutedSm}`}>
                 <BadgeCheck className="h-4 w-4 shrink-0" aria-hidden />

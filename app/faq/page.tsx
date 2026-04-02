@@ -168,7 +168,7 @@ export default function FaqPage() {
               Still evaluating it? Start with the product built around clarity and control.
             </h2>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 md:flex-row">
-              <Link
+              {/* <Link
                 href="/waitlist"
                 className="inline-flex w-full items-center justify-center rounded-full px-12 py-5 text-xl font-bold text-[#0e2d63] shadow-[0_14px_40px_-14px_rgba(173,198,255,0.9),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] md:w-auto"
                 style={{
@@ -177,7 +177,7 @@ export default function FaqPage() {
                 }}
               >
                 Try MindMesh
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

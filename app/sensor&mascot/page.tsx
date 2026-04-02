@@ -264,12 +264,12 @@ export default function SensorAndMascotPage() {
             Use MindMesh to ask, navigate, and act in one continuous flow.
           </p>
           <div className={styles.ctaRow}>
-            <button type="button" className={styles.primaryButton}>
+            {/* <button type="button" className={styles.primaryButton}>
               Try MindMesh
             </button>
             <button type="button" className={styles.secondaryOutlineButton}>
               Book a Demo
-            </button>
+            </button> */}
           </div>
         </div>
       </section>

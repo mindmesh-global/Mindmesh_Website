@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FooterContactPopup from '@/components/layout/FooterContactPopup';
 
 export default function SiteFooter() {
   return (
@@ -15,49 +16,59 @@ export default function SiteFooter() {
             Elevating productivity through architectural privacy and ambient intelligence.
           </p>
           <p className="text-sm sm:text-base" style={{ color: '#a1a1aa' }}>
-            © 2024 MindMesh AI. Built for focus.
+            © 2026 MindMesh AI. Built for focus.
           </p>
         </div>
 
         <div className="flex flex-col gap-3">
           <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Product</h5>
-          <Link href="/features" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-            Features
+          <Link
+            href="/sensor&mascot#sensor"
+            className="text-sm transition-colors hover:text-white sm:text-base"
+            style={{ color: '#a1a1aa' }}
+          >
+            Sensor
           </Link>
-          <Link href="/waitlist" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-            Waitlist
+          <Link
+            href="/sensor&mascot#mascot"
+            className="text-sm transition-colors hover:text-white sm:text-base"
+            style={{ color: '#a1a1aa' }}
+          >
+            Mascot
           </Link>
           <Link href="/security" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
             Security
           </Link>
-          <Link href="#" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-            Status
+          <Link
+            href="/faq"
+            className="text-sm transition-colors hover:text-white sm:text-base"
+            style={{ color: '#a1a1aa' }}
+          >
+            FAQ
           </Link>
         </div>
 
         <div className="flex flex-col gap-3">
           <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Company</h5>
-          <Link href="/about" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
+          {/* <Link href="/about" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
             About
           </Link>
           <Link href="/blog" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
             Blog
-          </Link>
-          <Link href="/contact" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-            Contact
-          </Link>
+          </Link> */}
+          <FooterContactPopup />
         </div>
 
         <div className="flex flex-col gap-3">
           <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Social</h5>
-          <a href="https://twitter.com" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-            X / Twitter
-          </a>
-          <a href="https://linkedin.com" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm transition-colors hover:text-white sm:text-base"
+            style={{ color: '#a1a1aa' }}
+          >
             LinkedIn
-          </a>
-          <a href="https://github.com" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
-            GitHub
           </a>
         </div>
 

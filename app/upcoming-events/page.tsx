@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import SiteNav from '@/components/layout/SiteNav';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
+import upcomingEventsMockup from '@/public/images/upcoming-events-mockup.png';
 import styles from './upcoming-events.module.css';
 
 const manrope = Manrope({
@@ -38,9 +39,6 @@ const heroAvatar1 =
 
 const heroAvatar2 =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuCoLwaVze9wA7dyrFmJs8C-d77q8mjqCk1ygbYWxGA75qIQgCa0F17G4-k6OInQp3V039Krp8o6yzJESYsmb_B33ZAWquUTGzBT_AUYWt9Tfs_rkS998e8au5d_t6cLp2G2n_0RR711aOpfayZd90aXUzyhVQlLX2I6JLbPCjORZl2zKyV75KYmTAuzyZ5_upaY56LmYmDPUjSUeogKEg7_C_g5ywTAZkJ8SjEfQZf5V3wlEOwRFIzWPbwoj0XuQY5V73dF5mKkMcE';
-
-const sectionLaptopImg =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCS6I5w7ouAz2Sp1qVNea6trz4yt8J3OsD5z-E_KQDvY2vbWk_4LMejC8qXFKB3b1_-GjSkHJ8sN4WhdoYShWoMwq0gNnNiTWcJ5DxdMN-TjA4h7M_ulnJCXzZg1kEDDJi4tsx-U6jY2DBP_ok-QzKj9RTrQWFrmW-cYoPKkjxEo797rpMmhShUSR_pVRAXqrgzbENmhvJ1fy1hSJPxIldVetJo6ylDgZ1PbijkQ8EzPTsSzf1nK0vKABWk37lJC-_fY6nOK6TbW54';
 
 export const metadata: Metadata = {
   title: 'Upcoming Events',
@@ -205,11 +203,12 @@ export default function UpcomingEventsPage() {
               <div className="order-2 md:order-1 md:w-1/2">
                 <div className="group relative overflow-hidden rounded-2xl shadow-2xl">
                   <Image
-                    src={sectionLaptopImg}
-                    alt="Minimalist desk with laptop showing a dark software interface"
-                    width={1200}
-                    height={800}
+                    src={upcomingEventsMockup}
+                    alt="Upcoming Events panel showing connected calendars and join meeting actions"
+                    width={928}
+                    height={384}
                     className="w-full grayscale transition-all duration-700 group-hover:grayscale-0"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className={styles.imageOverlayBlue} />
                 </div>
@@ -282,10 +281,10 @@ export default function UpcomingEventsPage() {
                 meeting briefs, relevant documents, and participant profiles, surfaced before you even
                 join the call.
               </p>
-              <Link href="/features" className={styles.linkPrimaryBold}>
+              {/* <Link href="/features" className={styles.linkPrimaryBold}>
                 View Calendar Intelligence
                 <ArrowRight className={`${styles.iconSvg} h-5 w-5`} aria-hidden strokeWidth={2.5} />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </section>
@@ -413,14 +412,14 @@ export default function UpcomingEventsPage() {
               Experience a more mindful way to manage your time. Join the thousands of thinkers using
               MindMesh to reclaim their focus.
             </p>
-            <div className="flex flex-col justify-center gap-6 sm:flex-row">
+            {/* <div className="flex flex-col justify-center gap-6 sm:flex-row">
               <Link href="/waitlist" className={styles.btnClosingLight}>
                 Try MindMesh
               </Link>
               <Link href="/features" className={styles.btnClosingDark}>
                 See All Features
               </Link>
-            </div>
+            </div> */}
           </div>
         </section>
       </main>

@@ -320,13 +320,13 @@ export default function ConnectedAppsPage() {
             system.
           </p>
           <div className={styles.ctaRow}>
-            <Link
+            {/* <Link
               href="/waitlist"
               className={styles.primaryButton}
             >
               Connect Your Workflow
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>

@@ -403,9 +403,9 @@ export default function YesterdaysNarrativePage() {
             Yesterday&apos;s Narrative helps turn yesterday&apos;s work into today&apos;s clarity.
           </p>
           <div className="flex flex-col justify-center gap-4 pt-6 sm:flex-row">
-            <Link href="/waitlist" className={styles.btnClosingPrimary}>
+            {/* <Link href="/waitlist" className={styles.btnClosingPrimary}>
               Try MindMesh
-            </Link>
+            </Link> */}
 
           </div>
         </section>

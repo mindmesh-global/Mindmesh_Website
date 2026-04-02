@@ -5,15 +5,17 @@ import { Manrope } from 'next/font/google';
 import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
-  ArrowUpDown,
   AtSign,
   BadgeCheck,
   Brain,
+  Check,
   CheckCircle2,
+  Filter,
   Flower2,
   GraduationCap,
   Inbox,
   LayoutGrid,
+  Mail,
   Network,
   Search,
   Shield,
@@ -109,33 +111,59 @@ export default function InboxPage() {
             <div className={`${styles.maxGrid} ${styles.maxGrid7xl} flex flex-col items-center gap-16 md:flex-row md:items-center`}>
               <div className="order-2 w-full md:order-1 md:w-1/2">
                 <div className={styles.refConsolidatedGrid}>
-                  <div className={styles.refConsolidatedSmall}>
-                    <Inbox className={`${styles.iconSvg} h-8 w-8`} style={{ color: 'var(--mm-tertiary)' }} aria-hidden />
-                    <div className="text-sm font-semibold text-[#dee5ff]">Workspace A</div>
+                  <div className={`${styles.refConsolidatedSmall} ${styles.refAccountFiltered}`}>
+                    <span className={styles.refFilteredPill}>Filtered</span>
+                    <Mail className={`${styles.iconSvg} h-8 w-8`} style={{ color: 'var(--mm-tertiary)' }} aria-hidden />
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#99aad9]">Connected</div>
+                    <div className="w-full truncate text-sm font-semibold text-[#dee5ff]" title="you@work.dev">
+                      you@work.dev
+                    </div>
                   </div>
-                  <div className={styles.refConsolidatedSmall}>
+                  <div className={`${styles.refConsolidatedSmall} ${styles.refAccountIdle}`}>
                     <AtSign className={`${styles.iconSvg} h-8 w-8`} style={{ color: 'var(--mm-primary-tint)' }} aria-hidden />
-                    <div className="text-sm font-semibold text-[#dee5ff]">Personal Context</div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#99aad9]">Connected</div>
+                    <div className="w-full truncate text-sm font-semibold text-[#dee5ff]" title="alex.personal@gmail.com">
+                      alex.personal@gmail.com
+                    </div>
+                    <p className={styles.refSwitchHint}>Switch filter to view this mailbox</p>
                   </div>
                   <div className={styles.refConsolidatedWide}>
-                    <div className="flex items-center gap-4">
-                      <div className={styles.refFlowOrb} aria-hidden>
-                        <ArrowUpDown className="h-5 w-5" strokeWidth={2.25} />
+                    <div className={styles.refConsolidatedWideMain}>
+                      <div className={styles.refFilterOrb} aria-hidden>
+                        <Filter className="h-5 w-5" strokeWidth={2.25} />
                       </div>
-                      <div className="text-lg font-bold text-[#dee5ff]">Unified Flow</div>
+                      <div className={styles.refFilterWideCopy}>
+                        <div className={styles.refFilterEyebrow}>Mailbox filter</div>
+                        <div className={styles.refFilterChipRow}>
+                          <span className={styles.refFilterChipOn}>
+                            <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden />
+                            you@work.dev
+                          </span>
+                          <span className={styles.refFilterChipOff} title="alex.personal@gmail.com">
+                            alex.personal@gmail.com
+                          </span>
+                        </div>
+                        <p className={styles.refFilterHelper}>
+                          Inbox list updates instantly — only threads from the selected address are shown. Pick
+                          another chip anytime to jump accounts without leaving MindMesh.
+                        </p>
+                      </div>
                     </div>
-                    <CheckCircle2 className={`${styles.iconSvg} h-7 w-7 shrink-0`} style={{ color: 'var(--mm-on-variant)' }} aria-hidden />
+                    <div className={styles.refFilterConfirmed} aria-hidden>
+                      <CheckCircle2 className="h-6 w-6" strokeWidth={2} />
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="order-1 md:order-2 md:w-1/2">
                 <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold leading-tight lg:text-4xl`}>
-                  A consolidated inbox without the usual chaos.
+                  Filter by email when several accounts are connected.
                 </h2>
                 <p className={`${styles.textMuted} text-lg leading-relaxed`}>
-                  MindMesh Inbox helps you see emails across connected accounts in one clear workspace.
-                  Instead of bouncing between separate inboxes and constantly re-orienting yourself, you get a
-                  calmer view of the messages that matter most.
+                  Connect multiple mail IDs and still stay focused: add a mailbox filter to isolate one
+                  address at a time. MindMesh shows only messages for that account — switch filters when you
+                  need another inbox, without signing out or losing context. One workspace, many accounts, the
+                  right mail on screen whenever you want it.
                 </p>
               </div>
             </div>
@@ -145,26 +173,80 @@ export default function InboxPage() {
           <section className="px-6 py-24 sm:px-8">
             <div className={`${styles.glassCardStitch} ${styles.refSearchShell} ${styles.maxGrid} ${styles.maxGrid7xl}`}>
               <div className={styles.refSearchGradient} aria-hidden />
-              <div className="relative z-10 max-w-2xl">
-                <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold lg:text-4xl`}>
-                  Search your work in plain English.
-                </h2>
-                <p className={`${styles.textMuted} mb-10 text-lg leading-relaxed`}>
-                  Find receipts, invoices, follow-ups, updates, and important threads by asking naturally.
-                  MindMesh is designed to help users get to the right message faster without forcing them to
-                  remember exact senders or keywords.
-                </p>
-                <Link href="#inbox-search-demo" className={`${styles.linkPrimaryBold} group text-lg`}>
-                  See Search in Action
-                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden />
-                </Link>
-              </div>
-              <div id="inbox-search-demo" className={`${styles.refSearchBar} relative z-10`}>
-                <Search className={`${styles.iconSvg} h-6 w-6 shrink-0`} style={{ color: 'var(--mm-on-variant)' }} aria-hidden />
-                <span className={`${styles.textMuted} min-w-0 flex-1 text-sm italic sm:text-base`} style={{ opacity: 0.75 }}>
-                  &quot;Find the contract from June about the branding project&quot;
-                </span>
-                <span className={styles.refSearchAiBtn}>AI Search</span>
+              <div className={styles.searchSplit}>
+                <div className={styles.searchColLeft}>
+                  <h2 className={`${styles.textOnSurface} mb-6 max-w-2xl text-3xl font-bold lg:text-4xl`}>
+                    Search your Mail here.
+                  </h2>
+                  <p className={`${styles.textMuted} mb-10 max-w-2xl text-lg leading-relaxed`}>
+                    Find receipts, invoices, follow-ups, updates, and important threads by asking naturally.
+                    MindMesh is designed to help users get to the right message faster without forcing them to
+                    remember exact senders or keywords.
+                  </p>
+                  <div id="inbox-search-demo" className={styles.refSearchBar}>
+                    <Search className={`${styles.iconSvg} h-6 w-6 shrink-0`} style={{ color: 'var(--mm-on-variant)' }} aria-hidden />
+                    <span
+                      className={`${styles.textMuted} min-w-0 flex-1 text-sm italic sm:text-base`}
+                      style={{ opacity: 0.75 }}
+                    >
+                      &quot;Find the contract from June about the branding project&quot;
+                    </span>
+                    <span className={styles.refSearchAiBtn}> Search</span>
+                  </div>
+                </div>
+                <div className={styles.searchVisual} aria-hidden>
+                  <div className={styles.searchMeshGlow} />
+                  <svg className={styles.searchMeshSvg} viewBox="0 0 400 320" fill="none" aria-hidden>
+                    <path
+                      d="M72 52 L198 118 L320 64 M198 118 L256 228 M198 118 L88 218"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      opacity="0.55"
+                    />
+                    <circle cx="72" cy="52" r="5" fill="currentColor" opacity="0.45" />
+                    <circle cx="320" cy="64" r="5" fill="currentColor" opacity="0.45" />
+                    <circle cx="256" cy="228" r="5" fill="currentColor" opacity="0.45" />
+                    <circle cx="88" cy="218" r="5" fill="currentColor" opacity="0.45" />
+                    <circle cx="198" cy="118" r="7" fill="currentColor" opacity="0.65" />
+                  </svg>
+                  <div className={`${styles.searchCardWrap} ${styles.searchCardWrapA}`}>
+                    <div className={styles.searchFloatingCard}>
+                      <div className={styles.searchCardIcon}>
+                        <Mail className="h-4 w-4" aria-hidden />
+                      </div>
+                      <div className="min-w-0">
+                        <div className={styles.searchCardMeta}>Top match</div>
+                        <div className={styles.searchCardTitle}>Branding contract — June</div>
+                        <div className={styles.searchCardSub}>Legal · PDF · 94% relevance</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`${styles.searchCardWrap} ${styles.searchCardWrapB}`}>
+                    <div className={styles.searchFloatingCard}>
+                      <div className={styles.searchCardIcon}>
+                        <Sparkles className="h-4 w-4" aria-hidden />
+                      </div>
+                      <div className="min-w-0">
+                        <div className={styles.searchCardMeta}> summary</div>
+                        <div className={styles.searchCardTitle}>“June branding” across 3 threads</div>
+                        <div className={styles.searchCardSub}>Merged context · English</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`${styles.searchCardWrap} ${styles.searchCardWrapC}`}>
+                    <div className={styles.searchFloatingCard}>
+                      <div className={styles.searchCardIcon}>
+                        <Inbox className="h-4 w-4" aria-hidden />
+                      </div>
+                      <div className="min-w-0">
+                        <div className={styles.searchCardMeta}>Also found</div>
+                        <div className={styles.searchCardTitle}>Re: Q3 marketing budget</div>
+                        <div className={styles.searchCardSub}>Finance · 2 attachments</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -181,8 +263,8 @@ export default function InboxPage() {
                     Inbox is built to reduce the mental overhead of email. It helps users scan conversations
                     and identify important messages faster so the day feels manageable.
                   </p>
-                  <Link href="/features" className={styles.btnTriageOutline}>
-                    See How MindMesh Works
+                  <Link href="/connected-apps" className={styles.btnTriageOutline}>
+                    Connect your Mail Accounts to manage your inbox
                   </Link>
                 </div>
                 <div className={styles.cognitiveCardStitch}>
@@ -253,12 +335,7 @@ export default function InboxPage() {
                 attached to work all day. MindMesh Inbox helps users reduce account switching and find what
                 they need faster.
               </p>
-              <div className="flex justify-center">
-                <div className={styles.lifePillStitch}>
-                  <Flower2 className={`${styles.iconSvg} h-6 w-6`} style={{ color: 'var(--mm-tertiary)' }} aria-hidden />
-                  <span className="font-medium italic text-[#dee5ff]">Mindful interaction by design.</span>
-                </div>
-              </div>
+
             </div>
           </section>
 
@@ -307,12 +384,9 @@ export default function InboxPage() {
                 MindMesh Inbox turns scattered messages across accounts into a clearer, calmer workspace.
               </p>
               <div className="flex flex-wrap justify-center gap-6">
-                <Link href="/waitlist" className={styles.btnClosingSolid}>
+                {/* <Link href="/waitlist" className={styles.btnClosingSolid}>
                   Try MindMesh
-                </Link>
-                <Link href="/features" className={styles.btnClosingGhost}>
-                  See All Features
-                </Link>
+                </Link> */}
               </div>
             </div>
           </section>
