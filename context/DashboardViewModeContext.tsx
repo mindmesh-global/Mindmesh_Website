@@ -23,7 +23,8 @@ export type DashboardViewModeContextValue = {
 const DashboardViewModeContext = createContext<DashboardViewModeContextValue | null>(null);
 
 export function DashboardViewModeProvider({ children }: { children: ReactNode }) {
-  const [viewMode, setViewModeState] = useState<ViewMode>('scrollable');
+  // `desktop` = full-page scroll marketing shell first; `scrollable` = window/Hero. localStorage overrides after hydrate.
+  const [viewMode, setViewModeState] = useState<ViewMode>('desktop');
 
   useEffect(() => {
     try {
