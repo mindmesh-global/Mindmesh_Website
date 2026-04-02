@@ -1,0 +1,42 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
+
+const DashboardDesktopShell = dynamic(
+  () =>
+    import('@/components/dashboard/view-shells/DashboardDesktopShell').then((m) => m.DashboardDesktopShell),
+  { ssr: false }
+);
+
+const FULL_BLEED_PATHS = ['/', '/dashboard'];
+
+/** Full-viewport marketing layout above all MindMesh chrome (dock, side icons, logo). */
+export default function DashboardFullBleedPortal() {
+  const { viewMode } = useDashboardViewMode();
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted || typeof document === 'undefined') return null;
+  if (viewMode !== 'desktop') return null;
+  if (!pathname || !FULL_BLEED_PATHS.includes(pathname)) return null;
+
+  return createPortal(
+    <div
+      id="mindmesh-marketing-scroll"
+      className="mindmesh-marketing-root fixed inset-0 z-[200000] overflow-y-auto overflow-x-hidden"
+      style={{ backgroundColor: '#0a0a14', color: '#a1a1aa' }}
+      role="document"
+      aria-label="MindMesh marketing"
+    >
+    
+      <DashboardDesktopShell />
+    </div>,
+    document.body
+  );
+}

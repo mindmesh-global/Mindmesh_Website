@@ -104,6 +104,12 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
+/* Fullscreen marketing overlay: survives Tailwind / PostCSS edge cases */
+.mindmesh-marketing-root {
+  background-color: #0a0a14;
+  color: #a1a1aa;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

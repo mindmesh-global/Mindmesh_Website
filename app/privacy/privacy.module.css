@@ -1,0 +1,116 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 560px at 88% -10%, rgba(74, 138, 255, 0.16), transparent 55%),
+    radial-gradient(780px 460px at 0% 22%, rgba(124, 92, 255, 0.14), transparent 58%),
+    #060e20;
+  color: #dfe8ff;
+}
+
+.main {
+  margin: 0 auto;
+  width: min(980px, 100%);
+  padding: 7.4rem 1.2rem 3.6rem;
+}
+
+.hero {
+  margin-bottom: 1.4rem;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(142, 174, 250, 0.28);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: rgba(19, 38, 80, 0.65);
+  color: #afc8ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0.95rem 0 0.55rem;
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 64ch;
+  color: #96abd7;
+  line-height: 1.7;
+}
+
+.panel {
+  border: 1px solid rgba(120, 150, 220, 0.2);
+  border-radius: 22px;
+  padding: 1.5rem;
+  background: linear-gradient(180deg, rgba(16, 36, 80, 0.95), rgba(10, 24, 55, 0.98));
+  box-shadow: 0 20px 45px -28px rgba(4, 11, 29, 0.95);
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  margin: 0.2rem 0 1.3rem;
+  background: linear-gradient(90deg, rgba(139, 170, 236, 0.2), rgba(139, 170, 236, 0.05));
+}
+
+.section {
+  border: 1px solid rgba(112, 141, 206, 0.16);
+  border-radius: 16px;
+  padding: 1.1rem 1rem;
+  margin-bottom: 0.9rem;
+  background: rgba(8, 20, 48, 0.62);
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+}
+
+.section p {
+  margin: 0.7rem 0 0;
+  color: #9cb0d8;
+  line-height: 1.65;
+}
+
+.list {
+  margin: 0.7rem 0 0;
+  padding-left: 1.2rem;
+  color: #9cb0d8;
+  line-height: 1.7;
+}
+
+.list li + li {
+  margin-top: 0.35rem;
+}
+
+.link {
+  color: #8fbeff;
+  text-underline-offset: 2px;
+}
+
+.link:hover {
+  color: #bdd9ff;
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-top: 6.6rem;
+  }
+
+  .panel {
+    padding: 1.05rem;
+    border-radius: 16px;
+  }
+
+  .section h2 {
+    font-size: 1.15rem;
+  }
+}
