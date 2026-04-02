@@ -27,7 +27,7 @@ export default function SiteFooter() {
           <Link href="/waitlist" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
             Waitlist
           </Link>
-          <Link href="/privacy" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
+          <Link href="/security" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>
             Security
           </Link>
           <Link href="#" className="text-sm transition-colors hover:text-white sm:text-base" style={{ color: '#a1a1aa' }}>

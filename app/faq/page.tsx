@@ -143,11 +143,13 @@ export default function FaqPage() {
           {faqs.map((faq) => (
             <details
               key={faq.question}
-              className="group rounded-2xl border border-[#364770]/15 bg-[#06122c] transition-all duration-300"
+              className="group rounded-2xl bg-[#081734] shadow-[0_12px_28px_-20px_rgba(0,0,0,0.95)] ring-1 ring-[#9ec0ff]/10 transition-all duration-300 hover:bg-[#0b1d42] hover:ring-[#9ec0ff]/20"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between p-6">
-                <h2 className="text-lg font-bold text-[#dee5ff]">{faq.question}</h2>
-                <ChevronDown className="h-5 w-5 text-[#adc6ff] transition-transform group-open:rotate-180" />
+                <h2 className="text-lg font-extrabold tracking-[-0.01em] text-[#f4f7ff]">
+                  {faq.question}
+                </h2>
+                <ChevronDown className="h-5 w-5 text-[#c6d8ff] transition-transform duration-300 group-open:rotate-180" />
               </summary>
               <div className="px-6 pb-6 pt-0 leading-relaxed text-[#99aad9]">{faq.answer}</div>
             </details>

@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { LayoutTemplate } from 'lucide-react';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
 
 type SiteNavProps = {
   activeHref?: string;
+  /** Right nav button label; default matches marketing dashboard shell (“Desktop view”). */
   actionLabel?: string;
-  actionHref?: string;
   onActionClick?: () => void;
   navClassName?: string;
   navBackgroundColor?: string;
+  disableNavigation?: boolean;
 };
 
 const navLinkBase =
@@ -39,20 +40,22 @@ function getNavLinkClass(href: string, activeHref?: string) {
 
 export default function SiteNav({
   activeHref,
-  actionLabel = 'Desktop View',
-  actionHref = '/dashboard',
+  actionLabel = 'Desktop view',
   onActionClick,
   navClassName,
   navBackgroundColor,
+  disableNavigation = false,
 }: SiteNavProps) {
-  const router = useRouter();
   const pathname = usePathname();
-  const { setViewMode } = useDashboardViewMode();
+  const { toggleViewMode } = useDashboardViewMode();
   const resolvedActiveHref = activeHref ?? pathname ?? undefined;
 
-  const handleDesktopViewClick = () => {
-    setViewMode('desktop');
-    router.push('/');
+  const handlePrimaryActionClick = () => {
+    if (onActionClick) {
+      onActionClick();
+      return;
+    }
+    toggleViewMode();
   };
 
   return (
@@ -61,23 +64,44 @@ export default function SiteNav({
       style={navBackgroundColor ? { backgroundColor: navBackgroundColor } : undefined}
     >
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-3 px-4 py-4 tracking-tight sm:px-8">
-        <Link href="/" className="flex min-w-0 shrink items-center gap-2.5">
-          <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">MindMesh</span>
-        </Link>
+        {disableNavigation ? (
+          <div className="flex min-w-0 shrink items-center gap-2.5">
+            <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">MindMesh</span>
+          </div>
+        ) : (
+          <Link href="/" className="flex min-w-0 shrink items-center gap-2.5">
+            <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">MindMesh</span>
+          </Link>
+        )}
 
         <div className="hidden min-w-0 flex-1 items-center justify-center gap-8 text-sm font-medium md:flex">
-          <Link href="/" className={getNavLinkClass('/', resolvedActiveHref)}>
-            Product
-          </Link>
-          <Link href="/connected-apps" className={getNavLinkClass('/connected-apps', resolvedActiveHref)}>
-            Integrations
-          </Link>
-          <Link href="/privacy" className={getNavLinkClass('/privacy', resolvedActiveHref)}>
-            Security
-          </Link>
-          <Link href="/faq" className={getNavLinkClass('/faq', resolvedActiveHref)}>
-            FAQ
-          </Link>
+          {disableNavigation ? (
+            <>
+              <span className={getNavLinkClass('/', resolvedActiveHref)}>Product</span>
+              <span className={getNavLinkClass('/connected-apps', resolvedActiveHref)}>Integrations</span>
+              <span className={getNavLinkClass('/security', resolvedActiveHref)}>Security</span>
+              <span className={getNavLinkClass('/trust', resolvedActiveHref)}>Trust</span>
+              <span className={getNavLinkClass('/faq', resolvedActiveHref)}>FAQ</span>
+            </>
+          ) : (
+            <>
+              <Link href="/" className={getNavLinkClass('/', resolvedActiveHref)}>
+                Product
+              </Link>
+              <Link href="/connected-apps" className={getNavLinkClass('/connected-apps', resolvedActiveHref)}>
+                Integrations
+              </Link>
+              <Link href="/security" className={getNavLinkClass('/security', resolvedActiveHref)}>
+                Security
+              </Link>
+              <Link href="/trust" className={getNavLinkClass('/trust', resolvedActiveHref)}>
+                Trust
+              </Link>
+              <Link href="/faq" className={getNavLinkClass('/faq', resolvedActiveHref)}>
+                FAQ
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="flex shrink-0 items-center justify-end">
@@ -94,9 +118,9 @@ export default function SiteNav({
           ) : (
             <button
               type="button"
-              onClick={actionLabel === 'Desktop View' ? handleDesktopViewClick : () => router.push(actionHref)}
+              onClick={handlePrimaryActionClick}
               className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label="Switch to desktop dashboard view"
+              aria-label={actionLabel}
             >
               <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
               <span className="hidden sm:inline">{actionLabel}</span>

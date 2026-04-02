@@ -33,6 +33,11 @@ function getWeatherInfo(code: number) {
   return WEATHER_CODES[code] ?? { emoji: '🌤️', label: 'Unknown' };
 }
 
+/** Stable string coords for SVG so SSR HTML matches client hydration (avoids float / string mismatches). */
+function svgCoord(n: number) {
+  return n.toFixed(3);
+}
+
 export function StaticWeatherCard() {
   const [formattedTime, setFormattedTime] = useState('--:-- --');
   const [formattedDate, setFormattedDate] = useState('---');
@@ -214,10 +219,10 @@ export function StaticWeatherCard() {
                 return (
                   <line
                     key={i}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
+                    x1={svgCoord(x1)}
+                    y1={svgCoord(y1)}
+                    x2={svgCoord(x2)}
+                    y2={svgCoord(y2)}
                     stroke="rgba(255,248,220,0.7)"
                     strokeWidth="3"
                     strokeLinecap="round"

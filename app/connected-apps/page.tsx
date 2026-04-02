@@ -4,11 +4,7 @@ import Link from 'next/link';
 import {
   ArrowRight,
   CalendarDays,
-  Check,
-  Cloud,
   Mail,
-  MessageSquare,
-  NotebookPen,
   Search,
   Shield,
   Workflow,
@@ -31,11 +27,23 @@ const supportedApps = [
   { name: 'SMTP Mailbox', icon: Workflow },
 ] as const;
 
-const libraryApps = [
-  { name: 'Cloud Drive', icon: Cloud },
-  { name: 'Task Mgmt', icon: Check },
-  { name: 'Messaging', icon: MessageSquare },
-  { name: 'Notion', icon: NotebookPen },
+const workflowCards = [
+  {
+    title: 'Inbox context',
+    description: 'Bring important email threads into one focused view.',
+  },
+  {
+    title: 'Calendar visibility',
+    description: 'Keep upcoming meetings and schedule context easy to scan.',
+  },
+  {
+    title: 'Unified overview',
+    description: 'See what is connected, active, and relevant in one place.',
+  },
+  {
+    title: 'Smarter daily flow',
+    description: 'Turn emails and events into summaries, narratives, and next-step clarity.',
+  },
 ] as const;
 
 export const metadata: Metadata = {
@@ -80,24 +88,18 @@ export default function ConnectedAppsPage() {
     <main
       className={`${manrope.className} ${styles.page} selection:bg-[#0e69dc] selection:text-white`}
     >
-      <SiteNav
-        actionLabel="Desktop View"
-        actionHref="/dashboard"
-        navBackgroundColor="#060e20"
-      />
+      <SiteNav navBackgroundColor="#060e20" />
 
       <section className={styles.heroSection}>
-        <div className={styles.heroGlow} />
         <div className={`${styles.container} ${styles.textCenter}`}>
           <span className={styles.eyebrow}>
             Connectivity
           </span>
           <h1 className={styles.heroTitle}>
-            Connect the tools you already rely on.
+            Connect the tools you already use
           </h1>
           <p className={styles.heroText}>
-            MindMesh works with the inboxes and calendars you already use, then brings them
-            together into one private, desktop-native workspace.
+          MindMesh brings your inboxes and calendars together into one private, desktop-native workspace.
           </p>
           <div className={styles.ctaRow}>
             <Link
@@ -210,23 +212,17 @@ export default function ConnectedAppsPage() {
         <div className={styles.container}>
           <div className={styles.centerIntro}>
             <h2 className={styles.sectionTitle}>
-              Expand your setup from the App Library.
+            Built around the way your work already moves.
             </h2>
             <p className={styles.sectionText}>
-              Browse supported services, add the tools you use most, and shape MindMesh around the
-              workflow you already have.
+            MindMesh starts with the inboxes and calendars you already use, then helps turn scattered activity into a calmer, more organized workspace.
             </p>
           </div>
           <div className={styles.libraryGrid}>
-            {libraryApps.map(({ name, icon: Icon }) => (
-              <div
-                key={name}
-                className={styles.libraryCard}
-              >
-                <Icon className="mx-auto h-8 w-8 text-[#99aad9]" />
-                <p className={styles.libraryName}>
-                  {name}
-                </p>
+            {workflowCards.map(({ title, description }) => (
+              <div key={title} className={styles.libraryCard}>
+                <h3 className={styles.libraryTitle}>{title}</h3>
+                <p className={styles.libraryDescription}>{description}</p>
               </div>
             ))}
           </div>
@@ -235,6 +231,16 @@ export default function ConnectedAppsPage() {
 
       <section className={styles.standardSection}>
         <div className={`${styles.container} ${styles.splitGridReverse}`}>
+          <div className={styles.textOrder}>
+            <h2 className={styles.sectionTitle}>
+              A consolidated inbox without the usual mess.
+            </h2>
+            <p className={styles.sectionText}>
+              Bring multiple inboxes into one focused experience so you can scan, search, and
+              prioritize without jumping between accounts all day.
+            </p>
+          </div>
+
           <div className={`${styles.messageCard} ${styles.messageOrder}`}>
             <div className={styles.messageStack}>
               <div className={styles.messageItem}>
@@ -273,16 +279,6 @@ export default function ConnectedAppsPage() {
                 </p>
               </div>
             </div>
-          </div>
-
-          <div className={styles.textOrder}>
-            <h2 className={styles.sectionTitle}>
-              A consolidated inbox without the usual mess.
-            </h2>
-            <p className={styles.sectionText}>
-              Bring multiple inboxes into one focused experience so you can scan, search, and
-              prioritize without jumping between accounts all day.
-            </p>
           </div>
         </div>
       </section>

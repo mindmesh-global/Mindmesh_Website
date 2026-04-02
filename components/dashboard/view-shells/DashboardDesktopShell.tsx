@@ -21,6 +21,7 @@ import {
 
 } from 'lucide-react';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
+import WaitlistModal from '@/components/WaitlistModal';
 import heroInboxMockup from '@/public/images/hero-inbox-mockup.jpg';
 import upcomingEventsMockup from '@/public/images/upcoming-events-mockup.png';
 import yesterdaysNarrativeMockup from '@/public/images/yesterdays-narrative-mockup.png';
@@ -289,13 +290,13 @@ const PRODUCT_LINKS: { title: string; desc: string; href: string }[][] = [
   [
     { title: 'Overview', desc: 'The big picture of your workspace', href: '/features' },
     { title: 'Dashboard', desc: 'Your daily mission control center', href: '/dashboard' },
-    { title: 'Inbox', desc: 'Unified communication across apps', href: '#' },
+    { title: 'Inbox', desc: 'Unified communication across apps', href: '/inbox' },
     { title: 'Connected Apps', desc: 'Seamless third-party integrations', href: '/connected-apps' },
   ],
   [
-    { title: 'Sensor', desc: 'Instant system-wide command bar', href: '#' },
-    { title: 'Mascot', desc: 'Proactive human-like AI assistant', href: '#' },
-    { title: "Yesterday's Narrative", desc: 'Daily summary of past achievements', href: '#' },
+    { title: 'Sensor', desc: 'Instant system-wide command bar', href: '/sensor&mascot#sensor' },
+    { title: 'Mascot', desc: 'Proactive human-like AI assistant', href: '/sensor&mascot#mascot' },
+    { title: "Yesterday's Narrative", desc: 'Daily summary of past achievements', href: '/yesterdays-narrative' },
   ],
 ];
 
@@ -435,6 +436,7 @@ function DashboardDesktopShell() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [activeCharacterIndex, setActiveCharacterIndex] = useState(0);
   const [sliderInteractionNonce, setSliderInteractionNonce] = useState(0);
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
   const inViewOpts = useMemo(
     () =>
@@ -495,8 +497,11 @@ function DashboardDesktopShell() {
             <Link href="/connected-apps" className={navLink}>
               Integrations
             </Link>
-            <Link href="/privacy" className={navLink}>
+            <Link href="/security" className={navLink}>
               Security
+            </Link>
+            <Link href="/trust" className={navLink}>
+              Trust
             </Link>
             <Link href="/faq" className={navLink}>
               FAQ
@@ -552,7 +557,12 @@ function DashboardDesktopShell() {
               transition={{ duration: 0.45, delay: heroStagger[3], ease: 'easeOut' }}
               className="mb-20 flex flex-col gap-4 sm:flex-row"
             >
-              <button type="button" className={earlyAccessBtn} style={earlyAccessBtnStyle}>
+              <button
+                type="button"
+                className={earlyAccessBtn}
+                style={earlyAccessBtnStyle}
+                onClick={() => setIsWaitlistOpen(true)}
+              >
                 Get Early Access
               </button>
               <button type="button" className={seeHowBtn} style={seeHowBtnStyle}>
@@ -618,13 +628,13 @@ function DashboardDesktopShell() {
                 Track upcoming meetings and important events in one place, with the context you need to stay
                 prepared.
               </p>
-              <button
-                type="button"
+              <Link
+                href="/upcoming-events"
                 className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
                 Explore the product
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
+              </Link>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -696,13 +706,13 @@ All your messages, one focused inbox.
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
               Bring all your accounts together in one place and you can respond faster and never miss what matters.
               </p>
-              <button
-                type="button"
+              <Link
+                href="/inbox"
                 className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
                 Explore the product
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
+              </Link>
             </motion.div>
           </div>
         </section>
@@ -721,12 +731,12 @@ Your yesterday, neatly wrapped up.              </h2>
               Instantly review the key meetings, emails, highlights, and decisions from yesterday so you know exactly where things stand.
               Review the key updates, conversations, and decisions from across your workspace without digging through tools.
               </p>
-              <button
-                type="button"
+              <Link
+                href="/yesterdays-narrative"
                 className={`group inline-flex items-center gap-2 ${primaryBtn}`}
               >
                 View Core Features <span aria-hidden>⚡</span>
-              </button>
+              </Link>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -940,9 +950,9 @@ Built for focus, not noise.
                 assistant experience. Together, they make MindMesh feel less like software you manage and
                 more like a calm layer that helps you stay on top of work.
               </p>
-              <button type="button" className={`group inline-flex items-center gap-2 ${outlineGhostBtn} px-8 py-3`}>
-                How it works and features <span aria-hidden>⚡</span>
-              </button>
+              <Link href="/sensor&mascot" className={`group inline-flex items-center gap-2 ${outlineGhostBtn} px-8 py-3`}>
+               Explore Sensor & Mascot <span aria-hidden>⚡</span>
+              </Link>
             </motion.div>
           </div>
         </section>
@@ -1071,6 +1081,7 @@ Built for focus, not noise.
                   type="button"
                   className={earlyAccessBtn}
                   style={earlyAccessBtnStyle}
+                  onClick={() => setIsWaitlistOpen(true)}
                 >
                   Get Early Access
                 </button>
@@ -1088,6 +1099,7 @@ Built for focus, not noise.
       </main>
 
       <SiteFooter />
+      <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
     </div>
   );
 }
