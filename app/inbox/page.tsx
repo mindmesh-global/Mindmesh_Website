@@ -5,18 +5,20 @@ import { Manrope } from 'next/font/google';
 import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
+  ArrowUpDown,
+  AtSign,
+  BadgeCheck,
   Brain,
-  CalendarDays,
-  Download,
+  CheckCircle2,
+  Flower2,
+  GraduationCap,
   Inbox,
   LayoutGrid,
-  Library,
-  Lock,
-  Mail,
+  Network,
   Search,
-  ShieldCheck,
+  Shield,
   Sparkles,
-  Star,
+  UserRound,
 } from 'lucide-react';
 import SiteNav from '@/components/layout/SiteNav';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
@@ -101,221 +103,220 @@ export default function InboxPage() {
           </div>
         </section>
 
-        <section className={`${styles.sectionBand} px-6 py-24 sm:px-8`}>
-          <div className={`${styles.maxGrid} flex flex-col items-center gap-16 md:flex-row md:items-center`}>
-            <div className="order-2 w-full md:order-1 md:w-1/2">
-              <div className={styles.consolidatedCluster}>
-                <div className={styles.consolidatedTopRow}>
-                  <div className={styles.consolidatedCardSmall}>
-                    <Inbox className={`${styles.iconSvg} mb-3 h-7 w-7 text-sky-400`} aria-hidden />
-                    <div className="text-sm font-bold text-slate-100">Workspace A</div>
+        <div className={styles.belowHero}>
+          {/* Section 1: Consolidated — Stitch HTML */}
+          <section className={`${styles.sectionStitchLow} px-6 py-24 sm:px-8`}>
+            <div className={`${styles.maxGrid} ${styles.maxGrid7xl} flex flex-col items-center gap-16 md:flex-row md:items-center`}>
+              <div className="order-2 w-full md:order-1 md:w-1/2">
+                <div className={styles.refConsolidatedGrid}>
+                  <div className={styles.refConsolidatedSmall}>
+                    <Inbox className={`${styles.iconSvg} h-8 w-8`} style={{ color: 'var(--mm-tertiary)' }} aria-hidden />
+                    <div className="text-sm font-semibold text-[#dee5ff]">Workspace A</div>
                   </div>
-                  <div className={styles.consolidatedCardSmall}>
-                    <Mail className={`${styles.iconSvg} mb-3 h-7 w-7 text-blue-300`} aria-hidden />
-                    <div className="text-sm font-bold text-slate-100">Personal Content</div>
+                  <div className={styles.refConsolidatedSmall}>
+                    <AtSign className={`${styles.iconSvg} h-8 w-8`} style={{ color: 'var(--mm-primary-tint)' }} aria-hidden />
+                    <div className="text-sm font-semibold text-[#dee5ff]">Personal Context</div>
                   </div>
-                </div>
-                <div className={styles.consolidatedCardWide}>
-                  <div className="flex min-w-0 items-center gap-4">
-                    <div className={styles.consolidatedAvatar} aria-hidden>
-                      JM
+                  <div className={styles.refConsolidatedWide}>
+                    <div className="flex items-center gap-4">
+                      <div className={styles.refFlowOrb} aria-hidden>
+                        <ArrowUpDown className="h-5 w-5" strokeWidth={2.25} />
+                      </div>
+                      <div className="text-lg font-bold text-[#dee5ff]">Unified Flow</div>
                     </div>
-                    <div>
-                      <div className="text-lg font-bold text-slate-50">Unified View</div>
-                      <div className={`${styles.textMuted} text-sm`}>All accounts, one calm stream</div>
-                    </div>
+                    <CheckCircle2 className={`${styles.iconSvg} h-7 w-7 shrink-0`} style={{ color: 'var(--mm-on-variant)' }} aria-hidden />
                   </div>
-                  <Sparkles className={`${styles.iconSvg} h-6 w-6 shrink-0 text-blue-300/80`} aria-hidden />
                 </div>
               </div>
+              <div className="order-1 md:order-2 md:w-1/2">
+                <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold leading-tight lg:text-4xl`}>
+                  A consolidated inbox without the usual chaos.
+                </h2>
+                <p className={`${styles.textMuted} text-lg leading-relaxed`}>
+                  MindMesh Inbox helps you see emails across connected accounts in one clear workspace.
+                  Instead of bouncing between separate inboxes and constantly re-orienting yourself, you get a
+                  calmer view of the messages that matter most.
+                </p>
+              </div>
             </div>
-            <div className="order-1 md:order-2 md:w-1/2">
-              <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold leading-tight lg:text-4xl`}>
-                A consolidated inbox without the usual chaos.
-              </h2>
-              <p className={`${styles.textMuted} text-lg leading-relaxed`}>
-                See messages across connected accounts in one clear workspace. Less jumping between inboxes,
-                less re-orienting yourself — just a steadier read on what actually needs you.
-              </p>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="px-6 py-24 sm:px-8">
-          <div className={`${styles.glassPanel} ${styles.searchGlassSection} ${styles.maxGrid}`}>
-            <div className={styles.searchGlassGradient} aria-hidden />
-            <div className="relative z-10 grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-              <div>
+          {/* Section 2: Search */}
+          <section className="px-6 py-24 sm:px-8">
+            <div className={`${styles.glassCardStitch} ${styles.refSearchShell} ${styles.maxGrid} ${styles.maxGrid7xl}`}>
+              <div className={styles.refSearchGradient} aria-hidden />
+              <div className="relative z-10 max-w-2xl">
                 <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold lg:text-4xl`}>
                   Search your work in plain English.
                 </h2>
                 <p className={`${styles.textMuted} mb-10 text-lg leading-relaxed`}>
-                  Find invoices, receipts, follow-ups, and threads by asking the way you&apos;d ask a
-                  teammate. No perfect keywords, no guessing sender addresses.
+                  Find receipts, invoices, follow-ups, updates, and important threads by asking naturally.
+                  MindMesh is designed to help users get to the right message faster without forcing them to
+                  remember exact senders or keywords.
                 </p>
-                <Link href="#inbox-search-demo" className={styles.linkPrimaryBold}>
+                <Link href="#inbox-search-demo" className={`${styles.linkPrimaryBold} group text-lg`}>
                   See Search in Action
-                  <ArrowRight className="h-5 w-5" aria-hidden />
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden />
                 </Link>
               </div>
-              <div>
-                <div id="inbox-search-demo" className={styles.searchBarMock}>
-                  <Search className={`${styles.iconSvg} h-5 w-5 shrink-0 text-slate-500`} aria-hidden />
-                  <span className="min-w-0 flex-1 text-sm italic leading-snug text-slate-500 sm:text-base">
-                    &quot;Find the invoice from last week&apos;s marketing project&quot;
-                  </span>
-                  <span className={styles.searchAiBtn}>AI Search</span>
-                </div>
+              <div id="inbox-search-demo" className={`${styles.refSearchBar} relative z-10`}>
+                <Search className={`${styles.iconSvg} h-6 w-6 shrink-0`} style={{ color: 'var(--mm-on-variant)' }} aria-hidden />
+                <span className={`${styles.textMuted} min-w-0 flex-1 text-sm italic sm:text-base`} style={{ opacity: 0.75 }}>
+                  &quot;Find the contract from June about the branding project&quot;
+                </span>
+                <span className={styles.refSearchAiBtn}>AI Search</span>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className={`${styles.sectionBand} px-6 py-24 sm:px-8`}>
-          <div className={styles.maxGrid}>
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-12">
-              <div className="space-y-8 lg:col-span-2">
-                <h2 className={`${styles.textOnSurface} text-4xl font-bold tracking-tight lg:text-5xl`}>
-                  Less triage. More clarity.
-                </h2>
-                <p className={`${styles.textMuted} max-w-xl text-xl leading-relaxed`}>
-                  Inbox is built to lower the mental tax of email — so you can scan, decide, and move on
-                  without the usual pile-up anxiety.
-                </p>
-                <Link href="/features" className={styles.btnOutlineRounded}>
-                  Explore MindMesh Features
-                </Link>
-              </div>
-              <div className={styles.cognitiveCard}>
-                <div className="space-y-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/15">
-                    <Brain className={`${styles.iconSvg} h-6 w-6 text-sky-300`} aria-hidden />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-50">Cognitive Ease</h3>
-                  <p className={`${styles.textMuted} text-sm leading-relaxed`}>
-                    Cleaner density and calmer grouping help your attention land where it should — not on
-                    noise.
+          {/* Section 3: Triage */}
+          <section className={`${styles.sectionStitchLow} px-6 py-24 sm:px-8`}>
+            <div className={`${styles.maxGrid} ${styles.maxGrid7xl}`}>
+              <div className={styles.triageGrid}>
+                <div className={styles.triageMain}>
+                  <h2 className={`${styles.textOnSurface} text-4xl font-bold tracking-tight lg:text-5xl`}>
+                    Less triage. More clarity.
+                  </h2>
+                  <p className={`${styles.textMuted} max-w-xl text-xl leading-relaxed`}>
+                    Inbox is built to reduce the mental overhead of email. It helps users scan conversations
+                    and identify important messages faster so the day feels manageable.
                   </p>
+                  <Link href="/features" className={styles.btnTriageOutline}>
+                    See How MindMesh Works
+                  </Link>
                 </div>
-                <div className={styles.cognitiveDots} aria-hidden>
-                  <span className={`${styles.cognitiveDot} ${styles.cognitiveDotBlue}`} />
-                  <span className={`${styles.cognitiveDot} ${styles.cognitiveDotSky}`} />
-                  <span className={`${styles.cognitiveDot} ${styles.cognitiveDotMuted}`} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="px-6 py-24 sm:px-8">
-          <div className={`${styles.maxGrid} grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-20`}>
-            <div className="order-2 lg:order-1">
-              <div className={styles.workspaceGrid}>
-                <div className={styles.workspaceTile}>
-                  <LayoutGrid className="h-8 w-8" aria-hidden />
-                  <span className={styles.workspaceTileMutedLabel}>Dashboard</span>
-                </div>
-                <div className={`${styles.workspaceTile} ${styles.workspaceTileActive}`}>
-                  <Inbox className="h-8 w-8" aria-hidden />
-                  <span className={styles.workspaceTileMutedLabel}>Inbox</span>
-                </div>
-                <div className={styles.workspaceTile}>
-                  <CalendarDays className="h-8 w-8" aria-hidden />
-                  <span className={styles.workspaceTileMutedLabel}>Calendar</span>
-                </div>
-                <div className={styles.workspaceTile}>
-                  <Library className="h-8 w-8" aria-hidden />
-                  <span className={styles.workspaceTileMutedLabel}>App Library</span>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2">
-              <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold lg:text-4xl`}>
-                Works with the rest of your MindMesh workspace.
-              </h2>
-              <p className={`${styles.textMuted} text-lg leading-relaxed`}>
-                Inbox sits alongside Dashboard, Calendar, the App Library, and the rest of your desktop
-                context — so mail is never a silo away from how you actually work.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className={`${styles.sectionBandSoft} px-6 py-24 sm:px-8`}>
-          <div className={`${styles.maxGrid} mx-auto max-w-3xl text-center`}>
-            <h2 className={`${styles.textOnSurface} mb-8 text-3xl font-bold tracking-tight lg:text-5xl`}>
-              Better email flow supports better work-life balance.
-            </h2>
-            <p className={`${styles.textMuted} mb-12 text-lg leading-relaxed lg:text-xl`}>
-              When inbox time is shorter and clearer, it&apos;s easier to stay current without carrying work
-              in your head all evening. MindMesh is built for that kind of boundary.
-            </p>
-            <div className="flex justify-center">
-              <div className={styles.lifeBalancePill}>
-                <Download className={`${styles.iconSvg} h-5 w-5 text-sky-400`} aria-hidden />
-                <span className="font-semibold text-slate-200">MindMesh: Selective by Design.</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-slate-800/80 px-6 py-24 sm:px-8">
-          <div className={`${styles.maxGrid} flex flex-col gap-14 lg:flex-row lg:gap-20`}>
-            <div className="lg:w-[32%]">
-              <h2 className={`${styles.textOnSurface} mb-4 text-3xl font-bold leading-tight`}>
-                Email visibility with privacy-first design.
-              </h2>
-              <div className={styles.privacyAccent} />
-            </div>
-            <div className="flex-1 space-y-8">
-              <p className={`${styles.textMuted} text-lg leading-relaxed`}>
-                Local-first patterns, careful access boundaries, and retrieval that serves you — not a data
-                product. Your mail stays oriented around your workflow.
-              </p>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {(
-                  [
-                    {
-                      Icon: ShieldCheck,
-                      label: 'Encryption-minded paths for sensitive threads',
-                    },
-                    { Icon: Star, label: 'You choose what surfaces; nothing noisy by default' },
-                    { Icon: Lock, label: 'Designed to minimize over-collection and over-retention' },
-                    {
-                      Icon: Sparkles,
-                      label: 'Smart organization without selling your attention',
-                    },
-                  ] satisfies { Icon: LucideIcon; label: string }[]
-                ).map(({ Icon, label }) => (
-                  <div key={label} className={styles.privacyMiniCard}>
-                    <Icon className={`${styles.iconSvg} mt-0.5 h-5 w-5 shrink-0 text-sky-400`} aria-hidden />
-                    <span className={`${styles.textMuted} text-sm leading-snug`}>{label}</span>
+                <div className={styles.cognitiveCardStitch}>
+                  <div className="space-y-4">
+                    <div className={styles.cognitiveIconWrap}>
+                      <Brain className="h-7 w-7" aria-hidden />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#dee5ff]">Cognitive Ease</h3>
+                    <p className={`${styles.textMuted} text-sm leading-relaxed`}>
+                      Reduced visual density allows your brain to process information without the typical
+                      &quot;inbox anxiety.&quot;
+                    </p>
                   </div>
-                ))}
+                  <div className={styles.cognitiveAvatarStack} aria-hidden>
+                    <span className={`${styles.cognitiveAvatar} ${styles.cognitiveAvatarBlue}`} />
+                    <span className={`${styles.cognitiveAvatar} ${styles.cognitiveAvatarSecondary}`} />
+                    <span className={`${styles.cognitiveAvatar} ${styles.cognitiveAvatarTertiary}`} />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="relative overflow-hidden px-6 py-28 text-center sm:px-8 sm:py-32">
-          <div className={styles.closingBlob} aria-hidden />
-          <div className="relative z-10 mx-auto max-w-3xl">
-            <h2 className={`${styles.textOnSurface} mb-8 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl`}>
-              Spend less time digging through email.
-            </h2>
-            <p className={`${styles.textMuted} mb-12 text-lg leading-relaxed sm:text-xl`}>
-              Turn scattered messages across accounts into one clearer, calmer place to think and respond.
-            </p>
-            <div className="flex flex-wrap justify-center gap-5">
-              <Link href="/waitlist" className={styles.btnClosingSolid}>
-                Try MindMesh
-              </Link>
-              <Link href="/features" className={styles.btnClosingGhost}>
-                See All Features
-              </Link>
+          {/* Section 4: Workspace grid */}
+          <section className="px-6 py-24 sm:px-8">
+            <div className={`${styles.maxGrid} ${styles.maxGrid7xl} grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-20`}>
+              <div className="order-2 lg:order-1">
+                <div className={styles.workspaceGrid}>
+                  <div className={styles.workspaceTileStitch}>
+                    <LayoutGrid className="h-8 w-8" aria-hidden />
+                    <span className={styles.workspaceTileMutedLabel}>Dashboard</span>
+                  </div>
+                  <div className={`${styles.workspaceTileStitch} ${styles.workspaceTileStitchActive}`}>
+                    <Inbox className="h-8 w-8" aria-hidden />
+                    <span className={styles.workspaceTileMutedLabel}>Inbox</span>
+                  </div>
+                  <div className={styles.workspaceTileStitch}>
+                    <Sparkles className="h-8 w-8" aria-hidden />
+                    <span className={styles.workspaceTileMutedLabel}>Mascot</span>
+                  </div>
+                  <div className={styles.workspaceTileStitch}>
+                    <GraduationCap className="h-8 w-8" aria-hidden />
+                    <span className={styles.workspaceTileMutedLabel}>Narrative</span>
+                  </div>
+                </div>
+              </div>
+              <div className="order-1 lg:order-2">
+                <h2 className={`${styles.textOnSurface} mb-6 text-3xl font-bold lg:text-4xl`}>
+                  Works with the rest of your MindMesh workspace.
+                </h2>
+                <p className={`${styles.textMuted} text-lg leading-relaxed`}>
+                  Inbox is part of a broader desktop system that includes Dashboard, Upcoming Events, Sensor,
+                  Mascot, Yesterday&apos;s Narrative, and the App Library. Email is no longer isolated from
+                  the rest of your work context.
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* Section 5: Life balance */}
+          <section className={`${styles.sectionLifeGradient} px-6 py-24 sm:px-8`}>
+            <div className={`${styles.maxGrid} ${styles.maxGrid7xl} mx-auto max-w-4xl text-center`}>
+              <h2 className={`${styles.textOnSurface} mb-8 text-3xl font-bold tracking-tight lg:text-5xl`}>
+                Better email flow supports better work-life balance.
+              </h2>
+              <p className={`${styles.textMuted} mb-12 text-xl leading-relaxed`}>
+                When checking email takes less effort, it is easier to stay caught up without staying mentally
+                attached to work all day. MindMesh Inbox helps users reduce account switching and find what
+                they need faster.
+              </p>
+              <div className="flex justify-center">
+                <div className={styles.lifePillStitch}>
+                  <Flower2 className={`${styles.iconSvg} h-6 w-6`} style={{ color: 'var(--mm-tertiary)' }} aria-hidden />
+                  <span className="font-medium italic text-[#dee5ff]">Mindful interaction by design.</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 6: Privacy */}
+          <section className={`px-6 py-24 sm:px-8 ${styles.privacyBorderStitch}`}>
+            <div className={`${styles.maxGrid} ${styles.maxGrid7xl} flex flex-col gap-16 lg:flex-row`}>
+              <div className="lg:w-1/3">
+                <h2 className={`${styles.textOnSurface} mb-4 text-3xl font-bold`}>
+                  Email visibility with privacy-first design.
+                </h2>
+                <div className="h-1 w-12 rounded-full bg-[#0e69dc]" />
+              </div>
+              <div className="flex-1 space-y-8 lg:w-2/3">
+                <p className={`${styles.textMuted} text-lg leading-relaxed`}>
+                  MindMesh is built around a local-first, privacy-conscious architecture. It is designed to
+                  organize and retrieve your connected work context with care, helping you stay productive
+                  without turning your inbox into a data product.
+                </p>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  {(
+                    [
+                      { Icon: BadgeCheck, label: 'Local-first architecture designed for privacy' },
+                      { Icon: Network, label: 'Built for intelligent retrieval and organization' },
+                      { Icon: Shield, label: 'Secure handling for sensitive data paths' },
+                      { Icon: UserRound, label: 'Designed to help you work with your data' },
+                    ] satisfies { Icon: LucideIcon; label: string }[]
+                  ).map(({ Icon, label }) => (
+                    <div key={label} className={styles.privacyRow}>
+                      <Icon className={`${styles.privacyRowIcon} h-6 w-6`} aria-hidden />
+                      <div className={`${styles.textMuted} text-sm leading-snug`}>{label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 7: Closing CTA */}
+          <section className="relative overflow-hidden px-6 py-28 text-center sm:px-8 sm:py-32">
+            <div className={styles.closingBlob} aria-hidden />
+            <div className="relative z-10 mx-auto max-w-3xl">
+              <h2 className={`${styles.textOnSurface} mb-8 text-4xl font-extrabold tracking-tighter sm:text-5xl lg:text-6xl`}>
+                Spend less time digging through email.
+              </h2>
+              <p className={`${styles.textMuted} mb-12 text-xl leading-relaxed`}>
+                MindMesh Inbox turns scattered messages across accounts into a clearer, calmer workspace.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6">
+                <Link href="/waitlist" className={styles.btnClosingSolid}>
+                  Try MindMesh
+                </Link>
+                <Link href="/features" className={styles.btnClosingGhost}>
+                  See All Features
+                </Link>
+              </div>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
   );

@@ -13,6 +13,17 @@
   --inbox-text-muted: #94a3c8;
   --inbox-primary-tint: #adc6ff;
   --inbox-glow: rgba(14, 105, 220, 0.35);
+  /* Stitch / HTML reference tokens (below-hero) */
+  --mm-bg-deep: #060e20;
+  --mm-surface-low: #06122c;
+  --mm-surface-highest: #11244c;
+  --mm-on-surface: #dee5ff;
+  --mm-on-variant: #99aad9;
+  --mm-tertiary: #919bff;
+  --mm-tertiary-container: #818cf8;
+  --mm-secondary-container: #2d3c51;
+  --mm-outline-variant: #364770;
+  --mm-glass: rgba(17, 36, 76, 0.6);
 
   font-family: var(--font-manrope), 'Manrope', system-ui, sans-serif;
   min-height: 100vh;
@@ -45,6 +56,279 @@
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
+}
+
+.maxGrid7xl {
+  max-width: 80rem;
+}
+
+/* Post-hero: match Stitch HTML palette & typography */
+.belowHero {
+  --inbox-text: var(--mm-on-surface);
+  --inbox-text-muted: var(--mm-on-variant);
+  --inbox-primary-tint: #adc6ff;
+}
+
+.sectionStitchLow {
+  background-color: var(--mm-surface-low);
+}
+
+.glassCardStitch {
+  background: var(--mm-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(54, 71, 112, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+}
+
+/* Section 1 — consolidated grid (flat, no overlap) */
+.refConsolidatedGrid {
+  display: grid;
+  max-width: 36rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.refConsolidatedSmall {
+  display: flex;
+  height: 12rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(54, 71, 112, 0.1);
+  background: var(--mm-surface-highest);
+  padding: 1.5rem;
+}
+
+.refConsolidatedWide {
+  grid-column: 1 / -1;
+  display: flex;
+  height: 8rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(173, 198, 255, 0.2);
+  background: rgba(14, 105, 220, 0.2);
+  padding: 1.5rem;
+}
+
+.refFlowOrb {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--inbox-blue);
+  color: #fff;
+}
+
+.refSearchShell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2.5rem;
+  padding: 2.5rem 1.75rem;
+}
+
+@media (min-width: 1024px) {
+  .refSearchShell {
+    padding: 4rem 5rem;
+  }
+}
+
+.refSearchGradient {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 33%;
+  background: linear-gradient(to left, rgba(173, 198, 255, 0.05), transparent);
+}
+
+.refSearchBar {
+  margin-top: 3rem;
+  display: flex;
+  max-width: 36rem;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(54, 71, 112, 0.3);
+  background: #000;
+  padding: 1rem;
+}
+
+.refSearchAiBtn {
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: var(--inbox-blue);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Triage: 2+1 grid + overlapping circles */
+.triageGrid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .triageGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.triageMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .triageMain {
+    grid-column: span 2;
+  }
+}
+
+.btnTriageOutline {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--mm-outline-variant);
+  background: transparent;
+  padding: 0.75rem 2rem;
+  font-weight: 700;
+  color: var(--mm-on-surface);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btnTriageOutline:hover {
+  background: rgba(17, 36, 76, 0.55);
+  border-color: rgba(100, 117, 161, 0.6);
+}
+
+.cognitiveCardStitch {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(54, 71, 112, 0.15);
+  background: var(--mm-surface-highest);
+  padding: 2rem;
+}
+
+.cognitiveIconWrap {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: rgba(129, 140, 248, 0.2);
+  color: var(--mm-tertiary-container);
+}
+
+.cognitiveAvatarStack {
+  display: flex;
+  align-items: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(54, 71, 112, 0.1);
+}
+
+.cognitiveAvatar {
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--mm-surface-low);
+  margin-left: -0.5rem;
+}
+
+.cognitiveAvatar:first-child {
+  margin-left: 0;
+}
+
+.cognitiveAvatarBlue {
+  background: var(--inbox-blue);
+}
+
+.cognitiveAvatarSecondary {
+  background: var(--mm-secondary-container);
+}
+
+.cognitiveAvatarTertiary {
+  background: var(--mm-tertiary-container);
+}
+
+/* Workspace tiles — Stitch opacity */
+.workspaceTileStitch {
+  display: flex;
+  aspect-ratio: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(54, 71, 112, 0.15);
+  background: var(--mm-glass);
+  backdrop-filter: blur(12px);
+  color: var(--mm-on-variant);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.workspaceTileStitch:hover {
+  opacity: 1;
+}
+
+.workspaceTileStitchActive {
+  opacity: 1;
+  color: var(--mm-primary-tint);
+  border-color: rgba(173, 198, 255, 0.3);
+  box-shadow: 0 0 0 1px rgba(173, 198, 255, 0.15);
+}
+
+.sectionLifeGradient {
+  background: linear-gradient(180deg, var(--mm-bg-deep) 0%, var(--mm-surface-low) 100%);
+}
+
+.lifePillStitch {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(54, 71, 112, 0.1);
+  background: rgba(17, 36, 76, 0.4);
+  padding: 1rem 2rem;
+  backdrop-filter: blur(8px);
+  color: var(--mm-on-surface);
+}
+
+.privacyBorderStitch {
+  border-top: 1px solid rgba(54, 71, 112, 0.1);
+  border-bottom: 1px solid rgba(54, 71, 112, 0.1);
+}
+
+.privacyRow {
+  display: flex;
+  gap: 1rem;
+}
+
+.privacyRowIcon {
+  flex-shrink: 0;
+  color: var(--mm-primary-tint);
 }
 
 /* Primary CTA */
@@ -171,9 +455,10 @@
   color: var(--inbox-primary-tint);
 }
 
-/* Overlapping consolidated cards */
+/* Overlapping consolidated cards — keep labels in upper area so the wide card tuck never covers copy */
 .consolidatedCluster {
   position: relative;
+  isolation: isolate;
   width: 100%;
   max-width: 520px;
   margin-left: auto;
@@ -194,18 +479,20 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   padding: 0 0.5rem;
-  margin-bottom: -2.75rem;
+  margin-bottom: 0;
 }
 
 .consolidatedCardSmall {
   display: flex;
-  height: 10.5rem;
+  min-height: 9.75rem;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-end;
+  gap: 0.875rem;
   border-radius: 1.25rem;
   border: 1px solid var(--inbox-card-border);
   background: rgba(15, 23, 42, 0.65);
-  padding: 1.25rem;
+  padding: 1.25rem 1.25rem 1.35rem;
   box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.5);
   transition: transform 0.25s ease;
 }
@@ -229,20 +516,29 @@
 .consolidatedCardWide {
   position: relative;
   z-index: 1;
+  margin-top: 0.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-start;
+  gap: 1.25rem;
   border-radius: 1.25rem;
   border: 1px solid rgba(14, 105, 220, 0.35);
   background: linear-gradient(135deg, rgba(14, 105, 220, 0.18) 0%, rgba(15, 23, 42, 0.85) 100%);
-  padding: 1.25rem 1.5rem;
+  padding: 1.35rem 1.75rem 1.35rem 1.65rem;
   box-shadow:
     0 24px 48px -12px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
-.consolidatedAvatar {
+.consolidatedWideMain {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 1rem;
+}
+
+.consolidatedProfileOrb {
   display: flex;
   height: 2.75rem;
   width: 2.75rem;
@@ -252,8 +548,9 @@
   border-radius: 9999px;
   background: linear-gradient(180deg, var(--inbox-blue-bright), var(--inbox-blue));
   color: #fff;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 800;
+  letter-spacing: 0.02em;
   box-shadow: 0 8px 20px rgba(14, 105, 220, 0.45);
 }
 
@@ -374,7 +671,23 @@
 }
 
 .cognitiveDotMuted {
-  background: #64748b;
+  background: #1e3a5f;
+  box-shadow: 0 0 8px rgba(30, 58, 95, 0.8);
+}
+
+.securedByDesign {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--inbox-primary-tint);
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.securedByDesign:hover {
+  gap: 0.75rem;
+  color: #fff;
 }
 
 /* Workspace 2×2 */
