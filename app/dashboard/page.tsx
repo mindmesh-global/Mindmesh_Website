@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { StaticWeatherCard } from '@/components/dashboard/StaticWeatherCard';
 import { SectionDimOverlay } from '@/components/dashboard/SectionDimOverlay';
@@ -60,16 +60,19 @@ function DashboardContent() {
   const dailyNarrativeRef = useRef<HTMLDivElement>(null);
   const connectedAppsRef = useRef<HTMLDivElement>(null);
 
-  const sectionRefsMap: Record<HomeSectionId, React.RefObject<HTMLDivElement | null>> = {
-    time_clash: timeClashRef,
-    inferred_facts: inferredFactsRef,
-    todos: todosRef,
-    events: eventsRef,
-    upcoming_events: upcomingEventsRef,
-    inbox: inboxRef,
-    daily_narrative: dailyNarrativeRef,
-    connected_apps: connectedAppsRef,
-  };
+  const sectionRefsMap = useMemo(
+    (): Record<HomeSectionId, React.RefObject<HTMLDivElement | null>> => ({
+      time_clash: timeClashRef,
+      inferred_facts: inferredFactsRef,
+      todos: todosRef,
+      events: eventsRef,
+      upcoming_events: upcomingEventsRef,
+      inbox: inboxRef,
+      daily_narrative: dailyNarrativeRef,
+      connected_apps: connectedAppsRef,
+    }),
+    []
+  );
 
   useEffect(() => {
     if (viewMode !== 'scrollable' || !setActiveSection) return;

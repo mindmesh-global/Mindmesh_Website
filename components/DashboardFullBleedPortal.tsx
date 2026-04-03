@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
+import mindmeshGemMark from '@/public/images/Logo/mindmesh-gem-mark.png';
 
 const DashboardDesktopShell = dynamic(
   () =>
@@ -34,7 +36,18 @@ export default function DashboardFullBleedPortal() {
       role="document"
       aria-label="MindMesh marketing"
     >
-    
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+        <Image
+          src={mindmeshGemMark}
+          alt=""
+          width={1024}
+          height={682}
+          quality={100}
+          priority
+          sizes="(max-width: 1024px) 92vw, 880px"
+          className="absolute left-1/2 top-[min(14vh,140px)] h-auto w-[min(92vw,880px)] max-w-none -translate-x-1/2 object-contain opacity-[0.16]"
+        />
+      </div>
       <DashboardDesktopShell />
     </div>,
     document.body

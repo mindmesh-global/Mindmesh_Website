@@ -30,7 +30,7 @@ import heroInboxMockup from '@/public/images/hero-inbox-mockup.jpg';
 import upcomingEventsMockup from '@/public/images/upcoming-events-mockup.png';
 import yesterdaysNarrativeMockup from '@/public/images/yesterdays-narrative-mockup.png';
 import connectedAppsMockup from '@/public/images/connected-apps-mockup.png';
-import mindmeshLogoTight from '@/public/images/Logo/mindmesh-logo-tight.png';
+import mindmeshGemMark from '@/public/images/Logo/mindmesh-gem-mark.png';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -491,7 +491,6 @@ function DashboardDesktopShell() {
       >
         <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-3 px-4 py-4 tracking-tight sm:px-8">
           <Link href="/" className="flex min-w-0 shrink items-center gap-2.5">
-          
             <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">MindMesh</span>
           </Link>
           <div className="hidden min-w-0 flex-1 items-center justify-center gap-8 md:flex">
@@ -664,34 +663,32 @@ function DashboardDesktopShell() {
         </section>
 
         <section className="py-32">
-          <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-stretch gap-24 px-6 md:grid-cols-2 sm:px-12">
-            {/* Taller fixed heights + padding = longer white glass frame around mockup */}
-            <div className="relative order-2 flex w-full md:order-1">
-              {/* Height + py: only the frosted white shell grows; image stays in flex-1 with object-contain so white shows top/bottom */}
+          <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-start gap-14 px-6 sm:px-12 md:grid-cols-2 md:gap-20 lg:gap-24">
+            <div className="relative order-2 min-w-0 w-full self-start md:order-1">
               <div
-                className={`${glassPanel} relative flex h-[36rem] w-full flex-col overflow-hidden rounded-2xl px-4 py-10 sm:h-[44rem] sm:px-5 sm:py-12 md:h-[54rem] md:px-6 md:py-14`}
+                className={`${glassPanel} relative w-full overflow-hidden rounded-2xl px-3 py-4 sm:px-4 sm:py-5 md:px-5 md:py-6`}
                 style={inboxPreviewPanelStyle}
               >
                 <div
                   className="pointer-events-none absolute inset-0 rounded-2xl bg-white/25"
                   aria-hidden
                 />
-                <div className="relative z-[1] min-h-0 flex-1 overflow-hidden rounded-xl">
+                <div className="relative z-[1] w-full overflow-hidden rounded-xl">
                   <Image
                     src={heroInboxMockup}
                     alt="MindMesh Inbox: unified email list with account filters, search, and message previews"
                     width={800}
                     height={600}
-                    className="h-full w-full object-cover object-left-top"
+                    className="h-auto w-full object-contain object-left-top"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
-              </div>
-              <div
-                className={`absolute -right-6 -top-6 rounded-xl p-4 ${glassPanel}`}
-                style={glassPanelStyle}
-              >
-                <Mail className="h-6 w-6 text-blue-400" aria-hidden />
+                <div
+                  className={`absolute right-3 top-3 z-[2] rounded-xl p-3 shadow-lg sm:right-4 sm:top-4 sm:p-4 ${glassPanel}`}
+                  style={glassPanelStyle}
+                >
+                  <Mail className="h-5 w-5 text-blue-400 sm:h-6 sm:w-6" aria-hidden />
+                </div>
               </div>
             </div>
             <motion.div
@@ -699,7 +696,7 @@ function DashboardDesktopShell() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={inViewOpts}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="order-1 md:order-2 md:self-center"
+              className="order-1 min-w-0 md:order-2 md:self-center"
             >
 <h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
 All your messages, one focused inbox.
@@ -1064,17 +1061,15 @@ Built for focus, not noise.
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="relative order-2 md:order-1"
             >
-              <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-2xl bg-black/30 shadow-2xl">
-                <div
-                  className="absolute inset-0"
-                />
+              <div className="relative flex w-full items-center justify-center overflow-hidden rounded-2xl bg-black/30 py-6 sm:py-8 md:py-10">
                 <Image
-                  src={mindmeshLogoTight}
+                  src={mindmeshGemMark}
                   alt="MindMesh logo"
-                  width={400}
-                  height={400}
-                  className="relative z-10 h-[160px] w-[160px] object-contain sm:h-[180px] sm:w-[180px]"
-                  sizes="(max-width: 768px) 180px, 180px"
+                  width={1024}
+                  height={682}
+                  quality={100}
+                  className="relative z-10 h-auto w-full max-w-[min(100%,min(92vw,440px))] object-contain sm:max-w-[min(100%,520px)] md:max-w-none"
+                  sizes="(max-width: 768px) 92vw, (max-width: 1280px) 45vw, 640px"
                 />
               </div>
             </motion.div>
