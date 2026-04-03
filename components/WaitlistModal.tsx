@@ -19,7 +19,9 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
   const containerRef = useRef<HTMLDivElement>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [platform, setPlatform] = useState<'windows' | 'macos' | ''>('');
   const [emailError, setEmailError] = useState('');
+  const [platformError, setPlatformError] = useState('');
   const [state, setState] = useState<ModalState>('form');
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -45,7 +47,13 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
         return;
       }
 
+      if (!platform) {
+        setPlatformError('Please select a platform');
+        return;
+      }
+
       setEmailError('');
+      setPlatformError('');
       setSubmitError(null);
       setState('loading');
 
@@ -53,7 +61,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
         const res = await fetch('/api/waitlist', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: trimmedEmail, name: trimmedName }),
+          body: JSON.stringify({ email: trimmedEmail, name: trimmedName, platform }),
         });
         const data = await res.json().catch(() => ({}));
 
@@ -66,14 +74,16 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
         setState('form');
       }
     },
-    [email, name]
+    [email, name, platform]
   );
 
   const handleClose = useCallback(() => {
     setState('form');
     setName('');
     setEmail('');
+    setPlatform('');
     setEmailError('');
+    setPlatformError('');
     setSubmitError(null);
     setFocusedInput(null);
     onClose();
@@ -245,6 +255,41 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                         )}
                       </div>
 
+                      <div>
+                        <label
+                          htmlFor="waitlist-platform"
+                          className="block text-sm font-medium text-slate-700 mb-1.5"
+                        >
+                          Platform <span className="text-amber-600">*</span>
+                        </label>
+                        <select
+                          id="waitlist-platform"
+                          value={platform}
+                          onChange={(e) => {
+                            const v = e.target.value as 'windows' | 'macos' | '';
+                            setPlatform(v);
+                            if (platformError) setPlatformError('');
+                          }}
+                          onFocus={() => setFocusedInput('platform')}
+                          onBlur={() => setFocusedInput(null)}
+                          required
+                          className={`w-full rounded-lg border px-4 py-3 text-[15px] text-slate-900 transition-all duration-200 focus:outline-none ${
+                            platformError
+                              ? 'border-amber-400 bg-amber-50/50'
+                              : focusedInput === 'platform'
+                                ? 'border-slate-400 bg-white ring-2 ring-slate-200/80'
+                                : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'
+                          }`}
+                        >
+                          <option value="">Select Windows or macOS</option>
+                          <option value="windows">Windows</option>
+                          <option value="macos">macOS</option>
+                        </select>
+                        {platformError && (
+                          <p className="mt-1.5 text-sm text-amber-600">{platformError}</p>
+                        )}
+                      </div>
+
                       <button
                         type="submit"
                         className="w-full py-3 px-4 rounded-lg bg-blue-600 text-white font-medium text-[15px] hover:bg-blue-700 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -401,6 +446,29 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       <input id="waitlist-email" type="email" value={email} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(''); }} onFocus={() => setFocusedInput('email')} onBlur={() => setFocusedInput(null)} placeholder="you@company.com" required className="w-full pl-12 pr-4 py-3 bg-transparent text-slate-900 placeholder:text-slate-400 text-[15px] focus:outline-none rounded-lg" />
                     </div>
                     {emailError && <p className="mt-1.5 text-sm text-amber-600">{emailError}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="waitlist-platform-embedded" className="block text-sm font-medium text-slate-700 mb-1.5">
+                      Platform <span className="text-amber-600">*</span>
+                    </label>
+                    <select
+                      id="waitlist-platform-embedded"
+                      value={platform}
+                      onChange={(e) => {
+                        const v = e.target.value as 'windows' | 'macos' | '';
+                        setPlatform(v);
+                        if (platformError) setPlatformError('');
+                      }}
+                      onFocus={() => setFocusedInput('platform')}
+                      onBlur={() => setFocusedInput(null)}
+                      required
+                      className={`w-full rounded-lg border px-4 py-3 text-[15px] text-slate-900 transition-all duration-200 focus:outline-none ${platformError ? 'border-amber-400 bg-amber-50/50' : focusedInput === 'platform' ? 'border-slate-400 bg-white ring-2 ring-slate-200/80' : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'}`}
+                    >
+                      <option value="">Select Windows or macOS</option>
+                      <option value="windows">Windows</option>
+                      <option value="macos">macOS</option>
+                    </select>
+                    {platformError && <p className="mt-1.5 text-sm text-amber-600">{platformError}</p>}
                   </div>
                   <button type="submit" className="w-full py-3 px-4 rounded-lg bg-blue-600 text-white font-medium text-[15px] hover:bg-blue-700 active:scale-[0.98] transition-all">
                     Join Waitlist

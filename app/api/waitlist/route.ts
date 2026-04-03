@@ -10,12 +10,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const email = (body.email as string)?.trim();
     const name = (body.name as string)?.trim() || '';
+    const platformRaw = String(body.platform ?? '')
+      .trim()
+      .toLowerCase();
+    const platform =
+      platformRaw === 'windows' || platformRaw === 'macos' ? platformRaw : '';
 
     if (!email) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
     if (!validateEmail(email)) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
+    }
+    if (!platform) {
+      return NextResponse.json({ error: 'Please select Windows or macOS' }, { status: 400 });
     }
 
     const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -42,11 +50,11 @@ export async function POST(request: NextRequest) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Sheet1!A:C',
+      range: 'Sheet1!A:D',
       valueInputOption: 'USER_ENTERED',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {
-        values: [[email, name, new Date().toISOString()]],
+        values: [[email, name, new Date().toISOString(), platform]],
       },
     });
 

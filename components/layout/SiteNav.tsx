@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { LayoutTemplate } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { ScrollText } from 'lucide-react';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
 
 type SiteNavProps = {
   activeHref?: string;
-  /** Right nav button label; default matches marketing dashboard shell (“Desktop view”). */
+  /** Opens home in macOS-style Hero; label matches that destination. */
   actionLabel?: string;
   onActionClick?: () => void;
   navClassName?: string;
@@ -40,22 +40,24 @@ function getNavLinkClass(href: string, activeHref?: string) {
 
 export default function SiteNav({
   activeHref,
-  actionLabel = 'Desktop view',
+  actionLabel = 'Scroll view',
   onActionClick,
   navClassName,
   navBackgroundColor,
   disableNavigation = false,
 }: SiteNavProps) {
   const pathname = usePathname();
-  const { toggleViewMode } = useDashboardViewMode();
+  const router = useRouter();
+  const { setViewMode } = useDashboardViewMode();
   const resolvedActiveHref = activeHref ?? pathname ?? undefined;
 
-  const handlePrimaryActionClick = () => {
+  const handleDesktopViewClick = () => {
     if (onActionClick) {
       onActionClick();
       return;
     }
-    toggleViewMode();
+    setViewMode('scrollable');
+    router.push('/');
   };
 
   return (
@@ -105,27 +107,15 @@ export default function SiteNav({
         </div>
 
         <div className="flex shrink-0 items-center justify-end">
-          {onActionClick ? (
-            <button
-              type="button"
-              onClick={onActionClick}
-              className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label="Switch to desktop dashboard view"
-            >
-              <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
-              <span className="hidden sm:inline">{actionLabel}</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handlePrimaryActionClick}
-              className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label={actionLabel}
-            >
-              <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
-              <span className="hidden sm:inline">{actionLabel}</span>
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleDesktopViewClick}
+            className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
+            aria-label="Open macOS-style home view"
+          >
+            <ScrollText className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
+            <span className="hidden sm:inline">{actionLabel}</span>
+          </button>
         </div>
       </div>
     </nav>

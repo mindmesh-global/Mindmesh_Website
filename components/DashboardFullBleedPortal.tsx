@@ -12,7 +12,7 @@ const DashboardDesktopShell = dynamic(
   { ssr: false }
 );
 
-const FULL_BLEED_PATHS = ['/', '/dashboard'];
+const FULL_BLEED_PATHS = ['/', '/dashboard', ];
 
 /** Full-viewport marketing layout above all MindMesh chrome (dock, side icons, logo). */
 export default function DashboardFullBleedPortal() {

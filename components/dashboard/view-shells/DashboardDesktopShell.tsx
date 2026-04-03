@@ -15,9 +15,9 @@ import {
   ChevronDown,
   EyeOff,
   KeyRound,
-  LayoutTemplate,
   Lock,
   Monitor,
+  ScrollText,
   Share2,
   Mail,
   ShieldCheck,
@@ -514,10 +514,10 @@ function DashboardDesktopShell() {
               type="button"
               onClick={() => toggleViewMode()}
               className={`inline-flex items-center gap-2 ${glossyNavBtn}`}
-              aria-label="Switch to desktop dashboard view"
+              aria-label="Switch to macOS view"
             >
-              <LayoutTemplate className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
-              <span className="hidden sm:inline">Desktop view</span>
+              <ScrollText className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
+              <span className="hidden sm:inline">Scroll view</span>
             </button>
           </div>
         </div>
