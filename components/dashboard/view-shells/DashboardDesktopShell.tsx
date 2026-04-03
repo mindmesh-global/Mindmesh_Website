@@ -19,6 +19,7 @@ import {
   Lock,
   Monitor,
   Share2,
+  Mail,
   ShieldCheck,
   Trash2,
 
@@ -591,8 +592,9 @@ function DashboardDesktopShell() {
         </section>
 
         <section className="border-y border-black/50 bg-black/25 py-12">
-          <div className="w-full pl-6 pr-4 sm:pl-10 sm:pr-6 lg:pl-16 lg:pr-8">
-          <div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-4 lg:gap-x-6">              {[
+          <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-12">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-6 md:gap-x-10 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-4">
+              {[
                 { Icon: Lock, label: 'Local-first by design' },
                 { Icon: Monitor, label: 'Desktop-native experience' },
                 { Icon: EyeOff, label: 'Read-only Google access' },
@@ -600,10 +602,10 @@ function DashboardDesktopShell() {
               ].map(({ Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center justify-center gap-4"
+                  className="flex min-w-0 items-center justify-center gap-3"
                 >
                   <Icon className="h-3.5 w-3.5 shrink-0 text-blue-200" aria-hidden />
-                  <span className="whitespace-nowrap text-sm uppercase tracking-[0.03em] text-blue-200 ">
+                  <span className="text-center text-xs uppercase leading-snug tracking-[0.03em] text-blue-200 sm:text-left sm:text-sm xl:text-center">
                     {label}
                   </span>
                 </div>
@@ -689,7 +691,7 @@ function DashboardDesktopShell() {
                 className={`absolute -right-6 -top-6 rounded-xl p-4 ${glassPanel}`}
                 style={glassPanelStyle}
               >
-                <Share2 className="h-6 w-6 text-blue-400" aria-hidden />
+                <Mail className="h-6 w-6 text-blue-400" aria-hidden />
               </div>
             </div>
             <motion.div
@@ -800,14 +802,14 @@ Your yesterday, neatly wrapped up.              </h2>
               viewport={inViewOpts}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-<h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">   
-Bring your essential apps together.
+              <h2 className="mb-8 text-4xl font-semibold leading-tight tracking-tight text-blue-100 md:text-6xl">
+                Bring your essential apps together.
               </h2>
               <p className={`mb-6 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-              Connect email, calendar, outlook , smtp and other key tools in one place so MindMesh can organize your workflow with less setup and more clarity.
+                Connect email, calendar, outlook , smtp and other key tools in one place so MindMesh can organize your workflow with less setup and more clarity.
               </p>
               <p className={`mb-10 text-lg leading-relaxed sm:text-xl ${bodyMuted}`}>
-              Link the tools you rely on every day and keep everything synced in one unified workspace.
+                Link the tools you rely on every day and keep everything synced in one unified workspace.
               </p>
               <Link href="/connected-apps" className={`group inline-flex items-center gap-2 ${primaryBtn}`}>
                 Explore connected apps
