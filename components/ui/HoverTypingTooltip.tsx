@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { Info } from 'lucide-react';
@@ -24,7 +24,7 @@ interface HoverTypingTooltipProps {
 }
 
 const iconVariants = {
-  light: 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-400',
+  light: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-400',
   dark: 'text-white/80 group-hover:text-white',
 };
 

@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
+import { isMindmeshHeroComponentRoute } from '@/lib/mindmesh-hero-routes';
 
 export default function Logo({ fontClassName }: { fontClassName?: string }) {
   const [mounted, setMounted] = useState(false);
@@ -12,7 +13,9 @@ export default function Logo({ fontClassName }: { fontClassName?: string }) {
   const dashboardVm = useOptionalDashboardViewMode();
   useEffect(() => setMounted(true), []);
 
-  const showOnlyOnDesktopView = pathname === '/' && dashboardVm?.viewMode === 'scrollable';
+  /** Maroon wordmark: macOS (scrollable) Hero pages only — not marketing scroll shell (`desktop`). */
+  const showFloatingWordmark =
+    dashboardVm?.viewMode === 'scrollable' && isMindmeshHeroComponentRoute(pathname);
 
   const logo = (
     <Link
@@ -29,6 +32,6 @@ export default function Logo({ fontClassName }: { fontClassName?: string }) {
     </Link>
   );
 
-  if (!mounted || typeof document === 'undefined' || !showOnlyOnDesktopView) return null;
+  if (!mounted || typeof document === 'undefined' || !showFloatingWordmark) return null;
   return createPortal(logo, document.body);
 }

@@ -240,7 +240,7 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
             className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}
             style={{ overscrollBehavior: 'contain', ...(uiOverlay?.mascotTooltipVisible ? { touchAction: 'none' } : {}) } as React.CSSProperties}
           >
-            <DashboardPage />
+            <DashboardPage hideViewSwitcher />
           </div>
         </MindMeshContainerProvider>
       </div>

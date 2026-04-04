@@ -35,16 +35,19 @@ const layoutTransition = {
   ease: 'easeInOut' as const,
 };
 
-export default function DashboardPage() {
+export type DashboardPageProps = { hideViewSwitcher?: boolean };
+
+export default function DashboardPage(props: DashboardPageProps = {}) {
+  const { hideViewSwitcher = false } = props;
   return (
     <SectionHoverProvider>
       <SectionDimOverlay />
-      <DashboardContent />
+      <DashboardContent hideViewSwitcher={hideViewSwitcher} />
     </SectionHoverProvider>
   );
 }
 
-function DashboardContent() {
+function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps = {}) {
   const setActiveSection = useHomeSection()?.setActiveSection;
   const uiOverlay = useUIOverlay();
   const onboarding = useOnboardingTour();
@@ -205,7 +208,7 @@ function DashboardContent() {
 
   return (
     <>
-      <ViewSwitcherButton />
+      {!hideViewSwitcher && <ViewSwitcherButton />}
       <div ref={containerRef}>
         <AnimatePresence mode="wait">
           <motion.div

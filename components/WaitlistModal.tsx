@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -113,7 +113,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-slate-900/50 backdrop-blur-md"
+            className="absolute inset-0 bg-gray-900/50 backdrop-blur-md"
           />
 
           {/* Mac-style draggable window */}
@@ -129,7 +129,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             whileDrag={{ cursor: 'grabbing' }}
-            className="relative w-full max-w-md bg-white rounded-xl overflow-hidden border border-slate-200/90 shadow-[0_8px_24px_rgba(0,0,0,0.12),0_24px_48px_rgba(0,0,0,0.08)] cursor-default pointer-events-auto"
+            className="relative w-full max-w-md bg-white rounded-xl overflow-hidden border border-gray-200/90 shadow-[0_8px_24px_rgba(0,0,0,0.12),0_24px_48px_rgba(0,0,0,0.08)] cursor-default pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Mac title bar - draggable handle */}
@@ -150,7 +150,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
               </div>
             </div>
 
-            <div className="p-8 sm:p-10 bg-slate-50/50 min-h-[240px]">
+            <div className="p-8 sm:p-10 bg-gray-50/50 min-h-[240px]">
               <AnimatePresence mode="wait">
                 {state === 'form' && (
                   <motion.div
@@ -160,7 +160,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <p className="text-slate-600 text-[15px] leading-relaxed">
+                    <p className="text-gray-900 text-[15px] leading-relaxed">
                       Be among the first to experience the future of productivity.
                     </p>
 
@@ -180,20 +180,20 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       <div>
                         <label
                           htmlFor="waitlist-name"
-                          className="block text-sm font-medium text-slate-700 mb-1.5"
+                          className="block text-sm font-medium text-gray-900 mb-1.5"
                         >
                           Name 
                         </label>
                         <div
                           className={`relative flex items-center rounded-lg border transition-all duration-200 ${
                             focusedInput === 'name'
-                              ? 'border-slate-400 bg-white ring-2 ring-slate-200/80'
-                              : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'
+                              ? 'border-gray-400 bg-white ring-2 ring-gray-200/80'
+                              : 'border-gray-200 bg-gray-50/80 hover:border-gray-300'
                           }`}
                         >
                           <User
                             className={`absolute left-4 w-5 h-5 transition-colors duration-200 ${
-                              focusedInput === 'name' ? 'text-slate-600' : 'text-slate-400'
+                              focusedInput === 'name' ? 'text-gray-600' : 'text-gray-400'
                             }`}
                           />
                           <input
@@ -204,7 +204,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                             onFocus={() => setFocusedInput('name')}
                             onBlur={() => setFocusedInput(null)}
                             placeholder="Your name"
-                            className="w-full pl-12 pr-4 py-3 bg-transparent text-slate-900 placeholder:text-slate-400 text-[15px] focus:outline-none rounded-lg"
+                            className="w-full pl-12 pr-4 py-3 bg-transparent text-gray-900 placeholder:text-gray-400 text-[15px] focus:outline-none rounded-lg"
                           />
                         </div>
                       </div>
@@ -213,7 +213,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       <div>
                         <label
                           htmlFor="waitlist-email"
-                          className="block text-sm font-medium text-slate-700 mb-1.5"
+                          className="block text-sm font-medium text-gray-900 mb-1.5"
                         >
                           Email <span className="text-amber-600">*</span>
                         </label>
@@ -222,8 +222,8 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                             emailError
                               ? 'border-amber-400 bg-amber-50/50'
                               : focusedInput === 'email'
-                                ? 'border-slate-400 bg-white ring-2 ring-slate-200/80'
-                                : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'
+                                ? 'border-gray-400 bg-white ring-2 ring-gray-200/80'
+                                : 'border-gray-200 bg-gray-50/80 hover:border-gray-300'
                           }`}
                         >
                           <Mail
@@ -231,8 +231,8 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                               emailError
                                 ? 'text-amber-500'
                                 : focusedInput === 'email'
-                                  ? 'text-slate-600'
-                                  : 'text-slate-400'
+                                  ? 'text-gray-600'
+                                  : 'text-gray-400'
                             }`}
                           />
                           <input
@@ -247,7 +247,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                             onBlur={() => setFocusedInput(null)}
                             placeholder="you@company.com"
                             required
-                            className="w-full pl-12 pr-4 py-3 bg-transparent text-slate-900 placeholder:text-slate-400 text-[15px] focus:outline-none rounded-lg"
+                            className="w-full pl-12 pr-4 py-3 bg-transparent text-gray-900 placeholder:text-gray-400 text-[15px] focus:outline-none rounded-lg"
                           />
                         </div>
                         {emailError && (
@@ -258,7 +258,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       <div>
                         <label
                           htmlFor="waitlist-platform"
-                          className="block text-sm font-medium text-slate-700 mb-1.5"
+                          className="block text-sm font-medium text-gray-700 mb-1.5"
                         >
                           Platform <span className="text-amber-600">*</span>
                         </label>
@@ -273,15 +273,15 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                           onFocus={() => setFocusedInput('platform')}
                           onBlur={() => setFocusedInput(null)}
                           required
-                          className={`w-full rounded-lg border px-4 py-3 text-[15px] text-slate-900 transition-all duration-200 focus:outline-none ${
+                          className={`w-full rounded-lg border px-4 py-3 text-[15px] text-gray-900 transition-all duration-200 focus:outline-none ${
                             platformError
                               ? 'border-amber-400 bg-amber-50/50'
                               : focusedInput === 'platform'
-                                ? 'border-slate-400 bg-white ring-2 ring-slate-200/80'
-                                : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'
+                                ? 'border-gray-400 bg-white ring-2 ring-gray-200/80'
+                                : 'border-gray-200 bg-gray-50/80 hover:border-gray-300'
                           }`}
                         >
-                          <option value="">Select Windows or macOS</option>
+                          <option value="">Select</option>
                           <option value="windows">Windows</option>
                           <option value="macos">macOS</option>
                         </select>
@@ -317,14 +317,14 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
-                        className="w-16 h-16 rounded-full border-[3px] border-slate-200 border-t-emerald-500 border-r-emerald-400/80"
+                        className="w-16 h-16 rounded-full border-[3px] border-gray-200 border-t-emerald-500 border-r-emerald-400/80"
                       />
                     </motion.div>
                     <motion.p
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.3 }}
-                      className="mt-7 text-slate-800 font-semibold"
+                      className="mt-7 text-gray-800 font-semibold"
                     >
                       Joining waitlist...
                     </motion.p>
@@ -332,7 +332,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
-                      className="mt-1.5 text-sm text-slate-500"
+                      className="mt-1.5 text-sm text-gray-500"
                     >
                       Hang tight
                     </motion.p>
@@ -376,7 +376,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5, type: 'spring', damping: 20 }}
-                      className="mt-7 text-2xl font-semibold text-slate-900 text-center"
+                      className="mt-7 text-2xl font-semibold text-gray-900 text-center"
                     >
                       You&apos;re on the list.
                     </motion.p>
@@ -384,7 +384,7 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6, type: 'spring', damping: 20 }}
-                      className="mt-2 text-slate-500 text-center text-[15px]"
+                      className="mt-2 text-gray-500 text-center text-[15px]"
                     >
                       We&apos;ll notify you soon.
                     </motion.p>
@@ -411,15 +411,15 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
 
   if (embedded && isOpen) {
     return (
-      <div className="w-full max-w-md bg-white rounded-xl overflow-hidden border border-slate-200/90 shadow-2xl">
+      <div className="w-full max-w-md bg-white rounded-xl overflow-hidden border border-gray-200/90 shadow-2xl">
         <div className="bg-gray-900 border-b border-gray-800 px-5 py-3.5">
           <span className="text-[13px] text-white font-medium">Get Early Access</span>
         </div>
-        <div className="p-8 sm:p-10 bg-slate-50/50 min-h-[240px]">
+        <div className="p-8 sm:p-10 bg-gray-50/50 min-h-[240px]">
           <AnimatePresence mode="wait">
             {state === 'form' && (
               <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <p className="text-slate-600 text-[15px] leading-relaxed">
+                <p className="text-gray-900 text-[15px] leading-relaxed">
                   Be among the first to experience the future of productivity.
                 </p>
                 {submitError && (
@@ -433,22 +433,22 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                   className="mt-6 space-y-5"
                 >
                   <div>
-                    <label htmlFor="waitlist-name" className="block text-sm font-medium text-slate-700 mb-1.5">Name</label>
-                    <div className={`relative flex items-center rounded-lg border transition-all duration-200 ${focusedInput === 'name' ? 'border-slate-400 bg-white ring-2 ring-slate-200/80' : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'}`}>
-                      <User className={`absolute left-4 w-5 h-5 ${focusedInput === 'name' ? 'text-slate-600' : 'text-slate-400'}`} />
-                      <input id="waitlist-name" type="text" value={name} onChange={(e) => setName(e.target.value)} onFocus={() => setFocusedInput('name')} onBlur={() => setFocusedInput(null)} placeholder="Your name" className="w-full pl-12 pr-4 py-3 bg-transparent text-slate-900 placeholder:text-slate-400 text-[15px] focus:outline-none rounded-lg" />
+                    <label htmlFor="waitlist-name" className="block text-sm font-medium text-gray-900 mb-1.5">Name</label>
+                    <div className={`relative flex items-center rounded-lg border transition-all duration-200 ${focusedInput === 'name' ? 'border-gray-400 bg-white ring-2 ring-gray-200/80' : 'border-gray-200 bg-gray-50/80 hover:border-gray-300'}`}>
+                      <User className={`absolute left-4 w-5 h-5 ${focusedInput === 'name' ? 'text-gray-600' : 'text-gray-400'}`} />
+                      <input id="waitlist-name" type="text" value={name} onChange={(e) => setName(e.target.value)} onFocus={() => setFocusedInput('name')} onBlur={() => setFocusedInput(null)} placeholder="Your name" className="w-full pl-12 pr-4 py-3 bg-transparent text-gray-900 placeholder:text-gray-400 text-[15px] focus:outline-none rounded-lg" />
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="waitlist-email" className="block text-sm font-medium text-slate-700 mb-1.5">Email <span className="text-amber-600">*</span></label>
-                    <div className={`relative flex items-center rounded-lg border transition-all duration-200 ${emailError ? 'border-amber-400 bg-amber-50/50' : focusedInput === 'email' ? 'border-slate-400 bg-white ring-2 ring-slate-200/80' : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'}`}>
-                      <Mail className={`absolute left-4 w-5 h-5 ${emailError ? 'text-amber-500' : focusedInput === 'email' ? 'text-slate-600' : 'text-slate-400'}`} />
-                      <input id="waitlist-email" type="email" value={email} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(''); }} onFocus={() => setFocusedInput('email')} onBlur={() => setFocusedInput(null)} placeholder="you@company.com" required className="w-full pl-12 pr-4 py-3 bg-transparent text-slate-900 placeholder:text-slate-400 text-[15px] focus:outline-none rounded-lg" />
+                    <label htmlFor="waitlist-email" className="block text-sm font-medium text-gray-900 mb-1.5">Email <span className="text-amber-600">*</span></label>
+                    <div className={`relative flex items-center rounded-lg border transition-all duration-200 ${emailError ? 'border-amber-400 bg-amber-50/50' : focusedInput === 'email' ? 'border-gray-400 bg-white ring-2 ring-gray-200/80' : 'border-gray-200 bg-gray-50/80 hover:border-gray-300'}`}>
+                      <Mail className={`absolute left-4 w-5 h-5 ${emailError ? 'text-amber-500' : focusedInput === 'email' ? 'text-gray-600' : 'text-gray-400'}`} />
+                      <input id="waitlist-email" type="email" value={email} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(''); }} onFocus={() => setFocusedInput('email')} onBlur={() => setFocusedInput(null)} placeholder="you@company.com" required className="w-full pl-12 pr-4 py-3 bg-transparent text-gray-900 placeholder:text-gray-400 text-[15px] focus:outline-none rounded-lg" />
                     </div>
                     {emailError && <p className="mt-1.5 text-sm text-amber-600">{emailError}</p>}
                   </div>
                   <div>
-                    <label htmlFor="waitlist-platform-embedded" className="block text-sm font-medium text-slate-700 mb-1.5">
+                    <label htmlFor="waitlist-platform-embedded" className="block text-sm font-medium text-gray-900 mb-1.5">
                       Platform <span className="text-amber-600">*</span>
                     </label>
                     <select
@@ -462,9 +462,9 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                       onFocus={() => setFocusedInput('platform')}
                       onBlur={() => setFocusedInput(null)}
                       required
-                      className={`w-full rounded-lg border px-4 py-3 text-[15px] text-slate-900 transition-all duration-200 focus:outline-none ${platformError ? 'border-amber-400 bg-amber-50/50' : focusedInput === 'platform' ? 'border-slate-400 bg-white ring-2 ring-slate-200/80' : 'border-slate-200 bg-slate-50/80 hover:border-slate-300'}`}
+                      className={`w-full rounded-lg border px-4 py-3 text-[15px] text-gray-900 transition-all duration-200 focus:outline-none ${platformError ? 'border-amber-400 bg-amber-50/50' : focusedInput === 'platform' ? 'border-gray-400 bg-white ring-2 ring-gray-200/80' : 'border-gray-200 bg-gray-50/80 hover:border-gray-300'}`}
                     >
-                      <option value="">Select Windows or macOS</option>
+                      <option value="">Select</option>
                       <option value="windows">Windows</option>
                       <option value="macos">macOS</option>
                     </select>
@@ -478,8 +478,8 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
             )}
             {state === 'loading' && (
               <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-16">
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }} className="w-16 h-16 rounded-full border-[3px] border-slate-200 border-t-emerald-500" />
-                <p className="mt-7 text-slate-800 font-semibold">Joining waitlist...</p>
+                <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }} className="w-16 h-16 rounded-full border-[3px] border-gray-200 border-t-emerald-500" />
+                <p className="mt-7 text-gray-800 font-semibold">Joining waitlist...</p>
               </motion.div>
             )}
             {state === 'success' && (
@@ -487,8 +487,8 @@ export default function WaitlistModal({ isOpen, onClose, embedded }: WaitlistMod
                 <div className="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center">
                   <Check className="w-10 h-10 text-emerald-600" strokeWidth={2.5} />
                 </div>
-                <p className="mt-7 text-2xl font-semibold text-slate-900">You&apos;re on the list.</p>
-                <p className="mt-2 text-slate-500 text-[15px]">We&apos;ll notify you soon.</p>
+                <p className="mt-7 text-2xl font-semibold text-gray-900">You&apos;re on the list.</p>
+                <p className="mt-2 text-gray-500 text-[15px]">We&apos;ll notify you soon.</p>
                 <a href="/" className="mt-8 px-8 py-3 rounded-xl text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 transition-colors">
                   Back to Home
                 </a>

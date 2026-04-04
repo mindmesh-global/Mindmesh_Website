@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -80,7 +80,7 @@ const bodyMuted = 'text-zinc-400';
 const bodyMutedSm = 'text-zinc-500';
 /** Center nav: inactive = muted slate + medium; Product uses blue + semibold (same text-sm). */
 const navLink =
-  'text-sm font-medium tracking-normal text-slate-400 antialiased transition-colors duration-200 hover:text-slate-200';
+  'text-sm font-medium tracking-normal text-gray-400 antialiased transition-colors duration-200 hover:text-gray-200';
 /**
  * Glossy royal-blue CTA: vertical gradient + top inner highlight + blue outer glow.
  */
@@ -420,7 +420,7 @@ function ProductMegaMenu() {
             return next;
           });
         }}
-        className="group flex cursor-pointer items-center gap-1 text-sm font-semibold text-blue-400 outline-none transition-colors hover:text-slate-200 dark:text-blue-300"
+        className="group flex cursor-pointer items-center gap-1 text-sm font-semibold text-blue-400 outline-none transition-colors hover:text-gray-200 dark:text-blue-300"
       >
         Product
         <ChevronDown
