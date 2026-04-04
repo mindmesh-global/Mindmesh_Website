@@ -8,7 +8,28 @@ const HOVER_SIZE = 60;
 const OFFSET_X = 24; // Image fixed on right side of cursor
 const OFFSET_Y = 10; // Align with cursor
 
+/** Last viewport pointer position — updated even while custom cursor is off so enabling places the image correctly. */
+let lastClientX = 0;
+let lastClientY = 0;
+
+function trackPointer(e: MouseEvent) {
+  lastClientX = e.clientX;
+  lastClientY = e.clientY;
+}
+
 export function useCursor(enabled = true) {
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    window.addEventListener('mousemove', trackPointer, { passive: true });
+    window.addEventListener('mousedown', trackPointer, { passive: true });
+    window.addEventListener('contextmenu', trackPointer, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', trackPointer);
+      window.removeEventListener('mousedown', trackPointer);
+      window.removeEventListener('contextmenu', trackPointer);
+    };
+  }, []);
+
   useEffect(() => {
     if (typeof document === 'undefined' || !enabled) return;
 
@@ -23,12 +44,13 @@ export function useCursor(enabled = true) {
       pointer-events: none;
       z-index: 2147483647;
       transform: translate(-50%, -50%);
-      left: 0;
-      top: 0;
+      left: ${lastClientX + OFFSET_X}px;
+      top: ${lastClientY + OFFSET_Y}px;
       transition: width 0.2s ease-out, height 0.2s ease-out, opacity 0.2s ease-out;
     `;
 
     const handleMouseMove = (e: MouseEvent) => {
+      trackPointer(e);
       img.style.left = `${e.clientX + OFFSET_X}px`;
       img.style.top = `${e.clientY + OFFSET_Y}px`;
     };
