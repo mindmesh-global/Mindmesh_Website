@@ -98,8 +98,9 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  /* Match marketing shell — avoids a white flash before React paints */
+  background-color: #0a0a14;
+  color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

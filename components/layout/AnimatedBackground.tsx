@@ -2,11 +2,7 @@
 
 import Image from 'next/image';
 
-/**
- * Heavy animated background (purple hexagon grid + MindMesh visuals).
- * Lazy loaded with next/dynamic ssr:false so it never blocks server rendering.
- * Google sees text content immediately; browser loads animation after.
- */
+/** Hero background; imported statically from Hero (no dynamic ssr:false) to avoid refresh flash. */
 export default function AnimatedBackground() {
   return (
     <>
@@ -15,12 +11,13 @@ export default function AnimatedBackground() {
           src="/images/hero-sec-bg.png"
           alt=""
           fill
+          priority
           quality={95}
           sizes="100vw"
           className="object-cover object-center"
         />
       </div>
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/50" aria-hidden />
     </>
   );
 }

@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import dynamic from 'next/dynamic';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { motion, useDragControls } from 'framer-motion';
 import { Home, FileText, Mail, BookOpen, Calculator, FolderOpen, Sparkles, Video } from 'lucide-react';
@@ -16,12 +15,8 @@ import AppDirectoryWindow from './AppDirectoryWindow';
 import MovieWindow from './MovieWindow';
 import WaitlistModal from './WaitlistModal';
 import DesktopNav from './layout/DesktopNav';
+import AnimatedBackground from '@/components/layout/AnimatedBackground';
 import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
-
-const AnimatedBackground = dynamic(
-  () => import('@/components/layout/AnimatedBackground'),
-  { ssr: false, loading: () => <div className="absolute inset-0 bg-black" /> }
-);
 
 type WindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact' | 'appDirectory' | 'demo';
 interface OpenWindowItem {
@@ -433,7 +428,6 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
-      {/* Lazy-loaded background — never blocks SSR; Google sees content first */}
       <div className="absolute inset-0">
         <AnimatedBackground />
       </div>

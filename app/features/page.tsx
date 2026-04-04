@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 
 export default function FeaturesPage() {
   return (
-    <main className="min-h-screen h-screen overflow-hidden bg-white">
-      <Suspense fallback={<div className="min-h-screen" />}>
+    <main className="min-h-screen h-screen overflow-hidden bg-[#0a0a14]">
+      <Suspense fallback={<div className="min-h-screen h-screen bg-[#0a0a14]" aria-hidden />}>
         <Hero />
       </Suspense>
     </main>
