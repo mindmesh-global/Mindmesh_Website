@@ -266,8 +266,8 @@ export default function Hero() {
     setOpenWindows((prev) => {
       const next = prev.filter((w) => w.id !== id);
       const newFront = next.filter((w) => !minimizedIds.has(w.id)).pop();
-      if (newFront && typeof window !== 'undefined') {
-        window.history.replaceState({}, '', WINDOW_TYPE_TO_HREF[newFront.type]);
+      if (newFront) {
+        queueMicrotask(() => updateUrl(WINDOW_TYPE_TO_HREF[newFront.type], false));
       }
       return next;
     });
@@ -276,7 +276,7 @@ export default function Hero() {
       next.delete(id);
       return next;
     });
-  }, [minimizedIds]);
+  }, [minimizedIds, updateUrl]);
 
   const handleDragEnd = useCallback(
     (draggedItem: OpenWindowItem, info: { point: { x: number; y: number } }) => {
