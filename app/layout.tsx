@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Inter, Asul, Syne } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -83,7 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.className} ${syne.variable} text-gray-900 bg-white dark:text-slate-100 dark:bg-slate-950 antialiased`}
+        className={`${inter.className} ${syne.variable} bg-[#0a0a14] text-gray-100 antialiased`}
       >
         <ThemeScript />
         <HomeSectionProvider>

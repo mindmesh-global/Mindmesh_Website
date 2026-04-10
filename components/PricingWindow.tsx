@@ -186,23 +186,23 @@ export default function PricingWindow({
                 <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200">
                   Free
                 </h3>
-                <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-0.5 text-xs text-gray-900 dark:text-gray-400">
                   Connect your email and calendar in one place.
                 </p>
                 <ul className="mt-4 flex-1 space-y-2">
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
+                  <li className="flex items-start gap-2 text-xs text-black dark:text-gray-100">
                     <FeatureCheck variant="blue" />
                     <span>Connect up to 2 email accounts (Gmail or SMTP)</span>
                   </li>
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
+                  <li className="flex items-start gap-2 text-xs text-black dark:text-gray-100">
                     <FeatureCheck variant="blue" />
                     <span>Unified inbox — see all your mail in one view</span>
                   </li>
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
+                  <li className="flex items-start gap-2 text-xs text-black dark:text-gray-100">
                     <FeatureCheck variant="blue" />
                     <span>Calendar view — see your schedule at a glance</span>
                   </li>
-                  <li className="flex items-start gap-2 text-xs text-blue-800/90 dark:text-blue-300/90">
+                  <li className="flex items-start gap-2 text-xs text-black dark:text-gray-100">
                     <FeatureCheck variant="blue" />
                     <span>Works with Gmail, Outlook, and any SMTP provider</span>
                   </li>
@@ -295,7 +295,7 @@ export default function PricingWindow({
                 <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200">
                   Enterprise
                 </h3>
-                <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-0.5 text-xs text-black dark:text-gray-300">
                   Everything in Pro, plus custom integrations, SSO, and dedicated support.
                 </p>
                 <div className="mt-auto pt-5 space-y-2">
@@ -306,7 +306,7 @@ export default function PricingWindow({
                   >
                     Let&apos;s talk
                   </a>
-                  <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-center text-xs text-gray-900 dark:text-gray-400">
                     Reach out to{' '}
                     <a
                       href="mailto:support@mindmesh.global"

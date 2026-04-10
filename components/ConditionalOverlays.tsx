@@ -7,19 +7,9 @@ import SensorBarSpotlight from '@/components/SensorBarSpotlight';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
+import { isMindmeshHeroRoute, MINDMESH_HERO_ROUTES } from '@/lib/mindmesh-hero-routes';
 
-const MINDMESH_PAGES = [
-  '/',
-  '/dashboard',
-  '/features',
-  '/docs',
-  '/app-directory',
-  '/demo',
-  '/subscription',
-  '/social',
-  '/contact',
-  '/waitlist',
-];
+const MINDMESH_PAGES: readonly string[] = MINDMESH_HERO_ROUTES;
 
 export default function ConditionalOverlays() {
   const overlay = useUIOverlay();
@@ -40,11 +30,7 @@ export default function ConditionalOverlays() {
     return () => document.body.removeEventListener('wheel', preventScroll);
   }, [overlay?.mascotTooltipVisible]);
 
-  if (
-    dashboardVm?.viewMode === 'desktop' &&
-    pathname &&
-    (pathname === '/' || pathname === '/dashboard')
-  ) {
+  if (dashboardVm?.viewMode === 'desktop' && isMindmeshHeroRoute(pathname)) {
     return null;
   }
 

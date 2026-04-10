@@ -98,7 +98,8 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background: hsl(var(--background));
+  /* Dark canvas to avoid white flash; text follows theme tokens so light surfaces keep contrast */
+  background-color: #0a0a14;
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -179,7 +180,7 @@ html, body {
 
 .desktop-nav-item:hover .desktop-nav-label-bg span,
 .desktop-nav-label-bg:hover span {
-  color: rgb(15 23 42) !important; /* slate-900 for contrast on white hover bg */
+  color: rgb(15 23 42) !important; /* gray-900-scale for contrast on white hover bg */
 }
 
 /* Custom cursor - default cursor visible, follower image trails alongside */

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
@@ -91,7 +91,7 @@ export function StaticInboxList() {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-700 p-6 transition-shadow text-slate-900 dark:text-slate-100">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-gray-100 dark:ring-gray-700 p-6 transition-shadow text-gray-900 dark:text-gray-100">
       <div className="flex items-start justify-between gap-4 mb-6 w-full">
         <div className="flex-1 min-w-0">
           <div className="flex items-start gap-3 mb-2">
@@ -102,7 +102,7 @@ export function StaticInboxList() {
             </div>
             <div>
               <div className="flex items-center gap-6">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   <HoverTypingTooltip text="Your unified email inbox." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'inbox'}>
                     Inbox
                   </HoverTypingTooltip>
@@ -114,7 +114,7 @@ export function StaticInboxList() {
                   2 Emails today
                 </span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                 Last refreshed: Dec 16, 2:30:45 PM
               </p>
 
@@ -134,13 +134,13 @@ export function StaticInboxList() {
         <div className="flex flex-col items-end gap-3">
           <div className="flex items-center gap-10">
             <div className="relative">
-              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
                 type="text"
                 placeholder="Search by email..."
-                className="h-8 pl-8 pr-4 border border-slate-300 dark:border-slate-600 rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-500"/>
+                className="h-8 pl-8 pr-4 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder:text-gray-500"/>
             </div>
             <button className="h-10 w-30 border-none rounded-full bg-blue-500 text-white text-sm font-medium cursor-pointer px-4 py-2 flex items-center justify-center gap-2">
               <span>🔄</span>
@@ -151,7 +151,7 @@ export function StaticInboxList() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="h-8 w-40 pl-3 pr-8 border border-slate-200 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer flex items-center justify-between min-w-[240px] hover:border-slate-300 dark:hover:border-slate-500 transition-colors"
+              className="h-8 w-40 pl-3 pr-8 border border-gray-200 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer flex items-center justify-between min-w-[240px] hover:border-gray-300 dark:hover:border-gray-500 transition-colors"
             >
               <span>{selectedAccount}</span>
               <svg 
@@ -165,7 +165,7 @@ export function StaticInboxList() {
             </button>
             
             {isOpen && (
-              <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-md shadow-lg z-50 overflow-hidden">
+              <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg z-50 overflow-hidden">
                 {accounts.map((account, index) => (
                   <button
                     key={index}
@@ -176,7 +176,7 @@ export function StaticInboxList() {
                     className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                       account === selectedAccount
                         ? 'bg-blue-600 text-white font-semibold'
-                        : 'text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-600 font-normal'
+                        : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-600 font-normal'
                     }`}
                   >
                     {account}
@@ -197,52 +197,52 @@ export function StaticInboxList() {
               onClick={() => setExpandedId(isExpanded ? null : msg.id)}
               className={`border rounded-lg transition-all cursor-pointer overflow-hidden ${
                 isExpanded
-                  ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-800 border-blue-200 dark:border-blue-800 shadow-lg'
-                  : 'border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600'
+                  ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800 border-blue-200 dark:border-blue-800 shadow-lg'
+                  : 'border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               {/* Collapsed / Preview state */}
               {!isExpanded ? (
                 <div className="p-4 flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-600 dark:to-slate-700 text-slate-700 dark:text-slate-200 text-sm">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-600 dark:to-gray-700 text-gray-700 dark:text-gray-200 text-sm">
                     {msg.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1 gap-2">
-                      <p className="font-medium text-slate-900 dark:text-slate-100 truncate">{msg.subject}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100 truncate">{msg.subject}</p>
                       <span className={`px-2 py-1 text-xs rounded-md font-medium border flex-shrink-0 ${msg.accountStyle}`}>
                         {msg.accountTag}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 mb-2 justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center gap-2 mb-2 justify-between text-xs text-gray-500 dark:text-gray-400">
                       <span>{msg.from}</span>
                       <span>{msg.date}</span>
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                       {msg.preview}
                     </p>
                   </div>
                 </div>
               ) : (
                 /* Expanded – email-style layout */
-                <div className="bg-white dark:bg-slate-800/50">
+                <div className="bg-white dark:bg-gray-800/50">
                   {/* Email header bar */}
-                  <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/50">
+                  <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50">
                     <div className="flex items-start gap-3 mb-3">
                       <div className="w-11 h-11 rounded-full flex items-center justify-center font-semibold flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm shadow-md">
                         {msg.avatar}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-0.5">
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-0.5">
                           {msg.subject}
                         </h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-300">
-                          <span className="font-medium text-slate-500 dark:text-slate-400">From:</span>{' '}
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="font-medium text-gray-500 dark:text-gray-400">From:</span>{' '}
                           {msg.from} &lt;{msg.fromEmail ?? msg.from}&gt;
                         </p>
                         {hasTo && (
-                          <p className="text-sm text-slate-600 dark:text-slate-300 mt-0.5">
-                            <span className="font-medium text-slate-500 dark:text-slate-400">To:</span> {msg.to}
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-0.5">
+                            <span className="font-medium text-gray-500 dark:text-gray-400">To:</span> {msg.to}
                           </p>
                         )}
                       </div>
@@ -250,7 +250,7 @@ export function StaticInboxList() {
                         <span className={`px-2.5 py-1 text-xs rounded-md font-medium border ${msg.accountStyle}`}>
                           {msg.accountTag}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400">{msg.date}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{msg.date}</span>
                       </div>
                     </div>
                   </div>
@@ -261,20 +261,20 @@ export function StaticInboxList() {
                       {msg.fullBody.map((block, i) => (
                         <div key={i} className="mb-4 last:mb-0">
                           {block.type === 'paragraph' && (
-                            <p className="text-slate-700 dark:text-slate-200 leading-relaxed m-0">
+                            <p className="text-gray-700 dark:text-gray-200 leading-relaxed m-0">
                               {block.text}
                             </p>
                           )}
                           {block.type === 'list' && (
-                            <ul className="mt-2 mb-0 pl-5 space-y-1 text-slate-700 dark:text-slate-200 leading-relaxed list-disc">
+                            <ul className="mt-2 mb-0 pl-5 space-y-1 text-gray-700 dark:text-gray-200 leading-relaxed list-disc">
                               {(block.items ?? []).map((item, j) => (
                                 <li key={j}>{item}</li>
                               ))}
                             </ul>
                           )}
                           {block.type === 'signature' && (
-                            <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                              <p className="text-slate-600 dark:text-slate-300 text-sm whitespace-pre-wrap m-0 italic">
+                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                              <p className="text-gray-600 dark:text-gray-300 text-sm whitespace-pre-wrap m-0 italic">
                                 {block.text}
                               </p>
                             </div>
@@ -282,7 +282,7 @@ export function StaticInboxList() {
                         </div>
                       ))}
                     </div>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-4">
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
                       Click anywhere to collapse
                     </p>
                   </div>

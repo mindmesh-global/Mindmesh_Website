@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -39,7 +39,7 @@ function NavItemContent({ item }: { item: (typeof navItems)[0]; isActive?: boole
         />
       </div>
       <div className="desktop-nav-label-bg inline-block rounded-md px-2 py-1 w-fit bg-transparent transition-all duration-200">
-        <span className="text-sm font-semibold text-slate-900 text-center block whitespace-nowrap">{item.label}</span>
+        <span className="text-sm font-semibold text-gray-900 text-center block whitespace-nowrap">{item.label}</span>
       </div>
     </>
   );

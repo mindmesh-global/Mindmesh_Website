@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -28,7 +28,7 @@ const features = [
   { icon: BookOpen, title: 'Start with the story, not the search', description: 'Yesterday’s Narrative gives you a clean recap of what happened, what changed, and what still needs attention.', color: 'from-cyan-500 to-cyan-600' },
   { icon: ClipboardList, title: 'Turn activity into action', description: 'MindMesh extracts inferred facts and to-dos from emails and meetings, so important details do not stay buried in threads and calendar events.', color: 'from-orange-500 to-orange-600' },
   { icon: MousePointerClick, title: 'Capture context instantly', description: 'Use the Sensor Bar to check, launch, ask, and capture things the moment they matter, without breaking your flow.', color: 'from-red-500 to-red-600' },
-  { icon: Shield, title: 'Your privacy matters', description: 'MindMesh is built with privacy at its core. Your data stays under your control—encrypted locally, with clear choices about what gets synced. No selling your data, no hidden tracking.', color: 'from-slate-500 to-slate-600' },
+  { icon: Shield, title: 'Your privacy matters', description: 'MindMesh is built with privacy at its core. Your data stays under your control—encrypted locally, with clear choices about what gets synced. No selling your data, no hidden tracking.', color: 'from-gray-500 to-gray-600' },
 ];
 
 // Bento layout: cardIndex -> { gridClass, bg, border, isDark, iconBg, iconColor, cardColor? }
@@ -42,7 +42,7 @@ const BENTO_LAYOUT = [
   { gridClass: 'md:col-span-1', bg: 'bg-pink-50', border: 'border-2 border-pink-200', isDark: false, iconBg: 'bg-indigo-600', iconColor: '#4f46e5' },
   { gridClass: 'md:col-span-1', bg: 'bg-sky-50', border: 'border-2 border-blue-200', isDark: false, iconBg: 'bg-orange-600', iconColor: '#ea580c', cardColor: '#e0f2fe' },
   { gridClass: 'md:col-span-1', bg: 'bg-purple-50', border: 'border-2 border-purple-200', isDark: false, iconBg: 'bg-red-500', iconColor: '#ef4444', cardColor: '#f3e8ff' },
-  { gridClass: 'md:col-span-2', bg: 'bg-slate-50', border: 'border-2 border-slate-200', isDark: false, iconBg: 'bg-slate-600', iconColor: '#475569', cardColor: '#f8fafc' },
+  { gridClass: 'md:col-span-2', bg: 'bg-gray-50', border: 'border-2 border-gray-200', isDark: false, iconBg: 'bg-gray-600', iconColor: '#475569', cardColor: '#f8fafc' },
 ];
 
 // Per-icon infinite animations (pulse, float, bounce, etc.)

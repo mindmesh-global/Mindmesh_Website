@@ -3,16 +3,16 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutTemplate, Monitor } from 'lucide-react';
+import { Monitor, ScrollText } from 'lucide-react';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
 
-/** Fixed top-right of the viewport (same as before) — stays above the MindMesh window. */
+/** Fixed top-right — label shows *current* layout: macOS-style Hero vs marketing Scroll page. */
 export default function ViewSwitcherButton() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   const { viewMode, toggleViewMode } = useDashboardViewMode();
-  const isDesktop = viewMode === 'desktop';
+  const isMacStyleView = viewMode === 'scrollable';
 
   const node = (
     <div
@@ -26,7 +26,7 @@ export default function ViewSwitcherButton() {
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.96 }}
         className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-left text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-700"
-        aria-label={isDesktop ? 'Switch to scroll view' : 'Switch to desktop view'}
+        aria-label={isMacStyleView ? 'Switch to Scroll view' : 'Switch to macOS view'}
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -37,12 +37,14 @@ export default function ViewSwitcherButton() {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             className="flex items-center gap-2"
           >
-            {isDesktop ? (
+            {isMacStyleView ? (
               <Monitor className="h-5 w-5 shrink-0 text-white" aria-hidden />
             ) : (
-              <LayoutTemplate className="h-5 w-5 shrink-0 text-white" aria-hidden />
+              <ScrollText className="h-5 w-5 shrink-0 text-white" aria-hidden />
             )}
-            <span className="whitespace-nowrap">{isDesktop ? 'Desktop View' : 'Scroll View'}</span>
+            <span className="whitespace-nowrap">
+              {isMacStyleView ? 'macOS view' : 'Scroll view'}
+            </span>
           </motion.span>
         </AnimatePresence>
       </motion.button>

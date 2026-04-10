@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { motion, useDragControls } from 'framer-motion';
 import { Home, FileText, Mail, BookOpen, Calculator, FolderOpen, Sparkles, Video } from 'lucide-react';
@@ -16,11 +16,13 @@ import AppDirectoryWindow from './AppDirectoryWindow';
 import MovieWindow from './MovieWindow';
 import WaitlistModal from './WaitlistModal';
 import DesktopNav from './layout/DesktopNav';
+import AnimatedBackground from '@/components/layout/AnimatedBackground';
 import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
+import { isMindmeshHeroRoute } from '@/lib/mindmesh-hero-routes';
 
-const AnimatedBackground = dynamic(
-  () => import('@/components/layout/AnimatedBackground'),
-  { ssr: false, loading: () => <div className="absolute inset-0 bg-black" /> }
+const ViewSwitcherButton = dynamic(
+  () => import('@/components/ui/ViewSwitcherButton'),
+  { ssr: false }
 );
 
 type WindowType = 'home' | 'features' | 'docs' | 'social' | 'subscription' | 'contact' | 'appDirectory' | 'demo';
@@ -264,8 +266,8 @@ export default function Hero() {
     setOpenWindows((prev) => {
       const next = prev.filter((w) => w.id !== id);
       const newFront = next.filter((w) => !minimizedIds.has(w.id)).pop();
-      if (newFront && typeof window !== 'undefined') {
-        window.history.replaceState({}, '', WINDOW_TYPE_TO_HREF[newFront.type]);
+      if (newFront) {
+        queueMicrotask(() => updateUrl(WINDOW_TYPE_TO_HREF[newFront.type], false));
       }
       return next;
     });
@@ -274,7 +276,7 @@ export default function Hero() {
       next.delete(id);
       return next;
     });
-  }, [minimizedIds]);
+  }, [minimizedIds, updateUrl]);
 
   const handleDragEnd = useCallback(
     (draggedItem: OpenWindowItem, info: { point: { x: number; y: number } }) => {
@@ -427,13 +429,14 @@ export default function Hero() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [minimizedIds]);
 
-  if (dashboardVm?.viewMode === 'desktop' && pathname === '/') {
+  if (dashboardVm?.viewMode === 'desktop' && isMindmeshHeroRoute(pathname)) {
     return <div className="min-h-screen w-full bg-[#0a0a0f]" aria-hidden />;
   }
 
   return (
     <section ref={sectionRef} className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
-      {/* Lazy-loaded background — never blocks SSR; Google sees content first */}
+      <ViewSwitcherButton />
+
       <div className="absolute inset-0">
         <AnimatedBackground />
       </div>

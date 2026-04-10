@@ -3,16 +3,9 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
-
-const DashboardDesktopShell = dynamic(
-  () =>
-    import('@/components/dashboard/view-shells/DashboardDesktopShell').then((m) => m.DashboardDesktopShell),
-  { ssr: false }
-);
-
-const FULL_BLEED_PATHS = ['/', '/dashboard'];
+import DashboardDesktopShell from '@/components/dashboard/view-shells/DashboardDesktopShell';
+import { isMindmeshHeroRoute } from '@/lib/mindmesh-hero-routes';
 
 /** Full-viewport marketing layout above all MindMesh chrome (dock, side icons, logo). */
 export default function DashboardFullBleedPortal() {
@@ -24,7 +17,7 @@ export default function DashboardFullBleedPortal() {
 
   if (!mounted || typeof document === 'undefined') return null;
   if (viewMode !== 'desktop') return null;
-  if (!pathname || !FULL_BLEED_PATHS.includes(pathname)) return null;
+  if (!isMindmeshHeroRoute(pathname)) return null;
 
   return createPortal(
     <div
@@ -34,7 +27,6 @@ export default function DashboardFullBleedPortal() {
       role="document"
       aria-label="MindMesh marketing"
     >
-    
       <DashboardDesktopShell />
     </div>,
     document.body

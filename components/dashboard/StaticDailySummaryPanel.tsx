@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, type RefObject } from 'react';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
@@ -40,11 +40,11 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
   };
 
   return (
-    <div className="relative bg-white dark:bg-slate-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 dark:ring-slate-700 p-6 mb-6 transition-shadow text-slate-900 dark:text-slate-100 overflow-visible">
+    <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-gray-100 dark:ring-gray-700 p-6 mb-6 transition-shadow text-gray-900 dark:text-gray-100 overflow-visible">
       <div className="flex justify-between items-center mb-2 bg-white z-10 pb-2">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Today's Overview</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Today's Overview</h2>
         <div className="flex items-center gap-2">
-          <div className="text-xs text-slate-500 dark:text-slate-400">
+          <div className="text-xs text-gray-500 dark:text-gray-400">
             Last updated: 1:55:45 PM
           </div>
           <button className="h-10 w-30  border-none rounded-full bg-blue-500 text-white text-sm font-medium cursor-pointer px-4 py-2 flex items-center justify-center gap-2">
@@ -61,7 +61,7 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
         className={`mb-4 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('time_clash')}`}
         {...createSectionHandlers('time_clash', timeClashRef)}
       >
-        <div className="rounded-lg border border-red-200 shadow-sm bg-gradient-to-br from-red-50 via-white to-red-50 overflow-visible dark:from-red-950/30 dark:via-slate-800 dark:to-red-950/30">
+        <div className="rounded-lg border border-red-200 shadow-sm bg-gradient-to-br from-red-50 via-white to-red-50 overflow-visible dark:from-red-950/30 dark:via-gray-800 dark:to-red-950/30">
         <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 text-white font-semibold tracking-wide rounded-t-lg">
           <span className="text-xl">⏰</span>
           <HoverTypingTooltip text="Overlapping events that conflict." speed={35} variant="dark" controlledHover={sectionHover?.hoveredSectionId === 'time_clash'}>
@@ -74,7 +74,7 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
               <span className="font-medium">
                 "Team Standup" overlaps with "Client Meeting"
               </span>
-              <span className="text-slate-600 dark:text-slate-400 ml-2">
+              <span className="text-gray-600 dark:text-gray-400 ml-2">
                 from 10:00 AM to 10:30 AM
               </span>
             </div>
@@ -90,24 +90,24 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
         className={`mb-4 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('inferred_facts')}`}
         {...createSectionHandlers('inferred_facts', inferredFactsRef)}
       >
-        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
+        <h3 className="font-semibold mb-1 text-gray-900 dark:text-gray-100">
           <HoverTypingTooltip text="AI highlights from your emails and events." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'inferred_facts'}>
             Inferred Facts
           </HoverTypingTooltip>
         </h3>
         <ul className="space-y-1">
-          <li className="group flex items-start justify-between p-2 bg-gray-50 dark:bg-slate-700/50 rounded border border-slate-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700">
+          <li className="group flex items-start justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
             <div className="flex-1 pr-3">
-              <span className="text-slate-800 dark:text-slate-200">💡 Project deadline moved to next week</span>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-2 ml-7">
+              <span className="text-gray-800 dark:text-gray-200">💡 Project deadline moved to next week</span>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-7">
                 📧 9:30 AM • Mon Dec 16
               </div>
             </div>
           </li>
-          <li className="group flex items-start justify-between p-2 bg-gray-50 dark:bg-slate-700/50 rounded border border-slate-200 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700">
+          <li className="group flex items-start justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
             <div className="flex-1 pr-3">
-              <span className="text-slate-800 dark:text-slate-200">💡 New feature request from client</span>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-2 ml-7">
+              <span className="text-gray-800 dark:text-gray-200">💡 New feature request from client</span>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-7">
                 📧 11:15 AM • Mon Dec 16
               </div>
             </div>
@@ -122,22 +122,22 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
         className={`mb-4 relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('todos')}`}
         {...createSectionHandlers('todos', todosRef)}
       >
-        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
+        <h3 className="font-semibold mb-1 text-gray-900 dark:text-gray-100">
           <HoverTypingTooltip text="Action items from emails." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'todos'}>
             Todos
           </HoverTypingTooltip>
         </h3>
         <ul className="space-y-2">
-          <li className="group flex items-start p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+          <li className="group flex items-start p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
             <div className="flex items-center mr-3">
               <span className="text-lg">📝</span>
             </div>
             <div className="flex-1">
-              <div className={`font-medium mb-2 text-slate-900 dark:text-slate-100 transition-all ${checkedTodos.has(0) ? 'line-through text-gray-400 dark:text-slate-500' : ''}`}>
+              <div className={`font-medium mb-2 text-gray-900 dark:text-gray-100 transition-all ${checkedTodos.has(0) ? 'line-through text-gray-400 dark:text-gray-500' : ''}`}>
                 Review design mockups for new feature
               </div>
               {!checkedTodos.has(0) && (
-                <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+                <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                   <span>📅 Mon Dec 16</span>
                   <span>⏰ Due: Wed Dec 18</span>
                   <span>📧 Design Review Thread</span>
@@ -154,16 +154,16 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
               />
             </div>
           </li>
-          <li className="group flex items-start p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+          <li className="group flex items-start p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
             <div className="flex items-center mr-3">
               <span className="text-lg">📝</span>
             </div>
             <div className="flex-1">
-              <div className={`font-medium mb-2 text-slate-900 dark:text-slate-100 transition-all ${checkedTodos.has(1) ? 'line-through text-gray-400 dark:text-slate-500' : ''}`}>
+              <div className={`font-medium mb-2 text-gray-900 dark:text-gray-100 transition-all ${checkedTodos.has(1) ? 'line-through text-gray-400 dark:text-gray-500' : ''}`}>
                 Update project documentation
               </div>
               {!checkedTodos.has(1) && (
-                <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+                <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                   <span>📅 Mon Dec 18</span>
                   <span>⏰ Due: Wed Dec 19</span>
                   <span>📧 Project Documentation</span>
@@ -190,18 +190,18 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
         className={`relative z-[100] transition-all duration-200 rounded-xl cursor-default ${sectionHighlight('events')}`}
         {...createSectionHandlers('events', eventsRef)}
       >
-        <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">
+        <h3 className="font-semibold mb-1 text-gray-900 dark:text-gray-100">
           <HoverTypingTooltip text="Calendar meetings and appointments." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'events'}>
             Events
           </HoverTypingTooltip>
         </h3>
         <ul className="space-y-2">
-          <li className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+          <li className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span className="text-lg flex-shrink-0">📅</span>
-              <span className="font-medium truncate text-slate-900 dark:text-slate-100">Team Standup</span>
+              <span className="font-medium truncate text-gray-900 dark:text-gray-100">Team Standup</span>
             </div>
-            <div className="w-full sm:w-40 text-left sm:text-right text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap sm:ml-16">
+            <div className="w-full sm:w-40 text-left sm:text-right text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap sm:ml-16">
               10:00 AM - 10:30 AM
             </div>
             <div className="w-6 text-center flex-shrink-0">
@@ -218,12 +218,12 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
               </span>
             </div>
           </li>
-          <li className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+          <li className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span className="text-lg flex-shrink-0">📅</span>
-              <span className="font-medium truncate text-slate-900 dark:text-slate-100">Client Meeting</span>
+              <span className="font-medium truncate text-gray-900 dark:text-gray-100">Client Meeting</span>
             </div>
-            <div className="w-full sm:w-40 text-left sm:text-right text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap sm:ml-16">
+            <div className="w-full sm:w-40 text-left sm:text-right text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap sm:ml-16">
               10:15 AM - 11:00 AM
             </div>
             <span className="text-red-500 text-lg" title="Clashes with: Client Meeting">

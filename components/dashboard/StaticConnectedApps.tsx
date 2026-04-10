@@ -1,11 +1,11 @@
-'use client';
+﻿'use client';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
 import { useSectionHover } from '@/context/SectionHoverContext';
 
 export function StaticConnectedApps() {
   const sectionHover = useSectionHover();
   return (
-    <div className="p-6 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-slate-100 bg-white transition-shadow mb-4">
+    <div className="p-6 rounded-xl shadow-[0_18px_36px_-12px_rgba(15,23,42,0.2)] ring-1 ring-gray-100 bg-white transition-shadow mb-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-bold text-lg text-black">
           <HoverTypingTooltip text="Linked email and calendar accounts." speed={35} controlledHover={sectionHover?.hoveredSectionId === 'connected_apps'}>
@@ -30,7 +30,7 @@ export function StaticConnectedApps() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         {/* Gmail Card */}
-        <div className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition-all">
+        <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
@@ -62,7 +62,7 @@ export function StaticConnectedApps() {
         </div>
 
         {/* Google Calendar Card */}
-        <div className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition-all">
+        <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center relative">
@@ -94,7 +94,7 @@ export function StaticConnectedApps() {
         </div>
 
         {/* Outlook Card */}
-        <div className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition-all">
+        <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
@@ -126,7 +126,7 @@ export function StaticConnectedApps() {
         </div>
 
         {/* SMTP Mailbox Card */}
-        <div className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition-all">
+        <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center">
