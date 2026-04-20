@@ -16,7 +16,7 @@ export default function SiteFooter() {
             Elevating productivity through architectural privacy and ambient intelligence.
           </p>
           <p className="text-sm sm:text-base" style={{ color: '#a1a1aa' }}>
-            © 2026 MindMesh AI. Built for focus.
+            © MindMesh™ 2026 | A product of The Vansh Group.
           </p>
         </div>
 
