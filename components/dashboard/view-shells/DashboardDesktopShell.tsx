@@ -134,7 +134,11 @@ function HoneycombCanvas() {
     if (!canvas) return;
     const hexWidth = 46;
     const hexHeight = Math.sqrt(3) * (hexWidth / 2);
-    const w = window.innerWidth;
+    // Match marketing scrollport width so honeycomb does not extend past in-flow content (e.g. footer)
+    // when a vertical scrollbar narrows the overlay vs window.innerWidth.
+    const scrollRoot =
+      typeof document !== 'undefined' ? document.getElementById('mindmesh-marketing-scroll') : null;
+    const w = scrollRoot?.clientWidth ?? window.innerWidth;
     const h = window.innerHeight;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.floor(w * dpr);
@@ -178,9 +182,20 @@ function HoneycombCanvas() {
     window.addEventListener('mousemove', onMove);
     window.addEventListener('touchmove', onTouch, { passive: true });
 
+    const scrollRoot = document.getElementById('mindmesh-marketing-scroll');
+    const ro = scrollRoot ? new ResizeObserver(() => init()) : null;
+    if (scrollRoot && ro) ro.observe(scrollRoot);
+
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) return () => {};
+    if (!canvas || !ctx) {
+      return () => {
+        ro?.disconnect();
+        window.removeEventListener('resize', init);
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('touchmove', onTouch);
+      };
+    }
 
     const drawHex = (
       x: number,
@@ -258,6 +273,7 @@ function HoneycombCanvas() {
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
+      ro?.disconnect();
       window.removeEventListener('resize', init);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('touchmove', onTouch);

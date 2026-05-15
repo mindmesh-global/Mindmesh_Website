@@ -4,7 +4,7 @@ import FooterContactPopup from '@/components/layout/FooterContactPopup';
 export default function SiteFooter() {
   return (
     <footer
-      className="relative z-20 w-full bg-black pt-8 pb-10 backdrop-blur-md"
+      className="relative z-20 w-full shrink-0 bg-black pt-8 pb-10 backdrop-blur-md"
       style={{ backgroundColor: 'rgba(4, 13, 46, 0.83)', color: 'white' }}
     >
       <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-2 gap-x-8 gap-y-8 px-6 text-sm leading-relaxed sm:px-12 md:grid-cols-4 lg:grid-cols-6">
