@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { trackNavClick } from '@/utils/trackEvent';
 
 const navItems: { label: string; href: string; icon: string }[] = [
-  { label: 'MindMesh', href: '/', icon: '/images/Logo/mindmesh-logo-tight.png' },
+  { label: 'MindMesh', href: '/', icon: '/images/Logo/mindmesh-nav-icon.png?v=7' },
   { label: 'Join Waitlist', href: '/waitlist', icon: '/images/join-waitlist-icon.png' },
   { label: 'Subscription', href: '/subscription', icon: '/images/subscription-icon.png' },
   { label: 'Features', href: '/features', icon: '/images/features-icon.png' },
@@ -35,7 +35,8 @@ function NavItemContent({ item }: { item: (typeof navItems)[0]; isActive?: boole
           alt={item.label}
           width={48}
           height={48}
-          className="object-contain"
+          className={`object-contain ${item.href === '/' ? 'h-11 w-11 scale-110' : 'h-12 w-12'}`}
+          unoptimized={item.href === '/'}
         />
       </div>
       <div className="desktop-nav-label-bg inline-block rounded-md px-2 py-1 w-fit bg-transparent transition-all duration-200">

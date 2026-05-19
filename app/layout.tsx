@@ -75,12 +75,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
-      { url: '/favicon-96.png', sizes: '96x96', type: 'image/png' },
-      { url: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon-48.png?v=7', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-96.png?v=7', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon-192.png?v=7', sizes: '192x192', type: 'image/png' },
     ],
-    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
-    shortcut: '/favicon-48.png',
+    apple: [{ url: '/apple-icon.png?v=7', sizes: '180x180', type: 'image/png' }],
+    shortcut: '/favicon-48.png?v=7',
   },
 };
 

@@ -1,7 +1,7 @@
 /**
  * Build favicons from public/images/Logo/mindmesh-gem-mark.png
  * - Strips baked-in black so the tab icon blends with the browser chrome
- * - ~8% inset: large enough to read clearly, small enough to avoid edge clipping
+ * - ~2% inset: clearly larger in the tab, still safe from edge clipping
  */
 import sharp from 'sharp';
 import path from 'path';
@@ -30,8 +30,8 @@ async function stripBlackMatte(input) {
   }).png();
 }
 
-/** @param {number} marginPct horizontal+vertical inset, e.g. 0.08 = 8% */
-async function renderIcon(size, marginPct = 0.08) {
+/** @param {number} marginPct horizontal+vertical inset, e.g. 0.02 = 2% */
+async function renderIcon(size, marginPct = 0.02) {
   const matteFree = await stripBlackMatte(src);
   const { data } = await matteFree.trim({ threshold: 8 }).toBuffer({ resolveWithObject: true });
   const maxDim = Math.round(size * (1 - marginPct * 2));
@@ -62,8 +62,12 @@ const sizes = [
   { file: 'public/favicon-96.png', size: 96 },
   { file: 'public/favicon-192.png', size: 192 },
   { file: 'public/apple-icon.png', size: 180 },
+  /** Desktop sidebar / nav — same transparent mark, larger canvas */
+  { file: 'public/images/Logo/mindmesh-nav-icon.png', size: 96 },
 ];
 
+const MARGIN = 0.02;
+
 for (const { file, size } of sizes) {
-  await write(await renderIcon(size, 0.08), path.join(root, file));
+  await write(await renderIcon(size, MARGIN), path.join(root, file));
 }
