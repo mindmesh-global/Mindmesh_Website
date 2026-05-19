@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image, { type StaticImageData } from 'next/image';
 import { Manrope } from 'next/font/google';
 import Link from 'next/link';
 import {
@@ -11,6 +12,11 @@ import {
 } from 'lucide-react';
 import SiteNav from '@/components/layout/SiteNav';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
+import gmailIcon from '@/public/images/icons/gmail.png';
+import googleCalendarIcon from '@/public/images/icons/google-calendar.png';
+import outlookIcon from '@/public/images/icons/outlook.png';
+import outlookCalendarIcon from '@/public/images/icons/outlook-calendar.png';
+import smtpIcon from '@/public/images/icons/smtp.png';
 import styles from './connected-apps.module.css';
 
 const manrope = Manrope({
@@ -20,11 +26,11 @@ const manrope = Manrope({
 });
 
 const supportedApps = [
-  { name: 'Gmail', icon: Mail },
-  { name: 'Google Calendar', icon: CalendarDays },
-  { name: 'Outlook Email', icon: Mail },
-  { name: 'Outlook Calendar', icon: CalendarDays },
-  { name: 'SMTP Mailbox', icon: Workflow },
+  { name: 'Gmail', icon: gmailIcon },
+  { name: 'Google Calendar', icon: googleCalendarIcon },
+  { name: 'Outlook Email', icon: outlookIcon },
+  { name: 'Outlook Calendar', icon: outlookCalendarIcon },
+  { name: 'SMTP Mailbox', icon: smtpIcon },
 ] as const;
 
 const workflowCards = [
@@ -66,17 +72,11 @@ export const metadata: Metadata = {
   },
 };
 
-function AppBadge({
-  name,
-  Icon,
-}: {
-  name: string;
-  Icon: React.ComponentType<{ className?: string }>;
-}) {
+function AppBadge({ name, icon }: { name: string; icon: StaticImageData }) {
   return (
     <div className={styles.appCard}>
       <div className={styles.appIcon}>
-        <Icon className="h-5 w-5 text-[#dee5ff]" />
+        <Image src={icon} alt={name} width={32} height={32} className={styles.appIconImage} />
       </div>
       <p className={styles.appName}>{name}</p>
     </div>
@@ -144,8 +144,8 @@ export default function ConnectedAppsPage() {
             </p>
           </div>
           <div className={styles.appsGrid}>
-            {supportedApps.map(({ name, icon: Icon }) => (
-              <AppBadge key={name} name={name} Icon={Icon} />
+            {supportedApps.map(({ name, icon }) => (
+              <AppBadge key={name} name={name} icon={icon} />
             ))}
           </div>
         </div>
