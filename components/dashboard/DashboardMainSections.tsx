@@ -12,6 +12,7 @@ import type { ViewMode } from '@/context/DashboardViewModeContext';
 export type DashboardMainSectionsProps = {
   variant: ViewMode;
   timeClashRef: React.RefObject<HTMLDivElement | null>;
+  attentionRef: React.RefObject<HTMLDivElement | null>;
   inferredFactsRef: React.RefObject<HTMLDivElement | null>;
   todosRef: React.RefObject<HTMLDivElement | null>;
   eventsRef: React.RefObject<HTMLDivElement | null>;
@@ -25,6 +26,7 @@ export type DashboardMainSectionsProps = {
 export function DashboardMainSections({
   variant,
   timeClashRef,
+  attentionRef,
   inferredFactsRef,
   todosRef,
   eventsRef,
@@ -56,6 +58,7 @@ export function DashboardMainSections({
       <section aria-label="Today's overview" className={block}>
         <StaticDailySummaryPanel
           timeClashRef={timeClashRef}
+          attentionRef={attentionRef}
           inferredFactsRef={inferredFactsRef}
           todosRef={todosRef}
           eventsRef={eventsRef}

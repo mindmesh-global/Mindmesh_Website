@@ -9,6 +9,12 @@ export const HOME_SECTIONS = {
     summary: 'Overlapping meetings from your calendar. Fix conflicts before your day starts.',
     inferredFacts: [] as string[],
   },
+  attention: {
+    id: 'attention',
+    title: 'Attention',
+    summary: 'Urgent items now, ranked tasks for later today, and what was quietly handled.',
+    inferredFacts: [] as string[],
+  },
   todos: {
     id: 'todos',
     title: 'Todos',

@@ -21,6 +21,7 @@ const ViewSwitcherButton = dynamic(
 
 const SECTION_IDS: HomeSectionId[] = [
   'time_clash',
+  'attention',
   'inferred_facts',
   'todos',
   'events',
@@ -55,6 +56,7 @@ function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps = {})
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomSentinelRef = useRef<HTMLDivElement>(null);
   const timeClashRef = useRef<HTMLDivElement>(null);
+  const attentionRef = useRef<HTMLDivElement>(null);
   const inferredFactsRef = useRef<HTMLDivElement>(null);
   const todosRef = useRef<HTMLDivElement>(null);
   const eventsRef = useRef<HTMLDivElement>(null);
@@ -66,6 +68,7 @@ function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps = {})
   const sectionRefsMap = useMemo(
     (): Record<HomeSectionId, React.RefObject<HTMLDivElement | null>> => ({
       time_clash: timeClashRef,
+      attention: attentionRef,
       inferred_facts: inferredFactsRef,
       todos: todosRef,
       events: eventsRef,
@@ -170,6 +173,7 @@ function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps = {})
 
   const sectionsProps = {
     timeClashRef,
+    attentionRef,
     inferredFactsRef,
     todosRef,
     eventsRef,

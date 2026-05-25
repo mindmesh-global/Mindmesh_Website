@@ -26,6 +26,7 @@ const MASCOT_INTRO = {
 
 const SECTION_ORDER: HomeSectionId[] = [
   'time_clash',
+  'attention',
   'inferred_facts',
   'todos',
   'events',

@@ -1,18 +1,20 @@
 ﻿'use client';
 
 import { useState, type RefObject } from 'react';
+import { AttentionSection } from '@/components/dashboard/AttentionSection';
 import { HoverTypingTooltip } from '@/components/ui/HoverTypingTooltip';
 import { useSectionHover } from '@/context/SectionHoverContext';
 import type { HomeSectionId } from '@/context/HomeSectionContext';
 
 interface StaticDailySummaryPanelProps {
   timeClashRef?: RefObject<HTMLDivElement | null>;
+  attentionRef?: RefObject<HTMLDivElement | null>;
   inferredFactsRef?: RefObject<HTMLDivElement | null>;
   todosRef?: RefObject<HTMLDivElement | null>;
   eventsRef?: RefObject<HTMLDivElement | null>;
 }
 
-export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosRef, eventsRef }: StaticDailySummaryPanelProps) {
+export function StaticDailySummaryPanel({ timeClashRef, attentionRef, inferredFactsRef, todosRef, eventsRef }: StaticDailySummaryPanelProps) {
   const [checkedTodos, setCheckedTodos] = useState<Set<number>>(new Set());
   const sectionHover = useSectionHover();
 
@@ -82,6 +84,8 @@ export function StaticDailySummaryPanel({ timeClashRef, inferredFactsRef, todosR
         </ul>
         </div>
       </div>
+
+      <AttentionSection attentionRef={attentionRef} />
 
       {/* Inferred Facts */}
       <div
