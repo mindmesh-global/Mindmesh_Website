@@ -191,13 +191,21 @@ function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps = {})
     if (!sectionHover?.hoveredSectionId || !sectionHover?.updateCutoutRect) return;
     const ref = sectionRefsMap[sectionHover.hoveredSectionId];
     if (!ref?.current) return;
-    const update = () => ref.current && sectionHover?.updateCutoutRect(ref.current.getBoundingClientRect());
+    let raf = 0;
+    const update = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        if (ref.current) sectionHover?.updateCutoutRect(ref.current.getBoundingClientRect());
+      });
+    };
     update();
-    window.addEventListener('scroll', update, true);
-    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, { passive: true, capture: true });
+    window.addEventListener('resize', update, { passive: true });
     return () => {
       window.removeEventListener('scroll', update, true);
       window.removeEventListener('resize', update);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, [
     viewMode,

@@ -88,9 +88,15 @@
   --ring: 0 0% 83.1%;
 }
 
-/* Global Reset */
+/* Global Reset — native scroll (smooth CSS fights wheel/touch and feels sticky) */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 html, body {
@@ -103,6 +109,13 @@ html, body {
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Fullscreen marketing overlay: survives Tailwind / PostCSS edge cases */
@@ -181,6 +194,22 @@ html, body {
 .desktop-nav-item:hover .desktop-nav-label-bg span,
 .desktop-nav-label-bg:hover span {
   color: rgb(15 23 42) !important; /* gray-900-scale for contrast on white hover bg */
+}
+
+/* Spline scene loader */
+.loader {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spline-loader-spin 0.8s linear infinite;
+}
+
+@keyframes spline-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Custom cursor - default cursor visible, follower image trails alongside */

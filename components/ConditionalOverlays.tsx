@@ -25,9 +25,11 @@ export default function ConditionalOverlays() {
 
   useEffect(() => {
     if (!overlay?.mascotTooltipVisible) return;
-    const preventScroll = (e: WheelEvent) => e.preventDefault();
-    document.body.addEventListener('wheel', preventScroll, { passive: false });
-    return () => document.body.removeEventListener('wheel', preventScroll);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
   }, [overlay?.mascotTooltipVisible]);
 
   if (dashboardVm?.viewMode === 'desktop' && isMindmeshHeroRoute(pathname)) {

@@ -97,13 +97,15 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
     };
   }, []);
 
-  // Prevent user scroll (wheel) when mascot tooltip is visible, but allow programmatic scroll
+  // Lock scroll container while mascot tooltip is visible (avoid non-passive wheel listeners)
   useEffect(() => {
     const el = contentScrollRef.current;
     if (!el || !uiOverlay?.mascotTooltipVisible) return;
-    const preventScroll = (e: WheelEvent) => e.preventDefault();
-    el.addEventListener('wheel', preventScroll, { passive: false });
-    return () => el.removeEventListener('wheel', preventScroll);
+    const prev = el.style.overflow;
+    el.style.overflow = 'hidden';
+    return () => {
+      el.style.overflow = prev;
+    };
   }, [uiOverlay?.mascotTooltipVisible]);
 
   if (dashboardVm?.viewMode === 'desktop') {

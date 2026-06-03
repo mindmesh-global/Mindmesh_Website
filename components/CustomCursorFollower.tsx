@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCustomCursor } from '@/context/CustomCursorContext';
 
 export default function CustomCursorFollower() {
   const ctx = useCustomCursor();
   const customCursorEnabled = ctx?.customCursorEnabled ?? false;
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const positionRef = useRef({ x: 0, y: 0 });
+  const rafRef = useRef(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -16,32 +18,44 @@ export default function CustomCursorFollower() {
   useEffect(() => {
     if (!customCursorEnabled || !mounted) return;
 
-    const handleMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const applyPosition = () => {
+      rafRef.current = 0;
+      const el = nodeRef.current;
+      if (!el) return;
+      const { x, y } = positionRef.current;
+      el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
     };
 
-    window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
+    const handleMove = (e: MouseEvent) => {
+      positionRef.current = { x: e.clientX, y: e.clientY };
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(applyPosition);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, [customCursorEnabled, mounted]);
 
   if (!customCursorEnabled || !mounted) return null;
 
   return (
     <div
-      className="fixed top-0 left-0 w-20 h-20 pointer-events-none z-[99999]"
-      style={{
-        transform: `translate(${position.x}px, ${position.y}px) translate(-50%, -50%)`,
-      }}
+      ref={nodeRef}
+      className="pointer-events-none fixed left-0 top-0 z-[99999] h-20 w-20"
+      style={{ transform: 'translate(-50%, -50%)' }}
     >
       <img
         src="/custom-cursor.png"
         alt=""
         width={80}
         height={80}
-        className="w-20 h-20 object-contain opacity-100"
+        className="h-20 w-20 object-contain opacity-100"
         style={{ imageRendering: 'auto' }}
       />
     </div>
   );
 }
- 

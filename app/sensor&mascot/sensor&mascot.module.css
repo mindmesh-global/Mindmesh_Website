@@ -493,6 +493,16 @@
   opacity: 0.95;
 }
 
+.splineEmbed {
+  width: 100%;
+  height: 320px;
+  min-height: 320px;
+  background: #020617;
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
+  contain: layout paint;
+}
+
 .ctaSection {
   background: linear-gradient(to top, #0a1836, #060e20);
 }
@@ -633,5 +643,10 @@
 
   .sideImage {
     height: 240px;
+  }
+
+  .splineEmbed {
+    height: 240px;
+    min-height: 240px;
   }
 }

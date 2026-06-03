@@ -5,8 +5,8 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import Link from 'next/link';
 import SiteFooter from '@/components/layout/SiteFooter';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Inter } from 'next/font/google';
+import CharacterCarousel from '@/components/dashboard/CharacterCarousel';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -39,39 +39,6 @@ const inter = Inter({
 });
 
 const HERO_IMG = '/images/hero-dashboard-user.png';
-
-const SHERPA_LOTTIE_URL =
-  'https://lottie.host/225c420c-2766-4492-95e6-c5919c4b22ce/uUodXUtl4V.lottie';
-const ROBO_LOTTIE_URL =
-  'https://lottie.host/e0609cab-9f43-45bc-bb6a-7aca120370fd/53VP4mY0uR.lottie';
-const BOY_LOTTIE_URL =
-  'https://lottie.host/b1b961aa-0e9f-44da-ba76-8a6dd58fbc09/v6hQv7mXIq.lottie';
-const GIRL_LOTTIE_URL =
-  'https://lottie.host/a5b4e126-7cc7-4aac-9bdb-a3893082c5f3/W49fhgkrwT.lottie';
-const LUNA_LOTTIE_URL =
-  'https://lottie.host/018e4d06-8815-437d-bed0-5634ed59315c/HcMtWTaAMW.lottie';
-const MINI_LOTTIE_URL =
-  'https://lottie.host/972ee003-96b6-424d-aa08-1e0a0ebbc5a5/cuk1txLhrr.lottie';
-const WHISKERS_LOTTIE_URL =
-  'https://lottie.host/7ac5c67a-7983-42a0-b290-2e0429865911/uvdYl2wxbT.lottie';
-
-type CharacterSlide = {
-  id: string;
-  name: string;
-  src: string;
-  glow: string;
-  speed?: number;
-};
-
-const CHARACTER_SLIDES: CharacterSlide[] = [
-  { id: '1', name: 'Sherpa', src: SHERPA_LOTTIE_URL, glow: 'rgba(96,165,250,0.32)', speed: 1 },
-  { id: '2', name: 'Robo', src: ROBO_LOTTIE_URL, glow: 'rgba(59,130,246,0.28)', speed: 1 },
-  { id: '3', name: 'Boy', src: BOY_LOTTIE_URL, glow: 'rgba(129,140,248,0.28)', speed: 1 },
-  { id: '5', name: 'Girl', src: GIRL_LOTTIE_URL, glow: 'rgba(168,85,247,0.26)', speed: 1 },
-  { id: '6', name: 'Luna', src: LUNA_LOTTIE_URL, glow: 'rgba(56,189,248,0.28)', speed: 1 },
-  { id: '7', name: 'Mini', src: MINI_LOTTIE_URL, glow: 'rgba(99,102,241,0.26)', speed: 1 },
-  { id: 'cat', name: 'Whiskers', src: WHISKERS_LOTTIE_URL, glow: 'rgba(244,114,182,0.24)', speed: 1 },
-];
 
 const VIBGYOR = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
@@ -126,6 +93,7 @@ function HoneycombCanvas() {
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const timeRef = useRef(0);
   const rafRef = useRef<number>(0);
+  const pausedRef = useRef(false);
   const hexesRef = useRef<HexCell[]>([]);
   const sizeRef = useRef({ w: 0, h: 0, cols: 0, rows: 0, hexW: 46, hexH: 0 });
 
@@ -186,6 +154,16 @@ function HoneycombCanvas() {
     const ro = scrollRoot ? new ResizeObserver(() => init()) : null;
     if (scrollRoot && ro) ro.observe(scrollRoot);
 
+    let scrollPauseTimer: ReturnType<typeof setTimeout> | undefined;
+    const pauseWhileScrolling = () => {
+      pausedRef.current = true;
+      if (scrollPauseTimer) clearTimeout(scrollPauseTimer);
+      scrollPauseTimer = setTimeout(() => {
+        pausedRef.current = false;
+      }, 150);
+    };
+    scrollRoot?.addEventListener('scroll', pauseWhileScrolling, { passive: true });
+
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) {
@@ -238,6 +216,9 @@ function HoneycombCanvas() {
     };
 
     const animate = () => {
+      rafRef.current = requestAnimationFrame(animate);
+      if (pausedRef.current) return;
+
       timeRef.current += 0.01;
       const { w, h } = sizeRef.current;
       ctx.clearRect(0, 0, w, h);
@@ -266,13 +247,13 @@ function HoneycombCanvas() {
         }
         drawHex(hex.centerX, hex.centerY, hexWidth / 2, hex.brightness, hex.offsetY, hex.hueIndex);
       });
-
-      rafRef.current = requestAnimationFrame(animate);
     };
 
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
+      if (scrollPauseTimer) clearTimeout(scrollPauseTimer);
+      scrollRoot?.removeEventListener('scroll', pauseWhileScrolling);
       ro?.disconnect();
       window.removeEventListener('resize', init);
       window.removeEventListener('mousemove', onMove);
@@ -452,8 +433,6 @@ function ProductMegaMenu() {
 function DashboardDesktopShell() {
   const { toggleViewMode } = useDashboardViewMode();
   const rootRef = useRef<HTMLDivElement>(null);
-  const [activeCharacterIndex, setActiveCharacterIndex] = useState(0);
-  const [sliderInteractionNonce, setSliderInteractionNonce] = useState(0);
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
   const inViewOpts = useMemo(
@@ -482,15 +461,6 @@ function DashboardDesktopShell() {
   }, []);
 
   const heroStagger = [0, 0.1, 0.2, 0.3, 0.4, 0.5] as const;
-  const activeCharacter = CHARACTER_SLIDES[activeCharacterIndex];
-  const previousCharacter =
-    CHARACTER_SLIDES[(activeCharacterIndex - 1 + CHARACTER_SLIDES.length) % CHARACTER_SLIDES.length];
-  const nextCharacter = CHARACTER_SLIDES[(activeCharacterIndex + 1) % CHARACTER_SLIDES.length];
-
-  const handleCharacterSelect = useCallback((index: number) => {
-    setActiveCharacterIndex(index);
-    setSliderInteractionNonce((current) => current + 1);
-  }, []);
 
   return (
     <div
@@ -839,115 +809,9 @@ Your yesterday, neatly wrapped up.              </h2>
               whileInView={{ opacity: 1, x: 0 }}
               viewport={inViewOpts}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="order-2 relative flex justify-center md:order-2"
-              style={{ backgroundColor: 'rgba(210, 210, 218, 0.54)', borderRadius: '2rem' }}
+              className="order-2 flex justify-center md:order-2"
             >
-              <div
-                className="absolute h-[28rem] w-[28rem] animate-pulse rounded-full blur-3xl transition-all duration-500"
-                style={{
-                  background: `radial-gradient(circle at center, ${activeCharacter.glow} 0%, rgba(99,102,241,0.12) 45%, transparent 72%)`,
-                }}
-              />
-              <div
-                style={glassPanelStyle}
-                aria-hidden
-              />
-              <div className="relative z-10 mx-auto flex w-full max-w-[33rem] flex-col items-center gap-7 px-5 py-8 sm:px-8">
-                <div className="relative flex w-full items-end justify-center">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleCharacterSelect(
-                        (activeCharacterIndex - 1 + CHARACTER_SLIDES.length) % CHARACTER_SLIDES.length
-                      )
-                    }
-                    className="group absolute left-20 top-1/2 hidden h-32 w-32 -translate-y-1/2 rounded-3xl bg-white/[0.03] p-3 backdrop-blur-sm transition hover:bg-white/[0.05] md:block"
-                    aria-label={`Show ${previousCharacter.name}`}
-                  >
-                    <DotLottieReact
-                      src={previousCharacter.src}
-                      loop
-                      autoplay
-                      speed={previousCharacter.speed}
-                      className="h-full w-full opacity-70 transition group-hover:opacity-100"
-                      aria-hidden
-                    />
-                  </button>
-                  <div
-                    className="relative flex h-64 w-64 items-center justify-center rounded-[2rem] p-4 shadow-[0_0_50px_-10px_rgba(0,0,0,0.65)] backdrop-blur-md md:h-[300px] md:w-[300px]"
-                  >
-                    <div
-                      className="absolute inset-4 rounded-[1.5rem] blur-2xl"
-                      style={{ background: `radial-gradient(circle at center, ${activeCharacter.glow} 0%, transparent 72%)` }}
-                    />
-                    <div className="relative z-10 h-full w-full">
-                      <DotLottieReact
-                        key={activeCharacter.id}
-                        src={activeCharacter.src}
-                        loop
-                        autoplay
-                        speed={activeCharacter.speed}
-                        className="h-full w-full"
-                        aria-hidden
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleCharacterSelect((activeCharacterIndex + 1) % CHARACTER_SLIDES.length)}
-                    className="group absolute right-20 top-1/2 hidden h-32 w-32 -translate-y-1/2 rounded-3xl bg-white/[0.03] p-3 backdrop-blur-sm transition hover:bg-white/[0.05] md:block"
-                    aria-label={`Show ${nextCharacter.name}`}
-                  >
-                    <DotLottieReact
-                      src={nextCharacter.src}
-                      loop
-                      autoplay
-                      speed={nextCharacter.speed}
-                      className="h-full w-full opacity-70 transition group-hover:opacity-100"
-                      aria-hidden
-                    />
-                  </button>
-                </div>
-                <div className="flex flex-col items-center gap-4">
-                  <div className="rounded-2xl bg-zinc-950/55 px-5 py-3 text-center shadow-[0_10px_30px_-12px_rgba(0,0,0,0.8)] backdrop-blur-md">
-                    <p className="text-3xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
-                      {activeCharacter.name}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3 rounded-full border border-white/10 bg-zinc-950/50 px-4 py-3 backdrop-blur-md">
-                    {CHARACTER_SLIDES.map((character, index) => {
-                      const isActive = index === activeCharacterIndex;
-
-                      return (
-                        <button
-                          key={character.id}
-                          type="button"
-                          onClick={() => handleCharacterSelect(index)}
-                          className={`relative h-10 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400/60 ${
-                            isActive ? 'w-20 bg-white/10' : 'w-10 bg-transparent hover:bg-white/5'
-                          }`}
-                          aria-label={`Show ${character.name}`}
-                          aria-pressed={isActive}
-                        >
-                          <span className="absolute inset-x-2 top-1/2 h-px -translate-y-1/2 bg-white/20" />
-                          <span
-                            className={`absolute left-1/2 top-1/2 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ${
-                              isActive ? 'w-10 bg-blue-400 shadow-[0_0_20px_rgba(96,165,250,0.8)]' : 'w-3 bg-zinc-500'
-                            }`}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className="rounded-full bg-zinc-950/65 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-[0_10px_24px_-14px_rgba(0,0,0,0.9)] backdrop-blur-md">
-                    <div className="flex items-center gap-2 drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">
-                    <span className="text-white"> {String(activeCharacterIndex + 1).padStart(2, '0')}</span>
-                    <span className="h-px w-10 bg-white/35" />
-                    <span className="text-white">{String(CHARACTER_SLIDES.length).padStart(2, '0')}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <CharacterCarousel />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}

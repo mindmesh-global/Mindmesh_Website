@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import SiteNav from '@/components/layout/SiteNav';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
+import SensorMascotSpline from './SensorMascotSpline';
 import styles from './sensor&mascot.module.css';
 
 const manrope = Manrope({
@@ -247,13 +248,7 @@ export default function SensorAndMascotPage() {
               desktop assistant than a static productivity app.
             </p>
           </div>
-          <div className={styles.imageCard}>
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9V_vAzfBc2IM6w7joyiUgwxsnYjWtdDYVXRZ0wYetCvAbwT0RW3vc9RST7dSD3GGhuRqe7VB-PYggE2dvhlDmnDEkS1iv2-xN9GPu0u5WBOcDJ6uxKmHiFfCQ-n8cH_F9zSmg9B8uYnt7ExoYrg2VdLd8t5IXKbbCi2qV3_Jb7nDPEwVcVh5qNk0EoNEiBWyIY1fiVJ_GCNNBizuGlyTnDa8E61aYS79cRTNzcNi-HKDB6JxtcgARKqYD0Ut8EcnAS2kMD-8NGmU"
-              alt="Sleek workspace interface"
-              className={styles.sideImage}
-            />
-          </div>
+          <SensorMascotSpline />
         </div>
       </section>
 
