@@ -239,8 +239,8 @@ export default function MindMeshUI({ dragControls, onClose, onMinimize }: MindMe
           <div
             ref={contentScrollRef}
             data-mindmesh-scroll
-            className={`flex-1 min-h-0 overflow-y-auto ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}
-            style={{ overscrollBehavior: 'contain', ...(uiOverlay?.mascotTooltipVisible ? { touchAction: 'none' } : {}) } as React.CSSProperties}
+            className={`flex-1 min-h-0 overflow-y-auto overscroll-y-contain ${isFullscreen ? 'h-[calc(100vh-3rem)]' : ''}`}
+            style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch', ...(uiOverlay?.mascotTooltipVisible ? { touchAction: 'none' } : {}) } as React.CSSProperties}
           >
             <DashboardPage hideViewSwitcher />
           </div>

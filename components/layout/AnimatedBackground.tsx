@@ -12,7 +12,7 @@ export default function AnimatedBackground() {
           alt=""
           fill
           priority
-          quality={95}
+          quality={75}
           sizes="100vw"
           className="object-cover object-center"
         />

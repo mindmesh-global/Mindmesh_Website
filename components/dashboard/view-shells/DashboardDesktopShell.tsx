@@ -93,22 +93,22 @@ function HoneycombCanvas() {
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const timeRef = useRef(0);
   const rafRef = useRef<number>(0);
-  const pausedRef = useRef(false);
+  const runningRef = useRef(false);
+  const staticModeRef = useRef(false);
+  const staticLayerRef = useRef<HTMLCanvasElement | null>(null);
   const hexesRef = useRef<HexCell[]>([]);
   const sizeRef = useRef({ w: 0, h: 0, cols: 0, rows: 0, hexW: 46, hexH: 0 });
 
   const init = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const hexWidth = 46;
+    const hexWidth = staticModeRef.current ? 52 : 46;
     const hexHeight = Math.sqrt(3) * (hexWidth / 2);
-    // Match marketing scrollport width so honeycomb does not extend past in-flow content (e.g. footer)
-    // when a vertical scrollbar narrows the overlay vs window.innerWidth.
     const scrollRoot =
       typeof document !== 'undefined' ? document.getElementById('mindmesh-marketing-scroll') : null;
     const w = scrollRoot?.clientWidth ?? window.innerWidth;
     const h = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, staticModeRef.current ? 1 : 1.5);
     canvas.width = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
     canvas.style.width = `${w}px`;
@@ -134,48 +134,73 @@ function HoneycombCanvas() {
     }
     hexesRef.current = hexes;
     sizeRef.current = { w, h, cols: columns, rows, hexW: hexWidth, hexH: hexHeight };
+
+    if (!staticLayerRef.current) {
+      staticLayerRef.current = document.createElement('canvas');
+    }
+    const staticCanvas = staticLayerRef.current;
+    staticCanvas.width = Math.floor(w * dpr);
+    staticCanvas.height = Math.floor(h * dpr);
+    const sctx = staticCanvas.getContext('2d');
+    if (sctx) {
+      sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sctx.fillStyle = '#0a0a14';
+      sctx.fillRect(0, 0, w, h);
+      sctx.strokeStyle = '#ffffff';
+      sctx.globalAlpha = 0.04;
+      sctx.lineWidth = 1;
+      const half = hexWidth / 2;
+      for (const hex of hexes) {
+        sctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const angle = (Math.PI / 3) * i;
+          const px = hex.centerX + half * Math.cos(angle);
+          const py = hex.centerY + half * Math.sin(angle);
+          if (i === 0) sctx.moveTo(px, py);
+          else sctx.lineTo(px, py);
+        }
+        sctx.closePath();
+        sctx.stroke();
+      }
+      sctx.globalAlpha = 1;
+    }
+
+    if (staticModeRef.current && ctx && staticCanvas) {
+      ctx.drawImage(staticCanvas, 0, 0, w, h);
+    }
   }, []);
 
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    staticModeRef.current =
+      prefersReduced || coarsePointer || (navigator.hardwareConcurrency ?? 8) <= 4;
+
     init();
-
-    const onMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    const onTouch = (e: TouchEvent) => {
-      if (e.touches[0]) mouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    };
-
-    window.addEventListener('resize', init);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onTouch, { passive: true });
-
-    const scrollRoot = document.getElementById('mindmesh-marketing-scroll');
-    const ro = scrollRoot ? new ResizeObserver(() => init()) : null;
-    if (scrollRoot && ro) ro.observe(scrollRoot);
-
-    let scrollPauseTimer: ReturnType<typeof setTimeout> | undefined;
-    const pauseWhileScrolling = () => {
-      pausedRef.current = true;
-      if (scrollPauseTimer) clearTimeout(scrollPauseTimer);
-      scrollPauseTimer = setTimeout(() => {
-        pausedRef.current = false;
-      }, 150);
-    };
-    scrollRoot?.addEventListener('scroll', pauseWhileScrolling, { passive: true });
 
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) {
-      return () => {
-        ro?.disconnect();
-        window.removeEventListener('resize', init);
-        window.removeEventListener('mousemove', onMove);
-        window.removeEventListener('touchmove', onTouch);
-      };
-    }
+    if (!canvas || !ctx) return;
 
-    const drawHex = (
+    const scrollRoot = document.getElementById('mindmesh-marketing-scroll');
+
+    const stopLoop = () => {
+      runningRef.current = false;
+      cancelAnimationFrame(rafRef.current);
+    };
+
+    const startLoop = () => {
+      if (staticModeRef.current || runningRef.current || document.hidden) return;
+      runningRef.current = true;
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    const onMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+      if (!runningRef.current && !staticModeRef.current) startLoop();
+    };
+
+    const drawActiveHex = (
       x: number,
       y: number,
       size: number,
@@ -183,18 +208,8 @@ function HoneycombCanvas() {
       offset: number,
       hueIndex: number
     ) => {
-      const baseOpacity = 0.04;
-      const pulseOpacity = brightness * 0.8;
-      if (brightness > 0.05) {
-        ctx.strokeStyle = VIBGYOR[hueIndex];
-        ctx.shadowBlur = brightness * 15;
-        ctx.shadowColor = VIBGYOR[hueIndex];
-        ctx.globalAlpha = baseOpacity + pulseOpacity;
-      } else {
-        ctx.strokeStyle = '#ffffff';
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha = baseOpacity;
-      }
+      ctx.strokeStyle = VIBGYOR[hueIndex];
+      ctx.globalAlpha = 0.04 + brightness * 0.8;
       ctx.lineWidth = 1 + brightness * 1.5;
       ctx.beginPath();
       for (let i = 0; i < 6; i++) {
@@ -212,53 +227,91 @@ function HoneycombCanvas() {
         ctx.fill();
       }
       ctx.globalAlpha = 1;
-      ctx.shadowBlur = 0;
     };
 
     const animate = () => {
-      rafRef.current = requestAnimationFrame(animate);
-      if (pausedRef.current) return;
+      if (!runningRef.current) return;
 
       timeRef.current += 0.01;
       const { w, h } = sizeRef.current;
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#0a0a14';
-      ctx.fillRect(0, 0, w, h);
+      const staticLayer = staticLayerRef.current;
+      if (staticLayer) {
+        ctx.drawImage(staticLayer, 0, 0, w, h);
+      } else {
+        ctx.fillStyle = '#0a0a14';
+        ctx.fillRect(0, 0, w, h);
+      }
 
       const mouse = mouseRef.current;
       const time = timeRef.current;
       const hexWidth = sizeRef.current.hexW;
       const hexes = hexesRef.current;
-      const maxDist = 300;
+      const maxDist = 280;
+      let anyActive = false;
 
-      hexes.forEach((hex) => {
+      for (const hex of hexes) {
         const dx = mouse.x - hex.centerX;
         const dy = mouse.y - hex.centerY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < maxDist) {
+        const distSq = dx * dx + dy * dy;
+        if (distSq < maxDist * maxDist) {
+          const dist = Math.sqrt(distSq);
           const targetBrightness = Math.pow(1 - dist / maxDist, 2);
           hex.brightness += (targetBrightness - hex.brightness) * 0.15;
           const wave = Math.sin(dist / 40 - time * 4) * 8;
           hex.offsetY += (wave * (1 - dist / maxDist) - hex.offsetY) * 0.1;
-          if (Math.random() > 0.98) hex.hueIndex = (hex.hueIndex + 1) % VIBGYOR.length;
+          if (hex.brightness > 0.04) {
+            anyActive = true;
+            drawActiveHex(hex.centerX, hex.centerY, hexWidth / 2, hex.brightness, hex.offsetY, hex.hueIndex);
+          }
         } else {
           hex.brightness *= 0.92;
           hex.offsetY *= 0.92;
         }
-        drawHex(hex.centerX, hex.centerY, hexWidth / 2, hex.brightness, hex.offsetY, hex.hueIndex);
-      });
+      }
+
+      if (anyActive || mouse.x > -500) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        stopLoop();
+      }
     };
 
-    rafRef.current = requestAnimationFrame(animate);
+    let scrollPauseTimer: ReturnType<typeof setTimeout> | undefined;
+    const pauseWhileScrolling = () => {
+      stopLoop();
+      if (scrollPauseTimer) clearTimeout(scrollPauseTimer);
+      scrollPauseTimer = setTimeout(startLoop, 450);
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) stopLoop();
+      else if (!scrollPauseTimer) startLoop();
+    };
+
+    const onResize = () => {
+      stopLoop();
+      init();
+      startLoop();
+    };
+
+    window.addEventListener('resize', onResize);
+    window.addEventListener('mousemove', onMove, { passive: true });
+    document.addEventListener('visibilitychange', onVisibility);
+    scrollRoot?.addEventListener('scroll', pauseWhileScrolling, { passive: true });
+
+    const ro = scrollRoot ? new ResizeObserver(onResize) : null;
+    if (scrollRoot && ro) ro.observe(scrollRoot);
+
+    if (!staticModeRef.current) startLoop();
 
     return () => {
+      stopLoop();
       if (scrollPauseTimer) clearTimeout(scrollPauseTimer);
       scrollRoot?.removeEventListener('scroll', pauseWhileScrolling);
       ro?.disconnect();
-      window.removeEventListener('resize', init);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('touchmove', onTouch);
-      cancelAnimationFrame(rafRef.current);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [init]);
 
@@ -266,12 +319,13 @@ function HoneycombCanvas() {
     <canvas
       ref={canvasRef}
       className="pointer-events-none fixed inset-0 z-0"
+      style={{ contain: 'strict' }}
       aria-hidden
     />
   );
 }
 
-const glassPanel = 'rounded-2xl backdrop-blur-xl shadow-2xl shadow-black/50';
+const glassPanel = 'rounded-2xl shadow-2xl shadow-black/50';
 
 const glassPanelStyle: React.CSSProperties = {
   background: 'rgba(97, 89, 89, 0.5)',
@@ -359,7 +413,7 @@ function ProductMegaMenu() {
       <div
         id={PRODUCT_MENU_PANEL_ID}
         role="menu"
-        className="fixed z-[220000] rounded-2xl p-5 backdrop-blur-xl sm:p-6"
+        className="fixed z-[220000] rounded-2xl p-5 sm:p-6"
         style={{
           top: menuBox.top,
           left: menuBox.left,
@@ -472,7 +526,7 @@ function DashboardDesktopShell() {
       <HoneycombCanvas />
 
       <nav
-        className="fixed top-0 z-50 w-full border-b-0 bg-[#0a0a14]/90 backdrop-blur-md"
+        className="fixed top-0 z-50 w-full border-b-0 bg-[#06061d]/95"
         style={{ backgroundColor: 'rgba(6, 6, 29, 0.78)' }}
       >
         <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-3 px-4 py-4 tracking-tight sm:px-8">
@@ -570,6 +624,7 @@ function DashboardDesktopShell() {
                   className="w-full rounded-xl object-contain shadow-[0_40px_100px_rgba(0,0,0,0.6)]"
                   sizes="(max-width: 1280px) 100vw, 1280px"
                   priority
+                  quality={80}
                 />
               </div>
             </motion.div>
@@ -880,7 +935,7 @@ Built for focus, not noise.
                   >
                     <div className="pointer-events-none absolute left-1/2 top-1/2 h-[min(100%,420px)] w-[min(100%,420px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.12] blur-[80px]" />
                     <div className="relative flex min-h-[320px] flex-col justify-center gap-4 sm:min-h-[360px]">
-                      <div className="relative z-[3] ml-0 rounded-2xl border border-white/10 bg-zinc-950/40 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md sm:ml-4 sm:-rotate-1">
+                      <div className="relative z-[3] ml-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] sm:ml-4 sm:-rotate-1">
                         <div className="flex items-start gap-4">
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-300 ring-1 ring-blue-400/25">
                             <KeyRound className="h-5 w-5" strokeWidth={2} aria-hidden />
@@ -893,7 +948,7 @@ Built for focus, not noise.
                           </div>
                         </div>
                       </div>
-                      <div className="relative z-[2] mr-0 rounded-2xl border border-white/10 bg-zinc-950/50 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md sm:mr-6 sm:rotate-1">
+                      <div className="relative z-[2] mr-0 rounded-2xl border border-white/10 bg-zinc-950/80 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] sm:mr-6 sm:rotate-1">
                         <div className="flex items-start gap-4">
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-300/95 ring-1 ring-emerald-400/20">
                             <ShieldCheck className="h-5 w-5" strokeWidth={2} aria-hidden />
@@ -907,7 +962,7 @@ Built for focus, not noise.
                           </div>
                         </div>
                       </div>
-                      <div className="relative z-[1] ml-0 rounded-2xl border border-white/10 bg-zinc-950/35 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md sm:ml-8 sm:-rotate-1">
+                      <div className="relative z-[1] ml-0 rounded-2xl border border-white/10 bg-zinc-950/70 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] sm:ml-8 sm:-rotate-1">
                         <div className="flex items-start gap-4">
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/12 text-violet-300/95 ring-1 ring-violet-400/20">
                             <Trash2 className="h-5 w-5" strokeWidth={2} aria-hidden />
@@ -947,7 +1002,7 @@ Built for focus, not noise.
                   alt="MindMesh logo"
                   width={1024}
                   height={682}
-                  quality={100}
+                  quality={80}
                   className="relative z-10 h-auto w-full max-w-[min(100%,min(92vw,440px))] object-contain sm:max-w-[min(100%,520px)] md:max-w-none"
                   sizes="(max-width: 768px) 92vw, (max-width: 1280px) 45vw, 640px"
                 />

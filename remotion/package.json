@@ -1,0 +1,25 @@
+{
+  "name": "mindmesh-promo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "node scripts/copy-assets.mjs && node scripts/generate-soft-ambient.mjs",
+    "studio": "remotion studio",
+    "render": "remotion render MindMeshPromo out/mindmesh-promo.mp4 --crf=16 --scale=2",
+    "render:fast": "remotion render MindMeshPromo out/mindmesh-promo.mp4 --crf=20",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.272",
+    "@remotion/google-fonts": "4.0.272",
+    "@remotion/media-utils": "4.0.272",
+    "@remotion/transitions": "4.0.272",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.272"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.6",
+    "typescript": "^5.8.3"
+  }
+}

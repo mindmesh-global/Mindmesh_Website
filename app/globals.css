@@ -122,6 +122,14 @@ html, body {
 .mindmesh-marketing-root {
   background-color: #0a0a14;
   color: #a1a1aa;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* Defer paint for below-fold marketing sections during scroll */
+#mindmesh-marketing-scroll main > section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
 }
 
 @layer utilities {

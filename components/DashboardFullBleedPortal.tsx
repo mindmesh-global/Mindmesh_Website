@@ -22,7 +22,7 @@ export default function DashboardFullBleedPortal() {
   return createPortal(
     <div
       id="mindmesh-marketing-scroll"
-      className="mindmesh-marketing-root fixed inset-0 z-[200000] overflow-y-auto overflow-x-hidden overscroll-y-contain"
+      className="mindmesh-marketing-root fixed inset-0 z-[200000] overflow-y-auto overflow-x-hidden overscroll-y-contain [transform:translateZ(0)]"
       style={{
         backgroundColor: '#0a0a14',
         color: '#a1a1aa',

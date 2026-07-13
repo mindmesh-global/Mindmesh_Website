@@ -128,18 +128,17 @@ function SideMascot({
       }}
       whileHover={reduceMotion ? undefined : { opacity: 0.75, scale: 0.68 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className={`group absolute top-1/2 z-[1] hidden h-24 w-24 -translate-y-1/2 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-2 backdrop-blur-md transition-colors hover:border-white/10 hover:bg-white/[0.06] sm:flex md:h-28 md:w-28 lg:h-32 lg:w-32 ${
+      className={`group absolute top-1/2 z-[1] hidden h-24 w-24 -translate-y-1/2 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-2 transition-colors hover:border-white/10 hover:bg-white/[0.06] sm:flex md:h-28 md:w-28 lg:h-32 lg:w-32 ${
         position === 'left' ? 'left-2 md:left-6 lg:left-10' : 'right-2 md:right-6 lg:right-10'
       }`}
     >
-      <DotLottieReact
-        src={character.src}
-        loop
-        autoplay
-        speed={(character.speed ?? 1) * 0.85}
-        className="h-full w-full opacity-80 transition-opacity group-hover:opacity-100"
+      <span
+        className="flex h-full w-full items-center justify-center rounded-xl text-2xl font-bold opacity-80 transition-opacity group-hover:opacity-100 md:text-3xl"
+        style={{ color: character.accent }}
         aria-hidden
-      />
+      >
+        {character.name.charAt(0)}
+      </span>
     </motion.button>
   );
 }
@@ -147,10 +146,22 @@ function SideMascot({
 export default function CharacterCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [inView, setInView] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const isEngagedRef = useRef(false);
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '80px', threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const activeCharacter = CHARACTER_SLIDES[activeIndex];
   const previousCharacter = CHARACTER_SLIDES[wrapIndex(activeIndex - 1)];
@@ -265,7 +276,7 @@ export default function CharacterCarousel() {
             <button
               type="button"
               onClick={goPrev}
-              className="absolute left-0 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-black/55 hover:text-white sm:hidden"
+              className="absolute left-0 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/80 transition hover:border-white/20 hover:bg-black/75 hover:text-white sm:hidden"
               aria-label={`Previous: ${previousCharacter.name}`}
             >
               <ChevronLeft className="h-5 w-5" aria-hidden />
@@ -273,7 +284,7 @@ export default function CharacterCarousel() {
             <button
               type="button"
               onClick={goNext}
-              className="absolute right-0 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition hover:border-white/20 hover:bg-black/55 hover:text-white sm:hidden"
+              className="absolute right-0 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/80 transition hover:border-white/20 hover:bg-black/75 hover:text-white sm:hidden"
               aria-label={`Next: ${nextCharacter.name}`}
             >
               <ChevronRight className="h-5 w-5" aria-hidden />
@@ -315,7 +326,7 @@ export default function CharacterCarousel() {
                   <DotLottieReact
                     src={activeCharacter.src}
                     loop
-                    autoplay
+                    autoplay={inView && !reduceMotion}
                     speed={activeCharacter.speed}
                     className="h-full w-full drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)]"
                     aria-hidden
@@ -343,7 +354,7 @@ export default function CharacterCarousel() {
 
             <div className="w-full max-w-xs sm:max-w-sm">
               <div
-                className="relative h-2 overflow-hidden rounded-full border border-white/10 bg-zinc-950/60 backdrop-blur-sm"
+                className="relative h-2 overflow-hidden rounded-full border border-white/10 bg-zinc-950/80"
                 role="progressbar"
                 aria-valuemin={1}
                 aria-valuemax={slideCount}
