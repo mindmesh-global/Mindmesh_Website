@@ -61,9 +61,19 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts}',
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
+        body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['5rem', { lineHeight: '1.08', letterSpacing: '-0.03em', fontWeight: '700' }],
+        'display-lg': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
+        heading: ['1.75rem', { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' }],
+      },
       colors: {
         mm: mindMeshLanding,
         border: "hsl(var(--border))",
@@ -104,6 +114,10 @@ const config: Config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        'mm-elevated':
+          'var(--mm-shadow-elevated, 0 8px 32px rgba(0, 0, 0, 0.35))',
       },
     },
   },

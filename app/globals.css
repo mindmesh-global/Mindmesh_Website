@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 /* Weather card sun animations */
 @keyframes sunGlowPulse {
@@ -111,6 +110,385 @@ html, body {
   color: #a1a1aa;
 }
 
+/* Marketing homepage theme (Phase 2) — scope via data-marketing-theme on MarketingLayout */
+[data-marketing-theme='dark'] {
+  /* Colors (baseline) */
+  --mm-bg: #060e20;
+  --mm-surface: #0a1836;
+  --mm-surface-raised: #0f1e3f;
+  --mm-border: #364770;
+  --mm-text: #dee5ff;
+  --mm-text-muted: #99aad9;
+  --mm-accent: #adc6ff;
+  --mm-accent-strong: #4388fd;
+
+  /* Colors (extended) */
+  --mm-accent-muted: #699cff;
+  --mm-accent-hover: #317bef;
+  --mm-on-accent: #000000;
+  --mm-outline: #6475a1;
+  --mm-input-bg: #06122c;
+  --mm-input-border: #364770;
+  --mm-error: #fa746f;
+  --mm-error-text: #ff9993;
+  --mm-error-bg: #871f21;
+
+  /* Typography */
+  --font-display: var(--font-manrope), 'Manrope', system-ui, sans-serif;
+  --font-body: var(--font-inter), 'Inter', system-ui, sans-serif;
+
+  /* Layout — 1280px matches the Product Overview frame (P12) so hero and
+     section copy share the same left edge as the app chrome. */
+  --mm-layout-max: 80rem;
+  --mm-layout-gutter: 1.5rem;
+  --mm-section-py: 6rem;
+  --mm-section-py-lg: 8rem;
+  --mm-radius-button: 0.375rem;
+  --mm-radius-card: 0.5rem;
+  --mm-nav-height: 4rem;
+  --mm-scroll-offset: 5rem;
+  --mm-theater-height: 70vh;
+  --mm-theater-height-max: 720px;
+
+  /* Elevation (product frames + depth mockups) */
+  --mm-shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.35);
+
+  background-color: var(--mm-bg);
+  color: var(--mm-text);
+  font-family: var(--font-body);
+}
+
+/**
+ * Shared marketing content column. Width matches the Product Overview frame
+ * (`min(1280px, 100% - 3rem)`), so hero copy, section titles, nav, and the
+ * app chrome share one left edge. No extra px-6: gutters are in the width.
+ */
+[data-marketing-theme='dark'] .mm-content {
+  width: min(var(--mm-layout-max), calc(100% - 2 * var(--mm-layout-gutter)));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+[data-marketing-theme='dark'] .font-display {
+  font-family: var(--font-display);
+}
+
+[data-marketing-theme='dark'] .font-body {
+  font-family: var(--font-body);
+}
+
+/**
+ * Homepage hero H1 LCP path (P6-T08).
+ * Manrope-only face; no Inter synthesis. Copy order stays P1-T03.
+ */
+[data-marketing-theme='dark'] h1.hero-lcp {
+  font-family: var(--font-display);
+  font-synthesis: none;
+}
+
+[data-marketing-theme='dark'] [id] {
+  scroll-margin-top: var(--mm-scroll-offset);
+}
+
+/**
+ * Below-fold rendering deferral (P6-T14 / P1-T15 / P1-T17).
+ * Sections 7–9 only. Theaters (#connect/#focus/#execute) keep sticky
+ * ProductFrame; content-visibility applies layout containment and would
+ * break sticky, so they stay out (P1-T17 "where safe").
+ * `auto` in contain-intrinsic-size remembers measured height after first paint.
+ */
+[data-marketing-theme='dark'] main > section#features {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+[data-marketing-theme='dark'] main > section#trust {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+/* Product theater scroll kit (P1-T15, P3-T15, P8-T07) — vh heights via CSS (reliable on mobile) */
+[data-marketing-theme='dark'] [data-theater='connect']:not([data-reduced-motion='true']),
+[data-marketing-theme='dark'] [data-theater='focus']:not([data-reduced-motion='true']),
+[data-marketing-theme='dark'] [data-theater='sensor']:not([data-reduced-motion='true']),
+[data-marketing-theme='dark'] [data-theater='sensorCalc']:not([data-reduced-motion='true']),
+[data-marketing-theme='dark'] [data-theater='mascot']:not([data-reduced-motion='true']),
+[data-marketing-theme='dark'] [data-theater='mascotAttachment']:not([data-reduced-motion='true']) {
+  min-height: 120vh;
+}
+
+[data-marketing-theme='dark'] [data-theater='execute']:not([data-reduced-motion='true']) {
+  min-height: 140vh;
+}
+
+@media (min-width: 768px) {
+  [data-marketing-theme='dark'] [data-theater='connect']:not([data-reduced-motion='true']) {
+    min-height: 220vh;
+  }
+
+  [data-marketing-theme='dark'] [data-theater='execute']:not([data-reduced-motion='true']) {
+    min-height: 280vh;
+  }
+
+  [data-marketing-theme='dark'] [data-theater='focus']:not([data-reduced-motion='true']) {
+    min-height: 240vh;
+  }
+
+  [data-marketing-theme='dark'] [data-theater='sensor']:not([data-reduced-motion='true']),
+  [data-marketing-theme='dark'] [data-theater='sensorCalc']:not([data-reduced-motion='true']),
+  [data-marketing-theme='dark'] [data-theater='mascot']:not([data-reduced-motion='true']),
+  [data-marketing-theme='dark'] [data-theater='mascotAttachment']:not([data-reduced-motion='true']) {
+    min-height: 170vh;
+  }
+}
+
+[data-marketing-theme='dark'] .theater-sticky-frame {
+  position: sticky;
+  z-index: 10;
+  top: 80px;
+}
+
+/* Min/max height on the product chrome only so caption + depth links
+   can sit below the frame without fighting the sticky max-height. */
+[data-marketing-theme='dark'] .theater-frame-chrome {
+  min-height: 60vh;
+  max-height: 560px;
+}
+
+@media (min-width: 768px) {
+  [data-marketing-theme='dark'] .theater-frame-chrome {
+    min-height: 70vh;
+    max-height: 720px;
+  }
+}
+
+/**
+ * Product overview mount reveal, widened frame, and glow (P12-T02 / P12-T04 / P12-T06).
+ * Hold-then-reveal is JS-driven (useProductOverviewReveal flips
+ * data-overview-revealed after a fixed hold); reduced motion resolves to
+ * `true` immediately, so this CSS only needs to animate the transition,
+ * not branch on motion preference itself.
+ *
+ * The frame chrome stays at opacity: 1 throughout (see P12-T06 doc for why:
+ * avoids a blank-frame flash on the skeleton -> real content swap, which is
+ * a hard React mount, not a native crossfade). Only `transform` animates on
+ * the frame; the glow animates `opacity` only. Together the sequence still
+ * uses transform + opacity exclusively, per the Phase 12 motion contract.
+ *
+ * Breakout uses left/translateX centering with max-width (not width:100vw),
+ * so the frame never overflows the viewport and never gets edge-clipped by
+ * an ancestor overflow-x-clip / scrollbar-gutter mismatch.
+ */
+[data-marketing-theme='dark'] [data-overview-frame-wide] {
+  position: relative;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(14px);
+  transform-origin: 50% 0;
+}
+
+[data-marketing-theme='dark'] [data-overview-frame-wide][data-overview-revealed='true'] {
+  transform: translateY(0);
+}
+
+/* Simple (non-widened) reveal used by the mobile stacked tour (P12-T06). */
+[data-marketing-theme='dark'] [data-overview-reveal-simple] {
+  transition: opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+[data-marketing-theme='dark'] [data-overview-reveal-simple][data-overview-revealed='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/**
+ * Linear grey stage behind the first-viewport app (section-level).
+ * Soft hue fade in at Yesterday narrative, full-bleed L→R, soft fade out
+ * into the divider under the CTA row. No hard edges / borders.
+ */
+[data-marketing-theme='dark'] [data-overview-page-stage] {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  [data-marketing-theme='dark'] [data-overview-page-stage] {
+    display: block;
+    position: absolute;
+    top: var(--overview-stage-top, 15rem);
+    bottom: var(--overview-stage-bottom, 0px);
+    left: 50%;
+    right: auto;
+    z-index: 0;
+    width: 100vw;
+    max-width: none;
+    transform: translateX(-50%);
+    pointer-events: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 0;
+    /* Soft hue wash: no hard top/bottom edge; dissolves into the CTA divider. */
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, #1a2438 18%, transparent) 12%,
+      color-mix(in srgb, #1a2438 45%, transparent) 22%,
+      color-mix(in srgb, #1a2438 72%, transparent) 32%,
+      #1a2438 42%,
+      var(--mm-surface-raised) 58%,
+      var(--mm-surface) 72%,
+      color-mix(in srgb, var(--mm-surface) 65%, var(--mm-bg)) 84%,
+      color-mix(in srgb, var(--mm-bg) 55%, transparent) 93%,
+      transparent 100%
+    );
+    transition: opacity 280ms ease;
+  }
+
+  [data-marketing-theme='dark'] [data-overview-page-stage][data-ready='true'] {
+    opacity: 1;
+  }
+}
+
+/*
+ * Section-ending divider (Linear-style "shade"): a bright hairline that
+ * fades out at both edges, with a softer blurred glow band sitting just
+ * above it. Reads as a rectangular border closing out Product Overview and
+ * doubling as the top edge of the Problem section below.
+ */
+[data-marketing-theme='dark'] .overview-section-divider-line {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--mm-text) 22%, transparent) 50%,
+    transparent 100%
+  );
+}
+
+[data-marketing-theme='dark'] .overview-section-divider-glow {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--mm-accent-strong, #4388fd) 22%, transparent) 50%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  opacity: 0.7;
+}
+
+/* FIG 0.5 orbit figure: sun / planets / sensory tremor + inbound notification feed. */
+@keyframes problem-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes problem-orbit-core-aura {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+}
+
+/* Heartbeat rings: grow from the logo out to the last app orbit, then draw back in. */
+@keyframes problem-orbit-heartbeat {
+  0% {
+    transform: translate(-50%, -50%) scale(0.18);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.55;
+  }
+  42% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.32;
+  }
+  52% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.18;
+  }
+  90% {
+    transform: translate(-50%, -50%) scale(0.22);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.18);
+    opacity: 0;
+  }
+}
+
+@keyframes problem-orbit-badge-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  35% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes problem-orbit-feed-in {
+  0% {
+    top: var(--orbit-feed-start);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  100% {
+    top: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-mindmesh-orbit] [data-problem-figure],
+  [data-mindmesh-orbit] {
+    animation: none !important;
+  }
+}
+
+/* Widened frame + scale, desktop-only (P12-T04 Section 5).
+ * Frame fills `.mm-content` (same 1280px column as hero/sections), so no
+ * viewport breakout is needed; left edges stay aligned. */
+@media (min-width: 1024px) {
+  [data-marketing-theme='dark'] [data-overview-frame-wide] {
+    width: 100%;
+    transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(0.875) translateY(14px);
+    transform-origin: 50% 0;
+  }
+
+  [data-marketing-theme='dark'] [data-overview-frame-wide][data-overview-revealed='true'] {
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Product overview static tour (mobile + reduced-motion): keep cards in flow,
+   avoid horizontal bleed from dense grids (P11-T12). */
+[data-marketing-theme='dark'] [data-overview-static-tour],
+[data-marketing-theme='dark'] [data-product-overview-mobile] {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-marketing-theme='dark'] [data-overview-static-tour] .theater-frame-chrome {
+    max-height: none;
+    min-height: 0;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -122,6 +500,437 @@ html, body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: #2563eb; /* fallback if gradient clip not supported */
+  }
+}
+
+/* Attention Open → dossier: separate-dimension blur morph */
+@keyframes attention-open-cue {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--mm-primary) 45%, transparent);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--mm-primary) 0%, transparent);
+  }
+}
+
+@keyframes attention-open-press {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes attention-dossier-veil-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px) saturate(100%);
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+}
+
+@keyframes attention-dossier-veil-out {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px) saturate(100%);
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+  }
+}
+
+@keyframes attention-dossier-morph-in {
+  0% {
+    opacity: 0;
+    filter: blur(18px);
+    transform: translateY(10%) scale(0.84);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(6px);
+    transform: translateY(2%) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes attention-dossier-morph-out {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(14px);
+    transform: translateY(6%) scale(0.9);
+  }
+}
+
+[data-attention-open-state='cue'] {
+  animation: attention-open-cue 1.1s ease-in-out infinite;
+}
+
+[data-attention-open-state='press'] {
+  animation: attention-open-press 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-attention-board-plane] {
+  transform-origin: 50% 20%;
+  transition:
+    filter 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-attention-dossier-open='true'] [data-attention-board-plane] {
+  filter: blur(7px) saturate(85%);
+  transform: scale(0.965);
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+}
+
+[data-attention-dossier-veil] {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  border-radius: 0.5rem;
+  background:
+    radial-gradient(
+      120% 90% at 50% 20%,
+      color-mix(in srgb, var(--mm-primary) 18%, transparent),
+      transparent 62%
+    ),
+    color-mix(in srgb, var(--mm-surface-container-low, #12141a) 55%, transparent);
+  pointer-events: auto;
+}
+
+[data-attention-dossier-veil][data-attention-dossier-motion='enter'] {
+  animation: attention-dossier-veil-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-attention-dossier-veil][data-attention-dossier-motion='open'] {
+  opacity: 1;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+[data-attention-dossier-veil][data-attention-dossier-motion='exit'] {
+  animation: attention-dossier-veil-out 420ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+[data-attention-dossier-shell] {
+  position: absolute;
+  inset: 0.65rem;
+  z-index: 13;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--mm-primary) 45%, transparent);
+  background: color-mix(in srgb, var(--mm-surface-container-low, #12141a) 82%, transparent);
+  box-shadow:
+    0 24px 64px -20px color-mix(in srgb, var(--mm-primary) 35%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--mm-outline-variant) 40%, transparent);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  transform-origin: 50% 40%;
+  will-change: transform, opacity, filter;
+}
+
+[data-attention-dossier-shell][data-attention-dossier-motion='enter'] {
+  animation: attention-dossier-morph-in 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-attention-dossier-shell][data-attention-dossier-motion='open'] {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+[data-attention-dossier-shell][data-attention-dossier-motion='exit'] {
+  animation: attention-dossier-morph-out 420ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-attention-open-state='cue'],
+  [data-attention-open-state='press'],
+  [data-attention-dossier-veil][data-attention-dossier-motion='enter'],
+  [data-attention-dossier-veil][data-attention-dossier-motion='exit'],
+  [data-attention-dossier-shell][data-attention-dossier-motion='enter'],
+  [data-attention-dossier-shell][data-attention-dossier-motion='exit'] {
+    animation: none;
+  }
+
+  [data-attention-board-plane] {
+    transition: none;
+  }
+
+  [data-attention-dossier-open='true'] [data-attention-board-plane] {
+    filter: none;
+    transform: none;
+    opacity: 0.35;
+  }
+}
+
+@keyframes attention-tour-focus-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--mm-primary) 55%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--mm-primary) 30%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--mm-primary) 70%, transparent),
+      0 0 0 10px color-mix(in srgb, var(--mm-primary) 0%, transparent);
+  }
+}
+
+@keyframes attention-guide-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.12);
+    opacity: 1;
+  }
+}
+
+[data-attention-tour-focus='true'] {
+  position: relative;
+  border-radius: 0.75rem;
+  outline: 1px solid color-mix(in srgb, var(--mm-primary) 50%, transparent);
+  outline-offset: 3px;
+  animation: attention-tour-focus-pulse 1.35s ease-in-out infinite;
+  z-index: 1;
+}
+
+[data-attention-guide-cursor] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--mm-primary) 88%, white);
+  border: 2px solid color-mix(in srgb, var(--mm-on-primary, #fff) 80%, transparent);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--mm-primary) 18%, transparent),
+    0 8px 20px color-mix(in srgb, var(--mm-primary) 35%, transparent);
+  animation: attention-guide-pulse 1.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+[data-attention-guide-cursor]::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--mm-primary) 40%, transparent);
+  transform: translate(-50%, -50%);
+}
+
+[data-attention-tour-hint] {
+  position: absolute;
+  z-index: 21;
+  max-width: 14rem;
+  pointer-events: none;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--mm-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--mm-surface-container-high, #1c1f28) 92%, transparent);
+  color: var(--mm-on-surface, #f3f4f6);
+  padding: 0.45rem 0.65rem;
+  font-size: 11px;
+  line-height: 1.35;
+  box-shadow: 0 12px 28px color-mix(in srgb, black 35%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-attention-tour-focus='true'],
+  [data-attention-guide-cursor] {
+    animation: none;
+  }
+}
+
+/* Problem section figures (FIG 0.2–0.5): sleek, looping micro-animations under
+   each pain-point heading and the MindMesh "long-term memory" close. */
+@keyframes problem-figure-float-a {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes problem-figure-float-b {
+  0%,
+  100% {
+    transform: translateY(-4px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-1deg);
+  }
+}
+
+@keyframes problem-figure-float-c {
+  0%,
+  100% {
+    transform: translateY(6px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1.5deg);
+  }
+}
+
+@keyframes problem-figure-pulse-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes problem-figure-dash-flicker {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0.2;
+  }
+  50% {
+    stroke-dashoffset: 16;
+    opacity: 0.5;
+  }
+  100% {
+    stroke-dashoffset: 32;
+    opacity: 0.2;
+  }
+}
+
+@keyframes problem-figure-shuffle {
+  0% {
+    transform: translate(-50%, -50%) translateY(0) translateX(0) scale(1) rotate(0deg);
+    opacity: 1;
+    z-index: 4;
+  }
+  30% {
+    transform: translate(-50%, -50%) translateY(6px) translateX(30px) scale(0.94) rotate(4deg);
+    opacity: 0.7;
+    z-index: 2;
+  }
+  55% {
+    transform: translate(-50%, -50%) translateY(14px) translateX(0) scale(0.86) rotate(0deg);
+    opacity: 0.4;
+    z-index: 1;
+  }
+  80% {
+    transform: translate(-50%, -50%) translateY(6px) translateX(-30px) scale(0.94) rotate(-4deg);
+    opacity: 0.7;
+    z-index: 2;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(0) translateX(0) scale(1) rotate(0deg);
+    opacity: 1;
+    z-index: 4;
+  }
+}
+
+@keyframes problem-figure-ring-draw {
+  0% {
+    stroke-dashoffset: var(--ring-circumference);
+    opacity: 0;
+  }
+  35% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  80% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: var(--ring-circumference);
+    opacity: 0;
+  }
+}
+
+@keyframes problem-figure-chip-fade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(4px) scale(0.9);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(4px) scale(0.9);
+  }
+}
+
+@keyframes problem-figure-ghost-fade {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+}
+
+@keyframes problem-figure-core-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-problem-figure],
+  [data-problem-figure] * {
+    animation: none !important;
   }
 }
 
@@ -184,4 +993,5 @@ html, body {
 }
 
 /* Custom cursor - default cursor visible, follower image trails alongside */
+
 

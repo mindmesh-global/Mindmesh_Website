@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+# lighthouse ci
+/.lighthouseci/
+
 # production
 /build
 

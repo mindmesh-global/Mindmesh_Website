@@ -1,22 +1,39 @@
 ﻿import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Inter, Asul, Syne } from 'next/font/google';
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { Inter, Manrope } from 'next/font/google';
+import { DeferredGoogleAnalytics } from '@/components/analytics/DeferredGoogleAnalytics';
 import './globals.css';
-import ConditionalOverlays from '@/components/ConditionalOverlays';
-import Logo from '@/components/Logo';
-import GlobalSiteFooter from '@/components/layout/GlobalSiteFooter';
-import { HomeSectionProvider } from '@/context/HomeSectionContext';
-import { UIOverlayProvider } from '@/context/UIOverlayContext';
-import { OnboardingTourProvider } from '@/context/OnboardingTourContext';
-import CursorProvider from '@/components/CursorProvider';
-import { CustomCursorProvider } from '@/context/CustomCursorContext';
-import CustomContextMenu from '@/components/CustomContextMenu';
-import { DashboardViewModeRoot } from '@/components/DashboardViewModeRoot';
+import { RootAppShell } from '@/components/layout/RootAppShell';
+import {
+  OG_IMAGE,
+  OG_IMAGE_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+} from '@/lib/seo';
 
-const inter = Inter({ subsets: ['latin'] });
-const asul = Asul({ weight: '700', subsets: ['latin'] });
-const syne = Syne({ subsets: ['latin'], variable: '--font-syne' });
+/**
+ * Body Inter: `optional` so late webfont paint does not hold LCP (P6-T08 / P3-T16).
+ * Do not preload; Manrope for the hero H1 gets bandwidth priority.
+ */
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  display: 'optional',
+  preload: false,
+  variable: '--font-inter',
+  adjustFontFallback: true,
+});
+
+/** Display Manrope: preload + swap so hero H1 can become the LCP element. */
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  display: 'swap',
+  preload: true,
+  variable: '--font-manrope',
+  adjustFontFallback: true,
+});
 
 function ThemeScript() {
   return (
@@ -29,41 +46,34 @@ function ThemeScript() {
 export const metadata: Metadata = {
   metadataBase: new URL('https://mindmesh.global'),
   title: {
-    default: 'MindMesh — AI-Powered Productivity Assistant App',
-    template: '%s | MindMesh',
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    'MindMesh uses AI to automate your meeting notes, manage tasks, and detect calendar conflicts. Join thousands of professionals saving 2+ hours daily. Start free today.',
+  description: SITE_DESCRIPTION,
   keywords: [
-    'AI productivity',
-    'meeting notes',
-    'task automation',
-    'AI assistant',
     'MindMesh',
+    'cognitive layer',
+    'cognitive orchestration',
+    'AI productivity',
+    'local-first',
+    'work focus',
   ],
-  authors: [{ name: 'MindMesh' }],
-  creator: 'MindMesh',
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://mindmesh.global',
-    siteName: 'MindMesh',
-    title: 'MindMesh — AI-Powered Productivity Assistant App',
-    description: 'MindMesh uses AI to automate your meeting notes, manage tasks, and detect calendar conflicts. Join thousands of professionals saving 2+ hours daily. Start free today.',
-    images: [
-      {
-        url: 'https://mindmesh.global/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'MindMesh AI Productivity Assistant',
-      },
-    ],
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MindMesh — AI-Powered Productivity Assistant App',
-    description: 'MindMesh uses AI to automate your meeting notes, manage tasks, and detect calendar conflicts. Join thousands of professionals saving 2+ hours daily. Start free today.',
-    images: ['https://mindmesh.global/og-image.png'],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE_URL],
   },
   robots: {
     index: true,
@@ -81,29 +91,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body
-        className={`${inter.className} ${syne.variable} bg-[#0a0a14] text-gray-100 antialiased`}
-      >
+    <html
+      lang="en"
+      className={`scroll-smooth ${inter.variable} ${manrope.variable}`}
+      suppressHydrationWarning
+    >
+      <body className={`${inter.className} bg-[#0a0a14] text-gray-100 antialiased`}>
         <ThemeScript />
-        <HomeSectionProvider>
-          <UIOverlayProvider>
-            <OnboardingTourProvider>
-            <CustomCursorProvider>
-            <CursorProvider>
-            <DashboardViewModeRoot>
-              {children}
-              <Logo fontClassName={asul.className} />
-              <ConditionalOverlays />
-              <GlobalSiteFooter />
-            </DashboardViewModeRoot>
-            <CustomContextMenu />
-            </CursorProvider>
-            </CustomCursorProvider>
-            </OnboardingTourProvider>
-          </UIOverlayProvider>
-        </HomeSectionProvider>
-        <GoogleAnalytics gaId="G-NWRP4F6JWN" />
+        <RootAppShell>{children}</RootAppShell>
+        <DeferredGoogleAnalytics gaId="G-NWRP4F6JWN" />
       </body>
     </html>
   );

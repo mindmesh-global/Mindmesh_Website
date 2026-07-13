@@ -7,9 +7,10 @@ import SensorBarSpotlight from '@/components/SensorBarSpotlight';
 import { useUIOverlay } from '@/context/UIOverlayContext';
 import { useOnboardingTour } from '@/context/OnboardingTourContext';
 import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
-import { isMindmeshHeroRoute, MINDMESH_HERO_ROUTES } from '@/lib/mindmesh-hero-routes';
-
-const MINDMESH_PAGES: readonly string[] = MINDMESH_HERO_ROUTES;
+import {
+  isMindmeshDashboardChromeRoute,
+  isMindmeshOverlayRoute,
+} from '@/lib/mindmesh-legacy-routes';
 
 export default function ConditionalOverlays() {
   const overlay = useUIOverlay();
@@ -18,7 +19,7 @@ export default function ConditionalOverlays() {
   const dashboardVm = useOptionalDashboardViewMode();
 
   useEffect(() => {
-    if (overlay && pathname && !MINDMESH_PAGES.includes(pathname)) {
+    if (overlay && pathname && !isMindmeshOverlayRoute(pathname)) {
       overlay.setHasScrolledToBottom(false);
     }
   }, [pathname, overlay]);
@@ -30,23 +31,19 @@ export default function ConditionalOverlays() {
     return () => document.body.removeEventListener('wheel', preventScroll);
   }, [overlay?.mascotTooltipVisible]);
 
-  if (dashboardVm?.viewMode === 'desktop' && isMindmeshHeroRoute(pathname)) {
+  if (dashboardVm?.viewMode === 'desktop' && isMindmeshDashboardChromeRoute(pathname)) {
     return null;
   }
 
   if (!overlay || !onboarding) return null;
   const { showMascot, showSensorBar } = overlay;
 
-  const isMindmeshPage = pathname && MINDMESH_PAGES.includes(pathname);
-  const showMascotTooltip = false;
-  const showSensorBarTooltip = false;
-
-  if (!isMindmeshPage) return null;
+  if (!isMindmeshOverlayRoute(pathname)) return null;
 
   return (
     <>
-      {showSensorBar && <SensorBarSpotlight showTooltip={showSensorBarTooltip} />}
-      {showMascot && <MascotChatbot showTooltip={showMascotTooltip} />}
+      {showSensorBar && <SensorBarSpotlight showTooltip={false} />}
+      {showMascot && <MascotChatbot showTooltip={false} />}
     </>
   );
 }

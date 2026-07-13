@@ -1,36 +1,48 @@
-# MindMesh Website — Migration & SEO Summary
+# MindMesh Website - Migration & SEO Summary (historical)
 
-Summary of changes made to migrate the MindMesh website for SEO and Next.js best practices.
+> **Status:** Historical record of an earlier SEO / multi-route migration.
+> For the **current** marketing homepage and shell, use:
+>
+> - `README.md` and `QUICK_START.md`
+> - `docs/phase-1-tasks.md` … `docs/phase-8-tasks.md`
+> - Live homepage: `app/page.tsx` + `components/marketing/`
+>
+> The desktop shell `components/Hero.tsx` referenced below **no longer exists**. Public `/` is marketing, not the macOS window UI.
+
+---
+
+Summary of changes made to migrate the MindMesh website for SEO and Next.js best practices (pre–marketing rebuild).
 
 ---
 
 ## Overview
 
 - **Project:** MindMesh website (mindmesh.global)
-- **Stack:** Next.js 16, React 19, TypeScript, Tailwind CSS
-- **Goal:** SEO-friendly structure with SSR, proper metadata, sitemap, and optimized loading
+- **Stack:** Next.js, React, TypeScript, Tailwind CSS
+- **Goal (then):** SEO-friendly structure with SSR, proper metadata, sitemap, and optimized loading
 
 ---
 
 ## Changes Summary
 
-### 1. Route Structure (9 Public Pages)
+### 1. Route Structure (historical public pages)
 
-Added dedicated routes for each navigation item:
+This table describes routes as they existed in that migration. Several have since been redirected, removed, or rebuilt under the marketing funnel. Prefer `lib/marketing-routes.ts`, `next.config` redirects, and phase docs for what is live today.
 
-| Route | Path | Description |
+| Route | Path | Description (at time of migration) |
 |-------|------|-------------|
 | MindMesh | `/` | Homepage |
 | Join Waitlist | `/waitlist` | Waitlist signup form |
-| Subscription | `/subscription` | Pricing plans (Free, Pro, Enterprise) |
+| Subscription | `/subscription` | Pricing plans |
 | Features | `/features` | AI features overview |
-| App Directory | `/app-directory` | Integrations (Gmail, Outlook, etc.) |
+| App Directory | `/app-directory` | Integrations |
 | Social | `/social` | Social links |
 | Demo.mov | `/demo` | Demo video placeholder |
 | Docs | `/docs` | Documentation & FAQ |
 | Contact Us | `/contact` | Contact form |
 
-**Files created:**
+**Files created (historical):**
+
 - `app/waitlist/page.tsx` + `WaitlistPageClient.tsx`
 - `app/subscription/page.tsx` + `SubscriptionPageClient.tsx`
 - `app/features/page.tsx` + `FeaturesPageClient.tsx`
@@ -47,158 +59,99 @@ Added dedicated routes for each navigation item:
 - `metadataBase`: `https://mindmesh.global`
 - `title`: default + template `%s | MindMesh`
 - `description`, `keywords`, `authors`, `creator`
-- `openGraph`: type, locale, url, siteName, title, description, images
-- `twitter`: card, title, description, images
-- `robots`: index, follow, googleBot
+- `openGraph` / `twitter` / `robots`
+
+**Current defaults:** prefer `lib/seo.ts` (`SITE_TITLE`, `SITE_DESCRIPTION`) and Phase 7 metadata alignment (`P7-T01`).
 
 ---
 
 ### 3. Page-Level Metadata
 
-Each public page has unique metadata:
-
-- **title** — Uses template (e.g. `"Features"` → `"Features | MindMesh"`)
-- **description** — Keyword-rich, unique per page
-- **openGraph** — title, description, url per page
+Each public page had unique `title`, `description`, and `openGraph` fields.
 
 ---
 
 ### 4. JSON-LD Schema (Homepage)
 
-Added to `app/page.tsx`:
-
-- **SoftwareApplication** — name, url, description, applicationCategory, operatingSystem, offers
-- **Organization** — name, url, logo
+Added to `app/page.tsx` at the time: SoftwareApplication + Organization. Confirm current markup in the live `app/page.tsx`.
 
 ---
 
 ### 5. Sitemap & Robots
 
-**`next-sitemap.config.js`**
-- `siteUrl`: `https://mindmesh.global`
-- `generateRobotsTxt`: true
-- `robotsTxtOptions`: allow `/`, disallow `/dashboard/`, `/settings/`, `/api/`, `/admin/`
-- `exclude`: `/dashboard`, `/settings`
-- `transform`: homepage `changefreq: daily`, `priority: 1.0`; others `weekly`, `priority: 0.7`
-
-**`package.json`**
-- Added `"postbuild": "next-sitemap"`
-
-**Generated files (after build):**
-- `public/sitemap.xml`
-- `public/sitemap-0.xml`
-- `public/robots.txt`
+**`next-sitemap.config.js`** (or equivalent) generated `public/sitemap.xml` and `public/robots.txt`. Build/postbuild may still run sitemap generation; verify against current `package.json`.
 
 ---
 
 ### 6. Animated Background Optimization
 
 **`components/layout/AnimatedBackground.tsx`**
-- `'use client'` component
-- Renders background image + overlay
-- Lazy loaded via `next/dynamic` with `ssr: false`
-- Does not block server rendering; content loads first
 
-**Usage:**
-```tsx
-const AnimatedBackground = dynamic(
-  () => import('@/components/layout/AnimatedBackground'),
-  { ssr: false, loading: () => <div className="absolute inset-0 bg-black" /> }
-);
-```
+- Client component; lazy-loaded in the legacy shell era.
+
+Still relevant for legacy / dashboard-adjacent chrome if referenced; not the primary marketing homepage background system.
 
 ---
 
 ### 7. Desktop Nav Component
 
 **`components/layout/DesktopNav.tsx`**
-- 9-icon navigation using `next/link` and `next/image`
-- Left: MindMesh, Join Waitlist, Subscription, Features, App Directory
-- Right: Social, Demo.mov, Docs, Contact Us
-- `activeHref` prop for current route highlighting
+
+Historic 9-icon navigation for the desktop shell routes. Marketing chrome today is `components/marketing/MarketingNav.tsx` (and footer/layout siblings).
 
 ---
 
-### 8. Hero & Layout Updates
+### 8. Hero & Layout Updates (obsolete for `/`)
 
-**`components/Hero.tsx`**
+**`components/Hero.tsx` (deleted in Phase 6)**
+
+Historical notes:
+
 - Replaced inline background with lazy `AnimatedBackground`
-- Replaced draggable icons with `DesktopNav`
-- Icon clicks now navigate to routes (no overlays for nav items)
+- Used `DesktopNav` for icon navigation
+
+**Today:** `/` is composed from marketing sections. Do not restore `Hero.tsx` as the homepage. See `docs/phase-6-tasks.md` (Hero deletion) and `docs/phase-2-tasks.md` (marketing shell).
 
 **`components/layout/DesktopRouteLayout.tsx`**
-- Uses `AnimatedBackground` (lazy) and `DesktopNav`
-- Shared layout for all route pages
+
+Shared layout for historic route pages; superseded for marketing funnel by `MarketingLayout` / `MarketingDepthLayout`.
 
 ---
 
 ### 9. WaitlistModal Embedded Mode
 
 **`components/WaitlistModal.tsx`**
-- Added `embedded` prop for use on `/waitlist` page
-- When `embedded={true}`, renders inline instead of as a portal modal
+
+- `embedded` prop for inline waitlist UI where still used.
+
+Marketing waitlist patterns may also use `components/marketing/WaitlistForm.tsx`.
 
 ---
 
-## Architecture Rules
+## Architecture Rules (then)
 
 | Rule | Implementation |
 |------|----------------|
-| Public pages = Server Components | Page files have no `'use client'`; client UI in `*Client.tsx` |
-| Dashboard = Client only | `app/dashboard/page.tsx` has `'use client'` |
-| Layout = No `'use client'` | `app/layout.tsx` stays a Server Component |
-| Internal navigation | `next/link` everywhere |
-| Images | `next/image` in DesktopNav and AnimatedBackground |
+| Public pages = Server Components | Page files without `'use client'`; client UI in `*Client.tsx` |
+| Dashboard = Client heavy | `app/dashboard/` |
+| Layout = No unnecessary `'use client'` on root |
+| Internal navigation | `next/link` |
+| Images | Prefer `next/image` |
 
----
-
-## Dependencies Added
-
-- `next-sitemap` — sitemap and robots.txt generation
-
----
-
-## Assets to Add
-
-- `public/og-image.png` (1200×630) — Open Graph / Twitter card image
-- `public/logo.png` — Referenced in JSON-LD Organization schema
-- `public/images/app-directory-icon.png` — Optional; App Directory currently uses features icon
+Marketing homepage composition and theater rules: Phases 2–4 docs.
 
 ---
 
 ## Run Commands
 
 ```bash
-npm run dev      # Start dev server (port 3002)
-npm run build    # Build + run next-sitemap
+npm run dev      # Start dev server
+npm run build    # Production build (+ sitemap if configured)
 npm run start    # Start production server
 ```
 
 ---
 
-## File Structure (New/Modified)
+## File Structure note
 
-```
-website/
-├── app/
-│   ├── layout.tsx              # Updated metadata
-│   ├── page.tsx                 # JSON-LD, metadata
-│   ├── waitlist/
-│   ├── subscription/
-│   ├── features/
-│   ├── app-directory/
-│   ├── social/
-│   ├── demo/
-│   ├── docs/
-│   └── contact/
-├── components/
-│   ├── layout/
-│   │   ├── AnimatedBackground.tsx   # New
-│   │   ├── DesktopNav.tsx           # New
-│   │   └── DesktopRouteLayout.tsx  # Updated
-│   ├── Hero.tsx                    # Updated
-│   └── WaitlistModal.tsx           # Updated (embedded prop)
-├── next-sitemap.config.js          # New
-├── package.json                    # Updated (postbuild)
-└── README-MIGRATION.md             # This file
-```
+The tree below was accurate for the migration era (including `Hero.tsx`). It is **not** the current homepage structure. See `README.md` for the marketing-oriented map.

@@ -1,5 +1,14 @@
-import { Suspense } from 'react';
-import Hero from '@/components/Hero';
+import type { Metadata } from 'next';
+import { MarketingLayout } from '@/components/marketing/MarketingLayout';
+import { MarketingTheaterSections } from '@/components/marketing/MarketingTheaterSections';
+import { ProductOverviewHome } from '@/components/marketing/product-overview/ProductOverviewHome';
+import { HeroSection } from '@/components/marketing/sections/HeroSection';
+import { ProblemSection } from '@/components/marketing/sections/ProblemSection';
+import { HowItWorksSection } from '@/components/marketing/sections/HowItWorksSection';
+import { FeatureGridSection } from '@/components/marketing/sections/FeatureGridSection';
+import { TrustSection } from '@/components/marketing/sections/TrustSection';
+import { FinalCTASection } from '@/components/marketing/sections/FinalCTASection';
+import { OG_IMAGE, OG_IMAGE_URL, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/seo';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -8,9 +17,10 @@ const jsonLd = {
       '@type': 'SoftwareApplication',
       name: 'MindMesh',
       url: 'https://mindmesh.global',
-      description: 'AI-powered productivity assistant',
+      description:
+        'A cognitive orchestration layer that connects your apps, ranks what needs attention, and helps you act with approval.',
       applicationCategory: 'ProductivityApplication',
-      operatingSystem: 'Web',
+      operatingSystem: 'macOS, Windows',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     },
     {
@@ -22,17 +32,20 @@ const jsonLd = {
   ],
 };
 
-export const metadata = {
-  title: { absolute: 'MindMesh — AI-Powered Productivity Assistant' },
-  description:
-    'MindMesh automates your meeting notes, tasks and calendar using AI. Join thousands of professionals saving 2+ hours daily.',
+export const metadata: Metadata = {
+  title: { absolute: SITE_TITLE },
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: 'MindMesh — AI-Powered Productivity Assistant',
-    description: 'Automate notes, tasks & meetings with AI',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     url: 'https://mindmesh.global',
+    images: [OG_IMAGE],
   },
-  other: {
-    'google-site-verification': '',
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE_URL],
   },
 };
 
@@ -43,12 +56,16 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="min-h-screen h-screen overflow-hidden bg-[#0a0a14]">
-        <Suspense fallback={<div className="min-h-screen h-screen bg-[#0a0a14]" aria-hidden />}>
-          <Hero />
-        </Suspense>
-      </main>
+      <MarketingLayout>
+        <HeroSection />
+        <ProductOverviewHome />
+        <ProblemSection />
+        <HowItWorksSection />
+        <MarketingTheaterSections />
+        <FeatureGridSection />
+        <TrustSection />
+        <FinalCTASection />
+      </MarketingLayout>
     </>
   );
 }
-

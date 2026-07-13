@@ -37,17 +37,16 @@ const layoutTransition = {
 
 export type DashboardPageProps = { hideViewSwitcher?: boolean };
 
-export default function DashboardPage(props: DashboardPageProps = {}) {
-  const { hideViewSwitcher = false } = props;
+export default function DashboardPage() {
   return (
     <SectionHoverProvider>
       <SectionDimOverlay />
-      <DashboardContent hideViewSwitcher={hideViewSwitcher} />
+      <DashboardContent />
     </SectionHoverProvider>
   );
 }
 
-function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps = {}) {
+function DashboardContent({ hideViewSwitcher = false }: DashboardPageProps) {
   const setActiveSection = useHomeSection()?.setActiveSection;
   const uiOverlay = useUIOverlay();
   const onboarding = useOnboardingTour();

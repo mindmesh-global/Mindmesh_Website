@@ -23,14 +23,14 @@ export default function SiteFooter() {
         <div className="flex flex-col gap-3">
           <h5 className="mb-1 text-sm font-semibold text-blue-200 sm:text-base">Product</h5>
           <Link
-            href="/sensor&mascot#sensor"
+            href="/sensor"
             className="text-sm transition-colors hover:text-white sm:text-base"
             style={{ color: '#a1a1aa' }}
           >
             Sensor
           </Link>
           <Link
-            href="/sensor&mascot#mascot"
+            href="/mascot"
             className="text-sm transition-colors hover:text-white sm:text-base"
             style={{ color: '#a1a1aa' }}
           >

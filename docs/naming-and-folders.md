@@ -19,15 +19,16 @@ Several files sound alike but do **different jobs**. Use this table when you nee
 2. **`DashboardViewMode*`** → **which dashboard presentation** the user chose.
 3. **`view-shells`** → **how that presentation looks** (wrapper + header slot).
 
-### Related doc
+### Related docs
 
 - Feature details: [dashboard-view-switcher.md](./dashboard-view-switcher.md).
+- Homepage entry: [../README.md](../README.md) and [../QUICK_START.md](../QUICK_START.md). Public `/` is marketing (`app/page.tsx` + `components/marketing/`). The legacy desktop shell `components/Hero.tsx` was deleted in Phase 6.
 
 ---
 
 ## Full project structure (this repo)
 
-Snapshot of folders and files under the project root (`website/`). **Not listed:** `node_modules/`, `.next/`, `.git/`, and local/editor-only files such as `.env.local` or `.cursor/` debug logs.
+Snapshot under the project root. **Not listed:** `node_modules/`, `.next/`, `.git/`, and local/editor-only files. This tree may lag the marketing rebuild; treat `components/marketing/` and Phase docs as the source of truth for `/`.
 
 ```
 website/
@@ -81,28 +82,28 @@ website/
 │   │   └── StaticWeatherCard.tsx
 │   ├── layout/
 │   │   ├── AnimatedBackground.tsx
-│   │   └── DesktopNav.tsx
+│   │   ├── DesktopNav.tsx
+│   │   ├── LegacyAppShell.tsx
+│   │   └── RootAppShell.tsx
+│   ├── marketing/                 # Homepage + funnel sections / theaters
+│   │   ├── sections/
+│   │   ├── theater/
+│   │   ├── MarketingLayout.tsx
+│   │   ├── MarketingNav.tsx
+│   │   └── …
 │   ├── ui/
 │   │   ├── gradient-honeycomb.tsx
 │   │   ├── HoverTypingTooltip.tsx
 │   │   ├── TypingText.tsx
 │   │   └── ViewSwitcherButton.tsx
-│   ├── AppDirectoryWindow.tsx
 │   ├── ConditionalOverlays.tsx
-│   ├── ContactWindow.tsx
 │   ├── CursorProvider.tsx
 │   ├── CustomContextMenu.tsx
 │   ├── CustomCursorFollower.tsx
-│   ├── DocsWindow.tsx
-│   ├── FeaturesWindow.tsx
-│   ├── Hero.tsx
 │   ├── Logo.tsx
 │   ├── MascotChatbot.tsx
 │   ├── mindmeshui.tsx
-│   ├── MovieWindow.tsx
-│   ├── PricingWindow.tsx
 │   ├── SensorBarSpotlight.tsx
-│   ├── SocialWindow.tsx
 │   └── WaitlistModal.tsx
 ├── context/
 │   ├── CustomCursorContext.tsx

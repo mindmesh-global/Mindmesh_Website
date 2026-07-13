@@ -1,6 +1,11 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /sensor&mascot
 
 # Host
 Host: https://mindmesh.global

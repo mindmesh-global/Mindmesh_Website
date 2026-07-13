@@ -4,11 +4,12 @@ module.exports = {
   generateIndexSitemap: false,
   generateRobotsTxt: true,
   robotsTxtOptions: {
-    rules: [
+    // next-sitemap v4 uses `policies` (not `rules`).
+    policies: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/dashboard/', '/settings/', '/api/', '/admin/'],
+        disallow: ['/dashboard/', '/settings/', '/api/', '/admin/', '/sensor&mascot'],
       },
     ],
   },
@@ -21,6 +22,10 @@ module.exports = {
     '/admin/*',
     '/_not-found',
     '/icon.png',
+    // Legacy combined URL: client shim only (P8-T14). Keep out of sitemap; Disallow below.
+    // Indexable depth pages are /sensor and /mascot (P8-T17).
+    '/sensor&mascot',
+    '/sensor&mascot/*',
   ],
   changefreq: 'weekly',
   priority: 0.7,

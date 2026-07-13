@@ -1,0 +1,56 @@
+# Homepage Lighthouse CI (P7-T04 sketch)
+#
+# Soft-fails LCP while the P6-T09 lab exception stands (median ~2.93s vs <2.5s).
+# CLS still hard-fails above 0.1. See docs/phase-7/tasks/P7-T04-lighthouse-ci.md
+
+name: Lighthouse CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'components/marketing/**'
+      - 'lib/seo.ts'
+      - 'lib/marketing-*.ts'
+      - 'next.config.js'
+      - 'lighthouserc.cjs'
+      - 'package.json'
+      - 'package-lock.json'
+
+concurrency:
+  group: lighthouse-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lhci:
+    name: Homepage perf (mobile simulate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Run Lighthouse CI
+        run: npx --yes @lhci/cli@0.14.0 autorun --config=./lighthouserc.cjs
+
+      - name: Upload LHCI artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouseci-reports
+          path: .lighthouseci
+          if-no-files-found: ignore
+          retention-days: 14

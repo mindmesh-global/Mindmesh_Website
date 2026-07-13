@@ -296,8 +296,8 @@ const PRODUCT_LINKS: { title: string; desc: string; href: string }[][] = [
     { title: 'Connected Apps', desc: 'Seamless third-party integrations', href: '/connected-apps' },
   ],
   [
-    { title: 'Sensor', desc: 'Instant system-wide command bar', href: '/sensor&mascot#sensor' },
-    { title: 'Mascot', desc: 'Proactive human-like AI assistant', href: '/sensor&mascot#mascot' },
+    { title: 'Sensor', desc: 'Instant system-wide command bar', href: '/sensor' },
+    { title: 'Mascot', desc: 'Proactive human-like AI assistant', href: '/mascot' },
     { title: "Yesterday's Narrative", desc: 'Daily summary of past achievements', href: '/yesterdays-narrative' },
   ],
 ];
@@ -948,8 +948,8 @@ Built for focus, not noise.
                 assistant experience. Together, they make MindMesh feel less like software you manage and
                 more like a calm layer that helps you stay on top of work.
               </p>
-              <Link href="/sensor&mascot" className={`group inline-flex items-center gap-2 ${outlineGhostBtn} px-8 py-3`}>
-               Explore Sensor & Mascot <span aria-hidden>⚡</span>
+              <Link href="/sensor" className={`group inline-flex items-center gap-2 ${outlineGhostBtn} px-8 py-3`}>
+               Explore Sensor <span aria-hidden>⚡</span>
               </Link>
             </motion.div>
           </div>

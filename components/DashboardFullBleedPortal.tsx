@@ -5,9 +5,9 @@ import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
 import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
 import DashboardDesktopShell from '@/components/dashboard/view-shells/DashboardDesktopShell';
-import { isMindmeshHeroRoute } from '@/lib/mindmesh-hero-routes';
+import { isMindmeshDashboardChromeRoute } from '@/lib/mindmesh-legacy-routes';
 
-/** Full-viewport marketing layout above all MindMesh chrome (dock, side icons, logo). */
+/** Full-viewport dashboard layout above legacy chrome (dock, side icons). */
 export default function DashboardFullBleedPortal() {
   const { viewMode } = useDashboardViewMode();
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export default function DashboardFullBleedPortal() {
 
   if (!mounted || typeof document === 'undefined') return null;
   if (viewMode !== 'desktop') return null;
-  if (!isMindmeshHeroRoute(pathname)) return null;
+  if (!isMindmeshDashboardChromeRoute(pathname)) return null;
 
   return createPortal(
     <div

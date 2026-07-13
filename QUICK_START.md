@@ -1,88 +1,64 @@
 # Quick Start Guide
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Dependencies
 
-From the root directory:
-```bash
-npm install
-```
+From the repository root:
 
-Or from the website directory:
 ```bash
-cd apps/website
 npm install
 ```
 
 ### 2. Run Development Server
 
-From root:
 ```bash
-npm run dev:website
-```
-
-Or from website directory:
-```bash
-cd apps/website
 npm run dev
 ```
 
-Visit: `http://localhost:3001`
+Visit: `http://localhost:3002`.
 
-### 3. Add Your Download Files
+### 3. Customize Content (current homepage)
 
-Place your installer files in:
-```
-apps/website/public/downloads/
-├── windows/MindMesh-Setup.exe
-├── mac/MindMesh.dmg
-└── linux/MindMesh.AppImage
-```
+The live homepage is the **marketing** page, not a desktop window shell.
 
-### 4. Customize Content
+| Area | Where to edit |
+|------|----------------|
+| Homepage section order | `app/page.tsx` |
+| Hero, problem, how-it-works, theaters, CTA, … | `components/marketing/sections/` and `components/marketing/` |
+| Product theater demos | `components/marketing/theater/` |
+| Colors / tokens | `tailwind.config.ts`, `app/globals.css` |
+| Default SEO title / description | `lib/seo.ts` (also `app/layout.tsx` metadata) |
 
-- **Hero Section**: Edit `components/Hero.tsx`
-- **Features**: Edit `components/Features.tsx`
-- **Colors**: Edit `tailwind.config.ts`
-- **Metadata**: Edit `app/layout.tsx`
+Do **not** look for `components/Hero.tsx`. That macOS-style shell was removed (Phase 6). Dashboard UI lives under `app/dashboard/` and `components/dashboard/`.
 
-## 📦 Build for Production
+### 4. Phase docs
+
+Architecture and task trackers live under `docs/` (`phase-1` … `phase-8`). Start from `docs/phase-7-tasks.md` for current polish work, or `docs/phase-8-tasks.md` for Sensor / Mascot product pages.
+
+## Build for Production
 
 ```bash
-cd apps/website
 npm run build
 npm start
 ```
 
-## 🌐 Deploy
+## Deploy
 
-### Vercel (Recommended)
+### Vercel (recommended)
+
 1. Push to GitHub
-2. Import project in Vercel
-3. Set root directory to `apps/website`
-4. Deploy!
+2. Import the project in Vercel (repository root is the Next.js app)
+3. Deploy
 
-### Other Options
+### Other options
+
 - Netlify
 - AWS Amplify
 - Railway
-- Any Node.js hosting
+- Any Node.js hosting that supports Next.js
 
-## ✨ Features Included
+## Notes
 
-✅ Professional landing page
-✅ Responsive design
-✅ Smooth animations
-✅ OS detection for downloads
-✅ Download analytics tracking
-✅ SEO optimized
-✅ Modern UI/UX
-
-## 🎨 Customization Tips
-
-1. **Colors**: Update the gradient colors in `tailwind.config.ts`
-2. **Content**: All text content is in component files
-3. **Features**: Add/remove features in `components/Features.tsx`
-4. **Links**: Update social links in `components/Footer.tsx`
-
+- Framer Motion and sticky product theaters are intentional on the marketing page; see Phase 3–4 docs for scroll-kit behavior.
+- Field CWV / Lighthouse: `docs/phase-7/tasks/P7-T05-field-cwv-monitoring.md` and `npm run lhci` (CI config in `lighthouserc.cjs`).

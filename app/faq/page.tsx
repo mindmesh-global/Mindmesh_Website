@@ -1,17 +1,24 @@
 import type { Metadata } from 'next';
 import { ChevronDown } from 'lucide-react';
-import { Manrope } from 'next/font/google';
 import Link from 'next/link';
-import SiteNav from '../../components/layout/SiteNav';
+import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
+import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
+import { MARKETING_INTEGRATIONS } from '@/lib/marketing-integrations';
+import { SENSOR_MASCOT_FAQ_LINKS } from '@/lib/marketing-sensor-mascot-content';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
 
-const manrope = Manrope({
-  subsets: ['latin'],
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
-  display: 'swap',
-});
+const integrationNames = MARKETING_INTEGRATIONS.map((app) => app.displayName).join(', ');
 
-const faqs = [
+const sensorFaq = SENSOR_MASCOT_FAQ_LINKS[0];
+const mascotFaq = SENSOR_MASCOT_FAQ_LINKS[1];
+
+type FaqItem = {
+  question: string;
+  answer: string;
+  learnMore?: { label: string; href: string };
+};
+
+const faqs: readonly FaqItem[] = [
   {
     question: 'What is MindMesh?',
     answer:
@@ -38,14 +45,14 @@ const faqs = [
       'Supported Google Calendar access is read-only in the standard connection flow.',
   },
   {
-    question: 'What is the Sensor Bar?',
-    answer:
-      'Sensor is the always-available command bar that lets you ask questions, move around the product, and get to the right information fast.',
+    question: sensorFaq.question,
+    answer: sensorFaq.answer,
+    learnMore: sensorFaq.learnMore,
   },
   {
-    question: 'What is Mascot?',
-    answer:
-      'Mascot is the conversational, proactive assistant layer inside MindMesh that helps surface what matters in a more human way.',
+    question: mascotFaq.question,
+    answer: mascotFaq.answer,
+    learnMore: mascotFaq.learnMore,
   },
   {
     question: "What is Yesterday's Narrative?",
@@ -54,8 +61,8 @@ const faqs = [
   },
   {
     question: 'Which apps can I connect?',
-    answer:
-      'MindMesh supports Gmail, Google Calendar, Outlook Email, Outlook Calendar, and SMTP mailbox connections.',
+    answer: `MindMesh supports ${integrationNames}. See Connected apps for how each category fits Connect, Focus, and Execute.`,
+    learnMore: { label: 'View connected apps →', href: '/connected-apps' },
   },
   {
     question: 'How does MindMesh help me stay on top of work without being online all day?',
@@ -72,118 +79,102 @@ const faqs = [
     answer:
       'MindMesh is designed as a desktop-native experience for people who want a faster, more focused, more private way to manage work context.',
   },
-] as const;
+];
+
+const pageDescription =
+  'Answers about MindMesh privacy, permissions, features, and how the product works.';
 
 export const metadata: Metadata = {
   title: 'FAQ',
-  description:
-    'Answers about MindMesh privacy, permissions, features, and how the product works.',
+  description: pageDescription,
   openGraph: {
-    title: 'MindMesh FAQ',
-    description:
-      'Answers about privacy, permissions, features, and how MindMesh helps you stay on top of work.',
+    title: 'MindMesh | FAQ',
+    description: pageDescription,
     url: 'https://mindmesh.global/faq',
     images: [OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MindMesh FAQ',
-    description:
-      'Answers about privacy, permissions, features, and how MindMesh helps you stay on top of work.',
+    title: 'MindMesh | FAQ',
+    description: pageDescription,
     images: [OG_IMAGE_URL],
   },
 };
 
 export default function FaqPage() {
   return (
-    <main
-      className={`${manrope.className} min-h-screen overflow-x-hidden px-0 pb-24 pt-32 text-[#dee5ff] selection:bg-[#0e69dc] selection:text-white`}
-      style={{ backgroundColor: '#060e20' }}
+    <MarketingDepthLayout
+      eyebrow="FAQ"
+      title="Everything you would ask before trusting AI with your workday"
+      subtitle="Clear answers about privacy, permissions, features, and how MindMesh helps you stay on top of work without staying buried in it."
+      backHref="/"
+      backLabel="Back to homepage →"
     >
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            html,
-            body {
-              background: #060e20 !important;
-              color: #dee5ff !important;
-              font-family: 'Manrope', sans-serif;
-            }
-
             details > summary::-webkit-details-marker {
               display: none;
-            }
-
-            .faq-page-shell {
-              background: #060e20;
             }
           `,
         }}
       />
 
-      <div className="faq-page-shell">
-      <SiteNav activeHref="/faq" navBackgroundColor="#060e20" />
-
-      <section className="relative mx-auto mb-24 max-w-7xl px-8">
-        <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#0e69dc]/10 blur-[120px]" />
-        <div className="relative z-10 max-w-4xl text-center md:text-left">
-          <h1 className="mb-10 text-5xl font-semibold leading-[1.1] tracking-tighter text-[#dee5ff] md:text-7xl">
-            Everything you would ask before trusting AI with your workday.
-          </h1>
-          <p className="mb-10 max-w-3xl text-xl font-medium leading-relaxed text-[#99aad9]">
-            Clear answers about privacy, permissions, features, and how MindMesh helps you stay on
-            top of work without staying buried in it.
-          </p>
-         
-        </div>
-      </section>
-
-      <section className="mx-auto mb-32 max-w-4xl px-8">
-        <div className="space-y-4">
+      <section className="bg-mm-background py-16 lg:py-24">
+        <div className="mx-auto w-full max-w-[720px] space-y-3 px-6">
           {faqs.map((faq) => (
             <details
               key={faq.question}
-              className="group rounded-2xl bg-[#081734] shadow-[0_12px_28px_-20px_rgba(0,0,0,0.95)] ring-1 ring-[#9ec0ff]/10 transition-all duration-300 hover:bg-[#0b1d42] hover:ring-[#9ec0ff]/20"
+              className="group rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container transition-colors open:border-mm-outline-variant hover:bg-mm-surface-container-high"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between p-6">
-                <h2 className="text-lg font-extrabold tracking-[-0.01em] text-[#f4f7ff]">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 md:p-6">
+                <h2 className="font-display text-base font-semibold tracking-tight text-mm-on-background md:text-lg">
                   {faq.question}
                 </h2>
-                <ChevronDown className="h-5 w-5 text-[#c6d8ff] transition-transform duration-300 group-open:rotate-180" />
+                <ChevronDown className="h-5 w-5 shrink-0 text-mm-on-surface-variant transition-transform duration-300 group-open:rotate-180" />
               </summary>
-              <div className="px-6 pb-6 pt-0 leading-relaxed text-[#99aad9]">{faq.answer}</div>
+              <div className="px-5 pb-5 pt-0 text-sm leading-relaxed text-mm-on-surface-variant md:px-6 md:pb-6 md:text-base">
+                {faq.answer}
+                {faq.learnMore ? (
+                  <p className="mt-3">
+                    <Link
+                      href={faq.learnMore.href}
+                      className="font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+                    >
+                      {faq.learnMore.label}
+                    </Link>
+                  </p>
+                ) : null}
+              </div>
             </details>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-8 pb-24 text-center">
-        <div
-          className="relative overflow-hidden rounded-[2.5rem] border border-[#364770]/20 p-16"
-          style={{ background: 'linear-gradient(to bottom, #0a1836, #060e20)' }}
-        >
-          <div className="absolute inset-0 bg-[#adc6ff]/5 blur-[80px]" />
-          <div className="relative z-10">
-            <h2 className="mb-6 text-4xl font-extrabold tracking-tight md:text-5xl">
-              Still evaluating it? Start with the product built around clarity and control.
-            </h2>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 md:flex-row">
-              {/* <Link
-                href="/waitlist"
-                className="inline-flex w-full items-center justify-center rounded-full px-12 py-5 text-xl font-bold text-[#0e2d63] shadow-[0_14px_40px_-14px_rgba(173,198,255,0.9),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] md:w-auto"
-                style={{
-                  background:
-                    'linear-gradient(90deg, #4c8deb 0%, #7fb0ff 45%,rgba(240, 241, 242, 0.76) 75%,rgba(216, 212, 212, 0.86) 100%)',
-                }}
-              >
-                Try MindMesh
-              </Link> */}
-            </div>
+      <section className="border-t border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
+        <div className="mx-auto max-w-[720px] px-6 text-center">
+          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
+            Still evaluating? Start with the product built around clarity and control.
+          </h2>
+          <p className="mt-4 text-base text-mm-on-surface-variant">
+            Join the waitlist, or dig into security and privacy detail first.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href={MARKETING_CTA_HREF}
+              className="inline-flex items-center justify-center rounded-md bg-mm-primary-fixed px-6 py-3 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
+            >
+              Join waitlist
+            </Link>
+            <Link
+              href="/security"
+              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+            >
+              Learn about security →
+            </Link>
           </div>
         </div>
       </section>
-
-      </div>
-    </main>
+    </MarketingDepthLayout>
   );
 }

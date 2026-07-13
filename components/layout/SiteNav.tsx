@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ScrollText } from 'lucide-react';
-import { useDashboardViewMode } from '@/context/DashboardViewModeContext';
+import { useOptionalDashboardViewMode } from '@/context/DashboardViewModeContext';
 
 type SiteNavProps = {
   activeHref?: string;
@@ -48,7 +48,8 @@ export default function SiteNav({
 }: SiteNavProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { setViewMode } = useDashboardViewMode();
+  // Optional: depth pages on the slim marketing shell (P5-T01) have no provider yet.
+  const dashboardViewMode = useOptionalDashboardViewMode();
   const resolvedActiveHref = activeHref ?? pathname ?? undefined;
 
   const handleDesktopViewClick = () => {
@@ -56,7 +57,7 @@ export default function SiteNav({
       onActionClick();
       return;
     }
-    setViewMode('scrollable');
+    dashboardViewMode?.setViewMode('scrollable');
     router.push('/');
   };
 
