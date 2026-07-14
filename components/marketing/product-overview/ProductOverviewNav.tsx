@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import {
   Bell,
   BookOpen,
@@ -72,9 +73,14 @@ export function ProductOverviewNav({
       data-overview-tab={activeTab}
     >
       <div className="flex items-center gap-2 border-b border-mm-outline-variant/40 px-3 py-3">
-        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-mm-primary/20 text-xs font-bold text-mm-primary">
-          M
-        </span>
+        <Image
+          src="/images/Logo/mindmesh-logo-tight.png"
+          alt=""
+          width={28}
+          height={28}
+          className="h-7 w-7 shrink-0 object-contain"
+          aria-hidden
+        />
         <span className="text-sm font-semibold text-mm-on-surface">MindMesh</span>
       </div>
 

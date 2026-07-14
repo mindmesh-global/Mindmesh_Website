@@ -1,8 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { Bell, Settings } from 'lucide-react';
 import { THEATER_STICKY_TOP_PX } from '@/lib/marketing-theater-scroll';
-import { MARKETING_PERSONA_ACME } from '@/lib/marketing-demo-data';
 import type { ProductOverviewSceneId, ProductOverviewSidebarTab } from '@/lib/marketing-product-overview-data';
 import { ProductOverviewNav } from './ProductOverviewNav';
 
@@ -108,9 +108,10 @@ export function ProductOverviewFrame({
                   </span>
                 ) : null}
               </div>
-              <p className="hidden shrink-0 text-xs text-mm-on-surface-variant sm:block">
-                {MARKETING_PERSONA_ACME.name} · {MARKETING_PERSONA_ACME.company}
-              </p>
+              <div className="hidden shrink-0 items-center gap-2.5 pr-2 text-mm-on-surface-variant sm:flex" aria-hidden>
+                <Bell className="h-4 w-4" />
+                <Settings className="h-4 w-4" />
+              </div>
             </div>
 
             <div className="flex min-h-0 flex-1 overflow-hidden">
