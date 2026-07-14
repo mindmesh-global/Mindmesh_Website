@@ -150,9 +150,11 @@ function AttentionActionCard({
                   aria-label="Open Dossier"
                   title="Open Dossier"
                   className={[
-                    'inline-flex min-h-10 items-center justify-center gap-1.5 rounded-md px-3.5 text-xs font-semibold transition-[background-color,box-shadow,transform]',
-                    'bg-mm-primary text-mm-on-primary ring-2 ring-mm-primary/40',
-                    'hover:brightness-110 focus-visible:outline-none focus-visible:ring-mm-primary',
+                    'inline-flex min-h-10 items-center justify-center gap-1.5 rounded-md border border-white/20 px-3.5 text-xs font-semibold text-mm-on-primary-fixed transition-[background-color,box-shadow,transform]',
+                    'bg-mm-primary-fixed shadow-[inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-2px_4px_rgba(0,40,120,0.35),0_3px_0_rgba(15,55,140,0.9),0_0_18px_-2px_rgba(67,136,253,0.85)]',
+                    'hover:bg-mm-primary-fixed-dim hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-2px_4px_rgba(0,40,120,0.35),0_3px_0_rgba(15,55,140,0.9),0_0_24px_-2px_rgba(67,136,253,1)]',
+                    'active:translate-y-[2px] active:shadow-[inset_0_1px_2px_rgba(0,40,120,0.5)]',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mm-primary-fixed focus-visible:ring-offset-2 focus-visible:ring-offset-mm-surface-container-high',
                   ].join(' ')}
                 >
                   Open Dossier

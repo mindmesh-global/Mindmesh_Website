@@ -95,7 +95,7 @@ export function ProductOverviewProgressNav({
         className={
           scrollLayout
             ? 'flex flex-nowrap justify-start gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
-            : 'flex flex-wrap justify-center gap-2'
+            : 'grid grid-cols-3 gap-2'
         }
         onKeyDown={handleKeyDown}
       >
@@ -119,8 +119,8 @@ export function ProductOverviewProgressNav({
                 onSelectScene(item.scene);
               }}
               className={[
-                'inline-flex min-h-11 min-w-[2.75rem] items-center gap-2 rounded-md border px-3 py-2.5 text-left text-xs font-medium transition-[opacity,transform]',
-                scrollLayout ? 'shrink-0 whitespace-nowrap' : '',
+                'flex min-h-11 min-w-[2.75rem] items-center justify-center gap-2 rounded-md border px-3 py-2.5 text-center text-xs font-medium transition-[opacity,transform]',
+                scrollLayout ? 'shrink-0 whitespace-nowrap' : 'w-full',
                 selected
                   ? 'border-mm-primary bg-mm-primary/15 text-mm-on-surface ring-1 ring-mm-primary/40'
                   : 'border-mm-outline-variant/60 text-mm-on-surface-variant hover:border-mm-outline-variant hover:text-mm-on-surface',
@@ -140,7 +140,7 @@ export function ProductOverviewProgressNav({
               >
                 {item.scene}
               </span>
-              <span>{item.label}</span>
+              <span className="truncate whitespace-nowrap">{item.label}</span>
               {selected ? (
                 <span className="sr-only">(current scene)</span>
               ) : null}

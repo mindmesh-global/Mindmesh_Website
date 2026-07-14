@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -93,16 +94,32 @@ export function MarketingNav() {
             <a
               href={brandHref}
               onClick={brandOnClick}
-              className="font-display text-sm font-semibold tracking-tight text-mm-on-background"
+              className="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-mm-on-background"
             >
+              <Image
+                src="/images/Logo/mindmesh-logo-tight.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 object-contain"
+                aria-hidden
+              />
               MindMesh
             </a>
           ) : (
             <Link
               href={MARKETING_HOMEPAGE_PATH}
               onClick={closeMobile}
-              className="font-display text-sm font-semibold tracking-tight text-mm-on-background"
+              className="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-mm-on-background"
             >
+              <Image
+                src="/images/Logo/mindmesh-logo-tight.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 object-contain"
+                aria-hidden
+              />
               MindMesh
             </Link>
           )}

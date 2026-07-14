@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Inter, Manrope } from 'next/font/google';
 import { DeferredGoogleAnalytics } from '@/components/analytics/DeferredGoogleAnalytics';
@@ -83,6 +83,12 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+};
+
+/** Locks the initial page scale at 100% on first load (mobile + desktop). */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
