@@ -474,11 +474,102 @@ html, body {
   }
 }
 
-/* Product overview static tour (mobile + reduced-motion): keep cards in flow,
-   avoid horizontal bleed from dense grids (P11-T12). */
+/* Shared Linear-style mobile product chrome (homepage overview + theaters):
+ * desktop-width frame scaled and clipped with a soft right-edge fade.
+ * Layout box is collapsed with --overview-mobile-scale so transform: scale
+ * does not leave a huge empty gap. At md+ the zoom is off. */
+[data-marketing-theme='dark'] [data-overview-mobile-peek],
+[data-marketing-theme='dark'] [data-theater-mobile-peek] {
+  --overview-mobile-frame-w: 900px;
+  --overview-mobile-frame-h: 520px;
+  /*
+   * Matched to linear.app phone hero: sidebar + primary board content stay
+   * legible; roughly half the chrome width peeks past the right edge with a
+   * soft fade.
+   */
+  --overview-mobile-scale: 0.72;
+  position: relative;
+  overflow: hidden;
+  /* Bleed into the right gutter so the fade meets the viewport edge.
+   * Do not set max-width: 100% here; it would cancel the wider width. */
+  margin-right: -1.5rem;
+  width: calc(100% + 1.5rem);
+  height: calc(var(--overview-mobile-frame-h) * var(--overview-mobile-scale));
+}
+
+[data-marketing-theme='dark'] [data-overview-mobile-peek]::after,
+[data-marketing-theme='dark'] [data-theater-mobile-peek]::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: 2;
+  width: min(4.5rem, 18%);
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    color-mix(in srgb, var(--mm-bg) 40%, transparent) 40%,
+    var(--mm-bg) 100%
+  );
+}
+
+[data-marketing-theme='dark'] [data-overview-mobile-peek-frame],
+[data-marketing-theme='dark'] [data-theater-mobile-peek-frame] {
+  width: var(--overview-mobile-frame-w);
+  max-width: none;
+  transform: scale(var(--overview-mobile-scale));
+  transform-origin: top left;
+}
+
+[data-marketing-theme='dark'] [data-overview-mobile-peek] .theater-frame-chrome,
+[data-marketing-theme='dark'] [data-theater-mobile-peek] .theater-frame-chrome {
+  width: var(--overview-mobile-frame-w);
+  min-height: var(--overview-mobile-frame-h);
+  max-height: var(--overview-mobile-frame-h);
+  height: var(--overview-mobile-frame-h);
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  [data-marketing-theme='dark'] [data-overview-mobile-peek],
+  [data-marketing-theme='dark'] [data-theater-mobile-peek] {
+    --overview-mobile-scale: 0.76;
+  }
+}
+
+@media (min-width: 768px) {
+  [data-marketing-theme='dark'] [data-overview-mobile-peek],
+  [data-marketing-theme='dark'] [data-theater-mobile-peek] {
+    margin-right: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  [data-marketing-theme='dark'] [data-overview-mobile-peek]::after,
+  [data-marketing-theme='dark'] [data-theater-mobile-peek]::after {
+    display: none;
+  }
+
+  [data-marketing-theme='dark'] [data-overview-mobile-peek-frame],
+  [data-marketing-theme='dark'] [data-theater-mobile-peek-frame] {
+    width: 100%;
+    transform: none;
+  }
+
+  [data-marketing-theme='dark'] [data-overview-mobile-peek] .theater-frame-chrome,
+  [data-marketing-theme='dark'] [data-theater-mobile-peek] .theater-frame-chrome {
+    width: auto;
+    min-height: 70vh;
+    max-height: 720px;
+    height: auto;
+  }
+}
+
+/* Product overview static tour (mobile + reduced-motion): keep content in
+ * the column. Horizontal clipping for the Linear peek lives on
+ * [data-overview-mobile-peek] itself so the peek can bleed into the right
+ * gutter; the section already uses overflow-x-clip as the page-level guard. */
 [data-marketing-theme='dark'] [data-overview-static-tour],
 [data-marketing-theme='dark'] [data-product-overview-mobile] {
-  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -935,6 +1026,39 @@ html, body {
 }
 
 /* Blob Animation */
+@keyframes integrations-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+[data-marketing-theme='dark'] [data-integrations-marquee-track] {
+  animation: integrations-marquee 36s linear infinite;
+}
+
+[data-marketing-theme='dark'] [data-integrations-marquee]:hover [data-integrations-marquee-track] {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-marketing-theme='dark'] [data-integrations-marquee] {
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  [data-marketing-theme='dark'] [data-integrations-marquee]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-marketing-theme='dark'] [data-integrations-marquee-track] {
+    animation: none;
+  }
+}
+
 @keyframes blob {
   0% {
     transform: translate(0px, 0px) scale(1);

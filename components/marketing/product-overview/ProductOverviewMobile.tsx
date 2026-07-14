@@ -10,183 +10,185 @@ import {
   INBOX_SCENE_FIXTURES_ACME,
   PRODUCT_OVERVIEW_DEPTH_LINKS,
   PRODUCT_OVERVIEW_NAV,
-  PRODUCT_OVERVIEW_SCENE_CAPTIONS,
-  PRODUCT_OVERVIEW_SCENE_COUNT,
   UPCOMING_EVENTS_SCENE_FIXTURES_ACME,
   YESTERDAY_NARRATIVE_SCENE_FIXTURES_ACME,
   type ProductOverviewSceneId,
 } from '@/lib/marketing-product-overview-data';
+import { getProductOverviewVisualStateFromScene } from '@/lib/marketing-product-overview-scroll';
 import { ProductOverviewFrame } from './ProductOverviewFrame';
-import { ProductOverviewProgressNav } from './ProductOverviewProgressNav';
 import {
   AttentionOverviewScene,
   CompanionsOverviewScene,
   ConnectedAppsOverviewScene,
   InboxOverviewScene,
+  SceneLayer,
   UpcomingEventsOverviewScene,
   YesterdayNarrativeOverviewScene,
 } from './scenes/OverviewScenePlaceholders';
 
-function sceneContent(scene: ProductOverviewSceneId) {
+function workspaceCopy(scene: ProductOverviewSceneId): {
+  title: string;
+  supporting: string;
+} {
   switch (scene) {
     case 1:
       return {
-        tab: PRODUCT_OVERVIEW_NAV[0].sidebarTab,
-        emailExpanded: false,
         title: ATTENTION_BOARD_FIXTURES_ACME.header,
         supporting: ATTENTION_BOARD_FIXTURES_ACME.supportingLine,
-        body: <AttentionOverviewScene />,
       };
     case 2:
       return {
-        tab: PRODUCT_OVERVIEW_NAV[1].sidebarTab,
-        emailExpanded: false,
         title: UPCOMING_EVENTS_SCENE_FIXTURES_ACME.headline,
         supporting: UPCOMING_EVENTS_SCENE_FIXTURES_ACME.supportingLine,
-        body: <UpcomingEventsOverviewScene />,
       };
     case 3:
       return {
-        tab: PRODUCT_OVERVIEW_NAV[2].sidebarTab,
-        emailExpanded: true,
         title: INBOX_SCENE_FIXTURES_ACME.headline,
         supporting: INBOX_SCENE_FIXTURES_ACME.supportingLine,
-        body: <InboxOverviewScene />,
       };
     case 4:
       return {
-        tab: PRODUCT_OVERVIEW_NAV[3].sidebarTab,
-        emailExpanded: false,
         title: YESTERDAY_NARRATIVE_SCENE_FIXTURES_ACME.headline,
         supporting: YESTERDAY_NARRATIVE_SCENE_FIXTURES_ACME.supportingLine,
-        body: <YesterdayNarrativeOverviewScene />,
       };
     case 5:
       return {
-        tab: PRODUCT_OVERVIEW_NAV[4].sidebarTab,
-        emailExpanded: false,
         title: CONNECTED_APPS_SCENE_FIXTURES_ACME.headline,
         supporting: CONNECTED_APPS_SCENE_FIXTURES_ACME.supportingLine,
-        body: <ConnectedAppsOverviewScene />,
       };
     case 6:
       return {
-        tab: PRODUCT_OVERVIEW_NAV[5].sidebarTab,
-        emailExpanded: false,
         title: COMPANIONS_SCENE_FIXTURES_ACME.headline,
         supporting: COMPANIONS_SCENE_FIXTURES_ACME.supportingLine,
-        body: <CompanionsOverviewScene />,
       };
   }
 }
 
 /**
- * Mobile / stacked final-state cards (P11-T02 / P11-T10 / P11-T12).
- * No sticky scrub; progress nav scrolls to each stacked scene card.
+ * Mobile / reduced-motion product overview (P12-T10).
+ * Linear-style zoomed-out desktop chrome: full app visible at a reduced
+ * scale, clipped with a soft right-edge fade. No progress-tab strip;
+ * in-frame sidebar switches scenes when tapped.
  */
 export function ProductOverviewMobile() {
-  const scenes: ProductOverviewSceneId[] = [1, 2, 3, 4, 5, 6];
   const [activeScene, setActiveScene] = useState<ProductOverviewSceneId>(1);
+  const [sensorVisible, setSensorVisible] = useState(false);
+  const [mascotVisible, setMascotVisible] = useState(false);
   const revealed = useProductOverviewReveal();
 
   useEffect(() => {
-    const nodes = scenes
-      .map((scene) => document.getElementById(`overview-mobile-scene-${scene}`))
-      .filter((node): node is HTMLElement => Boolean(node));
-    if (nodes.length === 0) return undefined;
+    if (activeScene !== 6) {
+      setSensorVisible(false);
+      setMascotVisible(false);
+      return undefined;
+    }
 
-    const ratios = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          ratios.set(entry.target.id, entry.intersectionRatio);
-        }
-        let bestScene: ProductOverviewSceneId = 1;
-        let bestRatio = -1;
-        for (const scene of scenes) {
-          const ratio = ratios.get(`overview-mobile-scene-${scene}`) ?? 0;
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestScene = scene;
-          }
-        }
-        setActiveScene((prev) => (prev === bestScene ? prev : bestScene));
-      },
-      { threshold: [0.2, 0.45, 0.7], rootMargin: '-15% 0px -35% 0px' }
-    );
+    const sensorTimer = window.setTimeout(() => setSensorVisible(true), 120);
+    const mascotTimer = window.setTimeout(() => setMascotVisible(true), 280);
+    return () => {
+      window.clearTimeout(sensorTimer);
+      window.clearTimeout(mascotTimer);
+    };
+  }, [activeScene]);
 
-    for (const node of nodes) observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  const visual = getProductOverviewVisualStateFromScene(activeScene, {
+    sensorVisible: activeScene === 6 ? sensorVisible : false,
+    mascotVisible: activeScene === 6 ? mascotVisible : false,
+  });
+  const workspace = workspaceCopy(activeScene);
 
   const handleSelectScene = useCallback((scene: ProductOverviewSceneId) => {
-    const target = document.getElementById(`overview-mobile-scene-${scene}`);
-    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setActiveScene(scene);
   }, []);
 
   return (
     <div
-      className="space-y-10"
+      className="space-y-5"
       data-product-overview-mobile
+      data-overview-mode="click"
+      data-overview-scene={activeScene}
       data-overview-reveal-simple="true"
       data-overview-revealed={revealed ? 'true' : 'false'}
     >
-      <ProductOverviewProgressNav
-        activeScene={activeScene}
-        onSelectScene={handleSelectScene}
-        interactive
-        className="sticky top-20 z-20 rounded-lg border border-mm-outline-variant/50 bg-mm-background/95 p-3 backdrop-blur-sm"
-      />
-
-      {scenes.map((scene) => {
-        const content = sceneContent(scene);
-        return (
-          <div
-            key={scene}
-            id={`overview-mobile-scene-${scene}`}
-            data-overview-mobile-scene={scene}
-            className="scroll-mt-28"
+      {/*
+        Zoomed-out desktop frame (Linear mobile pattern). Layout size is
+        collapsed via --overview-mobile-scale in globals.css; the painted
+        chrome stays at full desktop width so the whole app reads at once.
+      */}
+      <div
+        data-overview-mobile-peek=""
+        className="relative overflow-x-clip max-md:mr-[-1.5rem] max-md:w-[calc(100%+1.5rem)] md:max-w-full"
+      >
+        <div data-overview-mobile-peek-frame="" className="max-w-none md:w-full">
+          <ProductOverviewFrame
+            activeTab={visual.sidebarTab}
+            emailExpanded={visual.emailExpanded}
+            shellOpacity={visual.shellOpacity}
+            workspaceTitle={workspace.title}
+            workspaceSupporting={workspace.supporting}
+            sticky={false}
+            showSidebar
+            forceSidebar
+            revealed={revealed}
+            onSelectScene={handleSelectScene}
+            sceneLabel={PRODUCT_OVERVIEW_NAV[activeScene - 1].label}
           >
-            <ProductOverviewFrame
-              activeTab={content.tab}
-              emailExpanded={content.emailExpanded}
-              workspaceTitle={content.title}
-              workspaceSupporting={content.supporting}
-              caption={PRODUCT_OVERVIEW_SCENE_CAPTIONS[scene]}
-              sticky={false}
-              showSidebar={false}
-              sceneLabel={PRODUCT_OVERVIEW_NAV[scene - 1].label}
-              progressNav={
-                <p className="text-xs font-medium text-mm-on-surface-variant">
-                  Scene {scene} of {PRODUCT_OVERVIEW_SCENE_COUNT} ·{' '}
-                  {PRODUCT_OVERVIEW_NAV[scene - 1].label}
-                </p>
-              }
-              footer={
-                scene === 6 ? (
-                  <p className="flex flex-wrap gap-x-4 gap-y-2 text-base font-medium">
-                    <Link
-                      href={PRODUCT_OVERVIEW_DEPTH_LINKS.sensor.href}
-                      className="text-mm-primary hover:text-mm-primary-dim"
-                    >
-                      {PRODUCT_OVERVIEW_DEPTH_LINKS.sensor.label}
-                    </Link>
-                    <Link
-                      href={PRODUCT_OVERVIEW_DEPTH_LINKS.mascot.href}
-                      className="text-mm-primary hover:text-mm-primary-dim"
-                    >
-                      {PRODUCT_OVERVIEW_DEPTH_LINKS.mascot.label}
-                    </Link>
-                  </p>
-                ) : null
-              }
+            <div
+              role="region"
+              aria-label={`MindMesh ${PRODUCT_OVERVIEW_NAV[activeScene - 1].label}`}
+              className="relative h-full min-h-[28rem] overflow-x-clip"
             >
-              <div className="h-full overflow-auto">{content.body}</div>
-            </ProductOverviewFrame>
-          </div>
-        );
-      })}
+              <SceneLayer active={activeScene === 1}>
+                <AttentionOverviewScene
+                  showOverlapChip
+                  playGuidedTour={activeScene === 1}
+                  onSelectScene={handleSelectScene}
+                />
+              </SceneLayer>
+              <SceneLayer active={activeScene === 2}>
+                <UpcomingEventsOverviewScene />
+              </SceneLayer>
+              <SceneLayer active={activeScene === 3}>
+                <InboxOverviewScene />
+              </SceneLayer>
+              <SceneLayer active={activeScene === 4}>
+                <YesterdayNarrativeOverviewScene />
+              </SceneLayer>
+              <SceneLayer active={activeScene === 5}>
+                <ConnectedAppsOverviewScene />
+              </SceneLayer>
+              <SceneLayer active={activeScene === 6}>
+                <CompanionsOverviewScene
+                  sensorVisible={sensorVisible}
+                  mascotVisible={mascotVisible}
+                />
+              </SceneLayer>
+            </div>
+          </ProductOverviewFrame>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center space-y-4 text-center">
+        <p className="max-w-2xl text-sm text-mm-on-surface-variant">
+          {visual.caption}
+        </p>
+        {activeScene === 6 ? (
+          <p className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-base font-medium">
+            <Link
+              href={PRODUCT_OVERVIEW_DEPTH_LINKS.sensor.href}
+              className="inline-flex min-h-11 items-center text-mm-primary hover:text-mm-primary-dim"
+            >
+              {PRODUCT_OVERVIEW_DEPTH_LINKS.sensor.label}
+            </Link>
+            <Link
+              href={PRODUCT_OVERVIEW_DEPTH_LINKS.mascot.href}
+              className="inline-flex min-h-11 items-center text-mm-primary hover:text-mm-primary-dim"
+            >
+              {PRODUCT_OVERVIEW_DEPTH_LINKS.mascot.label}
+            </Link>
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

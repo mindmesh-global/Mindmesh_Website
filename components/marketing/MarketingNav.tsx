@@ -19,6 +19,9 @@ const linkClassName =
 const primaryButtonClassName =
   'rounded-md bg-mm-primary-fixed px-4 py-2 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim';
 
+const mobilePrimaryButtonClassName =
+  'rounded-md bg-mm-primary-fixed px-3 py-1.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim';
+
 function handleHomepageAnchorClick(
   href: string,
   onNavigate?: () => void
@@ -59,6 +62,28 @@ export function MarketingNav() {
   const brandOnClick = onHomepage
     ? handleHomepageAnchorClick(MARKETING_SECTION_HASHES.hero, closeMobile)
     : () => closeMobile();
+
+  const ctaHref = onHomepage
+    ? MARKETING_PRIMARY_CTA.hash
+    : homepageSectionHref(MARKETING_PRIMARY_CTA.hash, false);
+
+  const primaryCta = onHomepage ? (
+    <a
+      href={MARKETING_PRIMARY_CTA.hash}
+      onClick={handleHomepageAnchorClick(MARKETING_PRIMARY_CTA.hash, closeMobile)}
+      className={mobilePrimaryButtonClassName}
+    >
+      {MARKETING_PRIMARY_CTA.label}
+    </a>
+  ) : (
+    <Link
+      href={ctaHref}
+      onClick={closeMobile}
+      className={mobilePrimaryButtonClassName}
+    >
+      {MARKETING_PRIMARY_CTA.label}
+    </Link>
+  );
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -121,16 +146,20 @@ export function MarketingNav() {
             )}
           </nav>
 
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-mm-on-background md:hidden"
-            aria-expanded={mobileOpen}
-            aria-controls="marketing-mobile-nav"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            onClick={() => setMobileOpen((open) => !open)}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {/* Linear-style mobile chrome: primary CTA outside, other links in the menu. */}
+          <div className="flex items-center gap-2 md:hidden">
+            {primaryCta}
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-mm-on-background"
+              aria-expanded={mobileOpen}
+              aria-controls="marketing-mobile-nav"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              onClick={() => setMobileOpen((open) => !open)}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -163,26 +192,6 @@ export function MarketingNav() {
                 </Link>
               );
             })}
-            {onHomepage ? (
-              <a
-                href={MARKETING_PRIMARY_CTA.hash}
-                onClick={handleHomepageAnchorClick(
-                  MARKETING_PRIMARY_CTA.hash,
-                  closeMobile
-                )}
-                className={`${primaryButtonClassName} mt-2 text-center`}
-              >
-                {MARKETING_PRIMARY_CTA.label}
-              </a>
-            ) : (
-              <Link
-                href={homepageSectionHref(MARKETING_PRIMARY_CTA.hash, false)}
-                onClick={closeMobile}
-                className={`${primaryButtonClassName} mt-2 text-center`}
-              >
-                {MARKETING_PRIMARY_CTA.label}
-              </Link>
-            )}
           </div>
         </nav>
       ) : null}

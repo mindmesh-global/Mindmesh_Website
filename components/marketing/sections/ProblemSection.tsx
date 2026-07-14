@@ -26,8 +26,9 @@ const problemCards = [
 
 /**
  * Problem narrative pulled up under the product overview CTAs.
- * Intro + three FIG panels share one full viewport; the MindMesh close
- * (FIG 0.5) starts on the next scroll. Section dividers mark each page end.
+ * Intro + three FIG panels (horizontal peek row on phone, three-up from md);
+ * the MindMesh close (FIG 0.5) starts on the next scroll. Section dividers
+ * mark each page end.
  */
 export function ProblemSection() {
   return (
@@ -38,7 +39,7 @@ export function ProblemSection() {
     >
       <div className="mm-content">
         {/* Intro + FIG 0.2–0.4: one full page of breathing room. */}
-        <div className="flex min-h-[calc(100svh-4rem)] flex-col justify-between gap-20 py-16 md:gap-28 md:py-24 lg:gap-32 lg:py-28">
+        <div className="flex min-h-[calc(100svh-4rem)] flex-col justify-between gap-12 py-16 md:gap-28 md:py-24 lg:gap-32 lg:py-28">
           <div className="w-full">
             <h2
               id="problem-heading"
@@ -53,23 +54,47 @@ export function ProblemSection() {
             </p>
           </div>
 
-          <div className="grid w-full gap-6 md:grid-cols-3 md:gap-5">
-            {problemCards.map(({ fig, heading, Figure }) => (
-              <div
-                key={fig}
-                className="flex flex-col rounded-2xl border border-mm-outline-variant/50 bg-mm-surface-container/40 p-6"
-              >
-                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-mm-on-surface-variant/70">
-                  {fig}
-                </span>
-                <h3 className="mt-3 font-display text-lg font-semibold leading-snug tracking-[-0.01em] text-mm-on-background md:text-xl">
-                  {heading}
-                </h3>
-                <div className="mt-6 flex flex-1 items-center justify-center">
-                  <Figure />
+          {/*
+            Linear-style figure row: side-by-side cards with a peek of the next
+            on phone (horizontal snap scroll); three-up grid from md up.
+          */}
+          <div
+            className="-mr-[var(--mm-layout-gutter,1.5rem)] md:mr-0"
+            data-problem-figures=""
+          >
+            <div
+              className={[
+                'flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1',
+                '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+                'md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:pb-0',
+              ].join(' ')}
+            >
+              {problemCards.map(({ fig, heading, Figure }) => (
+                <div
+                  key={fig}
+                  className={[
+                    'flex w-[min(78vw,20.5rem)] shrink-0 snap-start flex-col',
+                    'rounded-2xl border border-mm-outline-variant/50 bg-mm-surface-container/40 p-6',
+                    'md:w-auto md:shrink',
+                  ].join(' ')}
+                >
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-mm-on-surface-variant/70">
+                    {fig}
+                  </span>
+                  <h3 className="mt-3 font-display text-lg font-semibold leading-snug tracking-[-0.01em] text-mm-on-background md:text-xl">
+                    {heading}
+                  </h3>
+                  <div className="mt-6 flex flex-1 items-center justify-center">
+                    <Figure />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              {/* Trailing spacer so the last card can scroll clear of the right edge. */}
+              <div
+                className="w-[var(--mm-layout-gutter,1.5rem)] shrink-0 md:hidden"
+                aria-hidden
+              />
+            </div>
           </div>
         </div>
 

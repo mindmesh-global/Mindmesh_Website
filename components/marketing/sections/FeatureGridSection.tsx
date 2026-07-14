@@ -39,6 +39,10 @@ const featureCards = [
   },
 ] as const;
 
+/**
+ * Depth-page directory. Phone: compact title + chevron rows.
+ * md+: original card grid with descriptions.
+ */
 export function FeatureGridSection() {
   return (
     <MarketingSection
@@ -46,16 +50,40 @@ export function FeatureGridSection() {
       eyebrow="Features"
       title="Go deeper on what MindMesh does."
       subtitle="Depth pages for the layers behind connect, prioritize, and execute."
+      subtitleClassName="hidden md:block"
       withDivider
     >
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Phone: compact link list */}
+      <ul className="divide-y divide-mm-outline-variant/50 border-y border-mm-outline-variant/50 md:hidden">
+        {featureCards.map((card) => (
+          <li key={card.href}>
+            <Link
+              href={card.href}
+              className="flex min-h-14 items-center justify-between gap-4 py-3.5 text-left transition-colors hover:text-mm-primary"
+            >
+              <span className="font-display text-base font-semibold text-mm-on-background">
+                {card.title}
+              </span>
+              <ArrowRight
+                className="h-4 w-4 shrink-0 text-mm-on-surface-variant"
+                aria-hidden
+              />
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      {/* md+: card grid */}
+      <div className="hidden gap-6 sm:grid-cols-2 md:grid lg:grid-cols-3">
         {featureCards.map((card) => (
           <Link
             key={card.href}
             href={card.href}
             className="group rounded-lg border border-mm-outline-variant bg-mm-surface-container p-6 transition hover:-translate-y-0.5 hover:border-mm-primary"
           >
-            <h3 className="font-display text-xl font-semibold text-mm-on-background">{card.title}</h3>
+            <h3 className="font-display text-xl font-semibold text-mm-on-background">
+              {card.title}
+            </h3>
             <p className="mt-3 text-base text-mm-on-surface-variant">{card.description}</p>
             <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-mm-primary group-hover:text-mm-primary-dim">
               {card.linkLabel}

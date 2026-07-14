@@ -21,8 +21,13 @@ export type ProductOverviewFrameProps = {
   progressNav?: ReactNode;
   /** Sticky inside overview scroll wrapper (desktop motion). */
   sticky?: boolean;
-  /** Hide full sidebar (mobile stacked cards use a scene chip instead). */
+  /** Hide full sidebar (legacy stacked cards used a scene chip instead). */
   showSidebar?: boolean;
+  /**
+   * Show the sidebar below `md` (Linear-style mobile peek of the desktop
+   * chrome). Ignored when `showSidebar` is false.
+   */
+  forceSidebar?: boolean;
   sceneLabel?: string;
   className?: string;
   /**
@@ -54,6 +59,7 @@ export function ProductOverviewFrame({
   progressNav,
   sticky = true,
   showSidebar = true,
+  forceSidebar = false,
   sceneLabel,
   className,
   wide = false,
@@ -61,6 +67,7 @@ export function ProductOverviewFrame({
   onSelectScene,
 }: ProductOverviewFrameProps) {
   const outerClassName = sticky ? 'absolute inset-0' : 'relative';
+  const sidebarVisibleBelowMd = showSidebar && forceSidebar;
 
   return (
     <div
@@ -95,7 +102,7 @@ export function ProductOverviewFrame({
               </div>
               <div className="flex min-w-0 flex-1 items-center gap-2">
                 <span className="text-sm font-medium text-mm-on-surface">MindMesh</span>
-                {sceneLabel ? (
+                {sceneLabel && !sidebarVisibleBelowMd ? (
                   <span className="truncate rounded-md bg-mm-primary/10 px-2 py-0.5 text-xs text-mm-primary md:hidden">
                     {sceneLabel}
                   </span>
@@ -108,7 +115,10 @@ export function ProductOverviewFrame({
 
             <div className="flex min-h-0 flex-1 overflow-hidden">
               {showSidebar ? (
-                <div className="hidden md:flex" style={{ opacity: shellOpacity }}>
+                <div
+                  className={sidebarVisibleBelowMd ? 'flex' : 'hidden md:flex'}
+                  style={{ opacity: shellOpacity }}
+                >
                   <ProductOverviewNav
                     activeTab={activeTab}
                     emailExpanded={emailExpanded}

@@ -12,6 +12,11 @@ export type ProductOverviewProgressNavProps = {
   onSelectScene: (scene: ProductOverviewSceneId) => void;
   /** When true, tabs are visible but not interactive (reduced-motion pin). */
   interactive?: boolean;
+  /**
+   * `wrap` (default): flex-wrap centered grid.
+   * `scroll`: single horizontal row with overflow scroll (mobile peek).
+   */
+  layout?: 'wrap' | 'scroll';
   className?: string;
 };
 
@@ -23,6 +28,7 @@ export function ProductOverviewProgressNav({
   activeScene,
   onSelectScene,
   interactive = true,
+  layout = 'wrap',
   className,
 }: ProductOverviewProgressNavProps) {
   const labelId = useId();
@@ -64,10 +70,15 @@ export function ProductOverviewProgressNav({
     [activeScene, focusScene, interactive, onSelectScene]
   );
 
+  const scrollLayout = layout === 'scroll';
+
   return (
     <div
-      className={['space-y-3 text-center', className].filter(Boolean).join(' ')}
+      className={['space-y-3', scrollLayout ? 'text-left' : 'text-center', className]
+        .filter(Boolean)
+        .join(' ')}
       data-overview-progress-nav
+      data-overview-progress-layout={layout}
       data-overview-progress-interactive={interactive ? 'true' : 'false'}
     >
       <p id={labelId} className="text-xs font-medium text-mm-on-surface-variant">
@@ -81,7 +92,11 @@ export function ProductOverviewProgressNav({
         role="tablist"
         aria-labelledby={labelId}
         aria-orientation="horizontal"
-        className="flex flex-wrap justify-center gap-2"
+        className={
+          scrollLayout
+            ? 'flex flex-nowrap justify-start gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
+            : 'flex flex-wrap justify-center gap-2'
+        }
         onKeyDown={handleKeyDown}
       >
         {PRODUCT_OVERVIEW_NAV.map((item) => {
@@ -105,6 +120,7 @@ export function ProductOverviewProgressNav({
               }}
               className={[
                 'inline-flex min-h-11 min-w-[2.75rem] items-center gap-2 rounded-md border px-3 py-2.5 text-left text-xs font-medium transition-[opacity,transform]',
+                scrollLayout ? 'shrink-0 whitespace-nowrap' : '',
                 selected
                   ? 'border-mm-primary bg-mm-primary/15 text-mm-on-surface ring-1 ring-mm-primary/40'
                   : 'border-mm-outline-variant/60 text-mm-on-surface-variant hover:border-mm-outline-variant hover:text-mm-on-surface',

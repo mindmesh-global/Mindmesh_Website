@@ -8,18 +8,30 @@ import { MarketingPriorityHandoff } from '@/components/marketing/theater/marketi
 import { useTheaterScroll } from '@/components/marketing/theater/TheaterScrollContext';
 import { getExecuteVisualStateFromProgress } from '@/lib/marketing-theater-scroll';
 
+type ExecuteTheaterDemoProps = {
+  /**
+   * Pin to the settled hold stack (draft + calendar + Jira + success).
+   * Used by the mobile static peek so it never lands mid-scrub.
+   */
+  forceFinal?: boolean;
+};
+
 /**
  * Scroll-driven Execute theater demo (P4-T10).
  * Priority carry-over → draft → calendar → Jira → success per P1-T08.
  */
-export function ExecuteTheaterDemo() {
-  const { progress, isPaused, step } = useTheaterScroll();
+export function ExecuteTheaterDemo({ forceFinal = false }: ExecuteTheaterDemoProps) {
+  const scroll = useTheaterScroll();
+  const progress = forceFinal ? 1 : scroll.progress;
   const visual = getExecuteVisualStateFromProgress(progress);
+  const step = forceFinal ? 7 : scroll.step;
+  const isPaused = forceFinal ? false : scroll.isPaused;
 
   return (
     <div
       className="relative min-h-[320px]"
       data-execute-theater-demo
+      data-execute-theater-final={forceFinal ? 'true' : 'false'}
       data-execute-theater-paused={isPaused ? 'true' : 'false'}
       data-execute-theater-step={step}
       data-execute-scroll-progress={progress.toFixed(3)}
@@ -30,11 +42,11 @@ export function ExecuteTheaterDemo() {
           opacity={visual.handoffOpacity}
           translateY={visual.handoffTranslateY}
           phase={visual.handoffPhase}
-          pulseScale={visual.ctaPulseScale}
+          pulseScale={forceFinal ? 1 : visual.ctaPulseScale}
         />
       </div>
 
-      {visual.showHoldStack ? (
+      {visual.showHoldStack || forceFinal ? (
         <div className="mt-4 space-y-3" data-execute-hold-stack>
           <MarketingDraftPanel scrollProgress={progress} />
           <MarketingCalendarBlock scrollProgress={progress} />

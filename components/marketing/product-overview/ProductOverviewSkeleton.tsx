@@ -57,13 +57,13 @@ export function ProductOverviewSkeleton({
 }: ProductOverviewSkeletonProps) {
   if (variant === 'mobile') {
     return (
-      <div className="space-y-10" data-product-overview-skeleton="mobile">
-        {PRODUCT_OVERVIEW_NAV.map((item) => (
-          <div key={item.scene} className="relative">
-            <FrameChromeSkeleton sceneLabel={item.label} />
-            <div className="mt-4 h-4 w-3/4 rounded bg-mm-surface-container-high/50" />
+      <div className="space-y-5" data-product-overview-skeleton="mobile">
+        <div data-overview-mobile-peek="">
+          <div data-overview-mobile-peek-frame="">
+            <FrameChromeSkeleton />
           </div>
-        ))}
+        </div>
+        <div className="mx-auto h-4 w-3/4 rounded bg-mm-surface-container-high/50" />
       </div>
     );
   }

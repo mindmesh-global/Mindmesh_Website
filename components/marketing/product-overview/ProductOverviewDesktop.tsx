@@ -223,7 +223,7 @@ function ProductOverviewDesktopMotion() {
 
 /**
  * Desktop product overview (P12 click-to-explore).
- * Reduced-motion and mobile use the stacked static tour instead (P11-T12).
+ * Reduced-motion and mobile use ProductOverviewMobile instead (P12-T10).
  */
 export function ProductOverviewDesktop() {
   const prefersReducedMotion = usePrefersReducedMotion();

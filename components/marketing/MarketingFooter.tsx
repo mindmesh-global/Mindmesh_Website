@@ -23,7 +23,10 @@ export function MarketingFooter() {
             </p>
           </div>
 
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3">
+          <nav
+            aria-label="Footer"
+            className="flex flex-col gap-3 md:flex-row md:flex-wrap md:gap-x-8 md:gap-y-3"
+          >
             {MARKETING_FOOTER_LINKS.map(({ label, href }) => (
               <Link key={href} href={href} className={linkClassName}>
                 {label}

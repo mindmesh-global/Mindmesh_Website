@@ -18,7 +18,11 @@ export function HeroSection() {
           id="hero-heading"
           className="hero-lcp max-w-[720px] font-display text-[2.25rem] font-bold leading-[1.08] tracking-[-0.03em] text-mm-on-background md:text-[3.25rem] lg:text-[4rem]"
         >
-          The Cognitive Layer for modern work
+          The Cognitive
+          <br />
+          Layer for
+          <br />
+          modern work
         </h1>
         <p className="mt-4 text-sm text-mm-on-surface-variant md:text-base lg:whitespace-nowrap">
           MindMesh connects your apps, ranks what needs your attention right now, and helps you act

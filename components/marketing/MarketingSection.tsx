@@ -10,6 +10,8 @@ type MarketingSectionProps = {
   className?: string;
   headingId?: string;
   headerClassName?: string;
+  /** Extra classes for the subtitle (e.g. hide on phone). */
+  subtitleClassName?: string;
   /** Linear-style hairline + glow at the bottom of this section. */
   withDivider?: boolean;
   /** Pull the heading closer to the border above (less top padding). */
@@ -25,6 +27,7 @@ export function MarketingSection({
   className = '',
   headingId,
   headerClassName = '',
+  subtitleClassName = '',
   withDivider = false,
   compactTop = false,
 }: MarketingSectionProps) {
@@ -52,7 +55,9 @@ export function MarketingSection({
               </h2>
             ) : null}
             {subtitle ? (
-              <p className="mt-4 max-w-[640px] text-lg text-mm-on-surface-variant lg:text-xl">
+              <p
+                className={`mt-4 max-w-[640px] text-lg text-mm-on-surface-variant lg:text-xl ${subtitleClassName}`.trim()}
+              >
                 {subtitle}
               </p>
             ) : null}

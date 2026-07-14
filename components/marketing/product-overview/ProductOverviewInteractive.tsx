@@ -26,18 +26,19 @@ const ProductOverviewMobile = dynamic(
 );
 
 /**
- * Dynamically loaded interactive overview body (P11-T11 / P11-T12).
+ * Dynamically loaded interactive overview body (P11-T11 / P12-T03 / P12-T10).
  *
- * Visibility is CSS-driven so reduced-motion desktop users get the stacked
- * static tour without waiting on JS hydration (no scrub dependency).
- * - Static tour: mobile always; desktop when prefers-reduced-motion
+ * Visibility is CSS-driven so reduced-motion desktop users get the click
+ * tour without waiting on JS hydration (no scrub dependency).
+ * - Click tour: mobile always (Linear-style peek frame); desktop when
+ *   prefers-reduced-motion
  * - Motion desktop: md+ and motion allowed only
  */
 export function ProductOverviewInteractive() {
   return (
     <>
       <div
-        className="block overflow-x-clip md:hidden motion-reduce:!block"
+        className="block md:hidden motion-reduce:!block"
         data-overview-static-tour
       >
         <ProductOverviewMobile />

@@ -50,3 +50,8 @@ export {
   TheaterScrollSection,
   type TheaterScrollSectionProps,
 } from './TheaterScrollSection';
+export {
+  TheaterMobilePeek,
+  type TheaterMobilePeekProps,
+} from './TheaterMobilePeek';
+export { useStaticTheaterScroll } from './useStaticTheaterScroll';
