@@ -27,7 +27,7 @@ const jsonLd = {
       '@type': 'Organization',
       name: 'MindMesh',
       url: 'https://mindmesh.global',
-      logo: 'https://mindmesh.global/logo.png',
+      logo: 'https://mindmesh.global/icon.png',
     },
   ],
 };
