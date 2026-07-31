@@ -13,13 +13,13 @@ export function MarketingFooter() {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm space-y-3">
             <p className="font-display text-sm font-semibold tracking-tight text-mm-on-background">
-              MindMesh
+              MindMesh™
             </p>
             <p className="text-sm leading-relaxed text-mm-on-surface-variant">
               The cognitive layer for modern work.
             </p>
             <p className="text-sm text-mm-on-surface-variant">
-              © {year} MindMesh. A product of The Vansh Group.
+              MindMesh™ {year}. A product of The Vansh Group.
             </p>
           </div>
 

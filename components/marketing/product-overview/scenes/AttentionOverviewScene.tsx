@@ -62,7 +62,7 @@ function SourceGlyph({ label }: { label: AttentionSourceLabel }) {
   if (iconSrc) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={iconSrc} alt="" width={18} height={18} className="h-[18px] w-[18px]" />
+      <img src={iconSrc} alt="" className="h-full w-full object-cover" />
     );
   }
   return (
@@ -100,7 +100,7 @@ function AttentionActionCard({
       data-attention-tour-anchor={tourFocus ? 'open' : undefined}
     >
       <div className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-mm-primary/15">
+        <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg">
           <SourceGlyph label={card.sourceLabel} />
         </div>
         <div className="min-w-0 flex-1">
@@ -113,11 +113,6 @@ function AttentionActionCard({
             >
               {card.title}
             </h4>
-            {isAnchor ? (
-              <span className="rounded-md bg-mm-primary/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-mm-primary">
-                Anchor
-              </span>
-            ) : null}
           </div>
           {card.summary ? (
             <p className="mt-1 text-xs text-mm-on-surface-variant md:text-sm">
@@ -201,7 +196,7 @@ function EvidenceRow({
       data-attention-evidence={item.id}
       data-attention-evidence-kind={item.kind}
     >
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-mm-surface-container-high">
+      <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
         <SourceGlyph label={item.source} />
       </div>
       <div className="min-w-0 flex-1">
@@ -334,12 +329,12 @@ function QuietHandledRow({
         onClick={() => setExpanded((prev) => !prev)}
         aria-expanded={showDetails}
       >
-        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-mm-surface">
+        <span className="h-6 w-6 shrink-0 overflow-hidden rounded-md">
           {iconSrc ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={iconSrc} alt="" width={14} height={14} className="h-3.5 w-3.5" />
+            <img src={iconSrc} alt="" className="h-full w-full object-cover" />
           ) : (
-            <span className="text-[10px] font-semibold text-mm-primary">
+            <span className="flex h-full w-full items-center justify-center bg-mm-surface text-[10px] font-semibold text-mm-primary">
               {row.sourceLabel.charAt(0)}
             </span>
           )}
@@ -446,16 +441,16 @@ function OverlapAlert({
 }) {
   return (
     <div
-      className="flex items-start gap-2.5 rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container px-3 py-2.5"
+      className="flex items-start gap-2.5 rounded-lg border border-mm-error/40 bg-mm-error-container/25 px-3 py-2.5"
       data-attention-overlap={alert.id}
       role="status"
     >
-      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-mm-primary/15 text-mm-primary">
+      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-mm-error/20 text-mm-error">
         <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="text-sm font-medium text-mm-on-surface">{alert.title}</p>
-        <p className="mt-0.5 text-xs leading-relaxed text-mm-on-surface-variant md:text-sm">
+        <p className="text-sm font-medium text-mm-error">{alert.title}</p>
+        <p className="mt-0.5 text-xs leading-relaxed text-mm-on-error-container md:text-sm">
           {alert.detail}
         </p>
       </div>
@@ -725,7 +720,7 @@ export function AttentionOverviewScene({
 
         <section data-attention-section="now">
           <div className="mb-2 flex items-baseline justify-between gap-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wide text-mm-on-surface-variant">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-mm-on-surface-variant">
               Now
             </h4>
             <span className="text-[11px] tabular-nums text-mm-on-surface-variant">
