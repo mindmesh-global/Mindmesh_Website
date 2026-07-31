@@ -200,7 +200,7 @@ export const ATTENTION_BOARD_FIXTURES_ACME: AttentionBoardFixture = {
     {
       id: 'attn-prep-2pm',
       title: PRIORITY_FIXTURE_ACME.title,
-      summary: 'Client call prep with open email, Slack, and Jira context.',
+      summary: 'Client-call prep with open email, Slack, and Jira context.',
       sourceLabel: 'Google Calendar',
       sourceApps: ['Gmail', 'Google Calendar', 'Slack', 'Jira'],
       whyNow: PRIORITY_FIXTURE_ACME.reason,
@@ -211,7 +211,7 @@ export const ATTENTION_BOARD_FIXTURES_ACME: AttentionBoardFixture = {
     {
       id: 'attn-standup-notes',
       title: 'Review standup notes',
-      summary: 'Capture follow-ups after the 11am standup.',
+      summary: 'Capture follow-ups after the 11 AM standup.',
       sourceLabel: 'Google Calendar',
       sourceApps: ['Google Calendar'],
       whyNow: 'Standup ends before lunch; notes are still open.',
@@ -224,8 +224,8 @@ export const ATTENTION_BOARD_FIXTURES_ACME: AttentionBoardFixture = {
       sourceLabel: 'Gmail',
       count: 1,
       detailLines: [
-        'Newsletter filed as reading later.',
-        'No action needed before 2pm.',
+        'Newsletter filed for reading later.',
+        'No action needed before 2 PM.',
       ],
     },
     {
@@ -234,8 +234,8 @@ export const ATTENTION_BOARD_FIXTURES_ACME: AttentionBoardFixture = {
       sourceLabel: 'Google Calendar',
       count: 1,
       detailLines: [
-        'Declined as optional; calendar stay clear for prep.',
-        'No conflict with the 2pm client call.',
+        'Declined as optional; calendar stays clear for prep.',
+        'No conflict with the 2 PM client call.',
       ],
     },
     {
@@ -255,7 +255,7 @@ export const ATTENTION_BOARD_FIXTURES_ACME: AttentionBoardFixture = {
       count: 1,
       detailLines: [
         'Personal focus block noted and left alone.',
-        'Does not need attention before 2pm.',
+        'Does not need attention before 2 PM.',
       ],
     },
     {

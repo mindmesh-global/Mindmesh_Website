@@ -14,9 +14,9 @@ export const MARKETING_PERSONA_ACME = {
 
 export const PRIORITY_FIXTURE_ACME = {
   id: 'priority-acme-2pm',
-  title: 'Prepare for 2pm client call',
+  title: 'Prepare for the 2 PM client call',
   reason:
-    "Dana's unread reply, a Slack thread on scope, and open Jira ticket PROD-142 all need you before 2pm.",
+    "Dana's unread reply, a Slack thread on scope, and an open Jira ticket (PROD-142) all need you before 2 PM.",
   sources: ['Gmail', 'Google Calendar', 'Slack', 'Jira'] as const,
 } as const;
 

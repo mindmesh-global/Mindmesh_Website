@@ -10,13 +10,13 @@ export default function SiteFooter() {
       <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-2 gap-x-8 gap-y-8 px-6 text-sm leading-relaxed sm:px-12 md:grid-cols-4 lg:grid-cols-6">
         <div className="col-span-2">
           <div className="mb-3 flex items-center gap-2">
-            <span className="text-xl font-semibold text-blue-200">MindMesh</span>
+            <span className="text-xl font-semibold text-blue-200">MindMesh™</span>
           </div>
           <p className="mb-5 max-w-xs text-sm leading-7 sm:text-base" style={{ color: '#a1a1aa' }}>
             Elevating productivity through architectural privacy and ambient intelligence.
           </p>
           <p className="text-sm sm:text-base" style={{ color: '#a1a1aa' }}>
-            © MindMesh™ 2026 | A product of The Vansh Group.
+            MindMesh™ 2026 | A product of The Vansh Group.
           </p>
         </div>
 

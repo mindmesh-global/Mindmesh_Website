@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
+import { PartnerTrustBadges } from '@/components/marketing/PartnerTrustBadges';
 import { MARKETING_INTEGRATIONS } from '@/lib/marketing-integrations';
 import {
   MARKETING_CTA_HREF,
@@ -66,8 +66,6 @@ const faqItems = [
 ] as const;
 
 export default function TrustPage() {
-  const { nvidia } = marketingTrustContent;
-
   return (
     <MarketingDepthLayout
       eyebrow={marketingTrustContent.eyebrow}
@@ -77,30 +75,14 @@ export default function TrustPage() {
       backLabel={depthBack.label}
     >
       <section className="bg-mm-background py-16 lg:py-24">
-        <div className="mx-auto w-full max-w-[720px] px-6">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
+        <div className="mx-auto w-full max-w-[1280px] px-6">
+          <h2 className="max-w-[720px] font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
             External validation, stated carefully.
           </h2>
-          <div className="mt-8 space-y-4">
-            <a
-              href={nvidia.linkUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block"
-            >
-              <Image
-                src={nvidia.badgeSrc}
-                alt={nvidia.badgeAlt}
-                width={111}
-                height={48}
-                className="h-10 w-auto md:h-12"
-                unoptimized
-              />
-            </a>
-            <p className="text-base text-mm-on-background">{nvidia.memberLine}</p>
-            <p className="text-sm text-mm-on-surface-variant">{nvidia.disclaimer}</p>
+          <div className="mt-8">
+            <PartnerTrustBadges />
           </div>
-          <p className="mt-8 text-base text-mm-on-surface-variant lg:text-lg">
+          <p className="mt-8 max-w-[720px] text-base text-mm-on-surface-variant lg:text-lg">
             {marketingTrustContent.securityLine}
           </p>
           <p className="mt-6">

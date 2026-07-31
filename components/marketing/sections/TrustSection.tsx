@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { MarketingSectionDivider } from '@/components/marketing/MarketingSectionDivider';
+import { PartnerTrustBadges } from '@/components/marketing/PartnerTrustBadges';
 import { marketingTrustContent } from '@/lib/marketing-trust-content';
 
 /**
@@ -8,8 +8,6 @@ import { marketingTrustContent } from '@/lib/marketing-trust-content';
  * space evenly below (same rhythm as How it works).
  */
 export function TrustSection() {
-  const { nvidia } = marketingTrustContent;
-
   return (
     <section
       id="trust"
@@ -25,25 +23,7 @@ export function TrustSection() {
           <span className="text-mm-on-surface-variant">{marketingTrustContent.subhead}</span>
         </h2>
 
-        <div className="max-w-[720px] space-y-4">
-          <a
-            href={nvidia.linkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block"
-          >
-            <Image
-              src={nvidia.badgeSrc}
-              alt={nvidia.badgeAlt}
-              width={111}
-              height={48}
-              className="h-10 w-auto md:h-12"
-              unoptimized
-            />
-          </a>
-          <p className="text-base text-mm-on-background">{nvidia.memberLine}</p>
-          <p className="text-sm text-mm-on-surface-variant">{nvidia.disclaimer}</p>
-        </div>
+        <PartnerTrustBadges />
 
         <div className="max-w-[720px] space-y-6">
           <p className="text-base leading-relaxed text-mm-on-background md:text-lg">
@@ -61,8 +41,6 @@ export function TrustSection() {
               </Link>
             ))}
           </div>
-
-          <p className="text-sm text-mm-on-surface-variant">{marketingTrustContent.waitlistLine}</p>
         </div>
 
         <MarketingSectionDivider />
