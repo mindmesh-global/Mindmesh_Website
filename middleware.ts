@@ -9,17 +9,24 @@ import type { NextRequest } from 'next/server';
 const HASH_REDIRECTS: Record<string, string> = {
   '/features': '/#features',
   '/waitlist': '/#cta',
+  // Waitlist-only: hide pricing until billing launches. 307 so we can restore /billing later.
+  // Restore steps: docs/unhide-billing.md
+  '/billing': '/#cta',
+  '/subscription': '/#cta',
 };
+
+const PERMANENT_HASH_REDIRECTS = new Set(['/features', '/waitlist']);
 
 export function middleware(request: NextRequest) {
   const destination = HASH_REDIRECTS[request.nextUrl.pathname];
   if (destination) {
-    return NextResponse.redirect(new URL(destination, request.url), 308);
+    const status = PERMANENT_HASH_REDIRECTS.has(request.nextUrl.pathname) ? 308 : 307;
+    return NextResponse.redirect(new URL(destination, request.url), status);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/features', '/waitlist'],
+  matcher: ['/features', '/waitlist', '/billing', '/subscription'],
 };

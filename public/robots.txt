@@ -6,9 +6,14 @@ Disallow: /settings/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /sensor&mascot
+Disallow: /billing
+Disallow: /subscription
 
 # Host
 Host: https://mindmesh.global
 
 # Sitemaps
 Sitemap: https://mindmesh.global/sitemap.xml
+
+# LLM discovery
+# https://mindmesh.global/llms.txt

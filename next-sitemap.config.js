@@ -9,9 +9,19 @@ module.exports = {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/dashboard/', '/settings/', '/api/', '/admin/', '/sensor&mascot'],
+        disallow: [
+          '/dashboard/',
+          '/settings/',
+          '/api/',
+          '/admin/',
+          '/sensor&mascot',
+          '/billing',
+          '/subscription',
+        ],
       },
     ],
+    transformRobotsTxt: async (_, robotsTxt) =>
+      `${robotsTxt}\n# LLM discovery\n# https://mindmesh.global/llms.txt\n`,
   },
   exclude: [
     '/dashboard',
@@ -26,6 +36,11 @@ module.exports = {
     // Indexable depth pages are /sensor and /mascot (P8-T17).
     '/sensor&mascot',
     '/sensor&mascot/*',
+    // Waitlist-only: pricing is hidden until billing launches.
+    '/billing',
+    '/billing/*',
+    '/subscription',
+    '/subscription/*',
   ],
   changefreq: 'weekly',
   priority: 0.7,

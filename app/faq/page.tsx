@@ -84,6 +84,19 @@ const faqs: readonly FaqItem[] = [
 const pageDescription =
   'Answers about MindMesh privacy, permissions, features, and how the product works.';
 
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+};
+
 export const metadata: Metadata = {
   title: 'FAQ',
   description: pageDescription,
@@ -103,13 +116,18 @@ export const metadata: Metadata = {
 
 export default function FaqPage() {
   return (
-    <MarketingDepthLayout
-      eyebrow="FAQ"
-      title="Everything you would ask before trusting AI with your workday"
-      subtitle="Clear answers about privacy, permissions, features, and how MindMesh helps you stay on top of work without staying buried in it."
-      backHref="/"
-      backLabel="Back to homepage →"
-    >
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <MarketingDepthLayout
+        eyebrow="FAQ"
+        title="Everything you would ask before trusting AI with your workday"
+        subtitle="Clear answers about privacy, permissions, features, and how MindMesh helps you stay on top of work without staying buried in it."
+        backHref="/"
+        backLabel="Back to homepage →"
+      >
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -175,6 +193,7 @@ export default function FaqPage() {
           </div>
         </div>
       </section>
-    </MarketingDepthLayout>
+      </MarketingDepthLayout>
+    </>
   );
 }

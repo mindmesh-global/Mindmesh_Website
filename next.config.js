@@ -31,11 +31,8 @@ const nextConfig = {
         destination: '/connected-apps',
         permanent: true,
       },
-      {
-        source: '/subscription',
-        destination: '/billing',
-        permanent: true,
-      },
+      // `/subscription` and `/billing` redirect to `/#cta` in middleware.ts
+      // while the site is waitlist-only (hash destinations cannot live here).
       {
         source: '/docs',
         destination: '/faq',
