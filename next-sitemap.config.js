@@ -12,6 +12,8 @@ module.exports = {
         disallow: ['/dashboard/', '/settings/', '/api/', '/admin/', '/sensor&mascot'],
       },
     ],
+    transformRobotsTxt: async (_, robotsTxt) =>
+      `${robotsTxt}\n# LLM discovery\n# https://mindmesh.global/llms.txt\n`,
   },
   exclude: [
     '/dashboard',
