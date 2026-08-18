@@ -6,6 +6,8 @@ Disallow: /settings/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /sensor&mascot
+Disallow: /billing
+Disallow: /subscription
 
 # Host
 Host: https://mindmesh.global

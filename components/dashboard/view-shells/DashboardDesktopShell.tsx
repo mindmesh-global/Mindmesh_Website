@@ -1123,8 +1123,8 @@ Built for focus, not noise.
                 >
                   Get Early Access
                 </button>
-                <Link href="/billing" className={seeHowBtn} style={seeHowBtnStyle}>
-                  View Billing & Plans
+                <Link href="/#features" className={seeHowBtn} style={seeHowBtnStyle}>
+                  See how it works
                 </Link>
               </div>
               <p className={`mt-6 flex items-center gap-2 text-sm ${bodyMutedSm}`}>

@@ -5,6 +5,7 @@ import BillingPlansClient from './BillingPlansClient';
 
 export const metadata: Metadata = {
   title: 'Billing & plans',
+  robots: { index: false, follow: false },
   description:
     'MindMesh plans: Free, Pro, and Enterprise. Compare features, monthly and yearly pricing, and how billing will work in the app.',
   openGraph: {

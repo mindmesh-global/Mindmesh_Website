@@ -32,7 +32,6 @@ MindMesh reads Gmail, Google Calendar, Outlook Email, Outlook Calendar, SMTP, Sl
 ## Optional
 
 - [FAQ](https://mindmesh.global/faq): Answers on privacy, permissions, desktop vs web, and how the product works.
-- [Billing and plans](https://mindmesh.global/billing): Free, Pro, and Enterprise plans, with monthly and yearly pricing.
 - [Terms of Service](https://mindmesh.global/terms): Terms for using MindMesh.
 - [Contact](https://mindmesh.global/contact): Support, demos, enterprise plans, and integration questions.
 - [NVIDIA Inception](https://www.nvidia.com/en-us/startups/): MindMesh is a member of the NVIDIA Inception program.
