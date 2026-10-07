@@ -32,14 +32,14 @@ function DownloadModal({ onClose }: { onClose: () => void }) {
       label: 'macOS',
       sub: 'macOS 12+',
       icon: <Apple className="h-6 w-6 shrink-0" aria-hidden />,
-      href: '/downloads/MindMesh-mac.dmg',
+      href: '/downloads/MindMesh_0.3.1_universal.dmg',
     },
     {
       key: 'windows' as OS,
       label: 'Windows',
       sub: 'Windows 10/11',
       icon: <Monitor className="h-6 w-6 shrink-0" aria-hidden />,
-      href: '/downloads/MindMesh-windows.exe',
+      href: '/downloads/MindMesh_0.3.1_x64-setup.exe',
     },
   ];
 

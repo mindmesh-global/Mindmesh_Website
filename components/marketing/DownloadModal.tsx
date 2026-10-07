@@ -30,14 +30,14 @@ const PLATFORMS = [
     key: 'windows' as OS,
     name: 'Windows',
     subtitle: 'Windows 10, 11',
-    href: '/downloads/MindMesh-windows.exe',
+    href: '/downloads/MindMesh_0.3.1_x64-setup.exe',
     icon: <WindowsIcon />,
   },
   {
     key: 'mac' as OS,
     name: 'Mac',
     subtitle: 'macOS 12.0+',
-    href: '/downloads/MindMesh-mac.dmg',
+    href: '/downloads/MindMesh_0.3.1_universal.dmg',
     icon: <AppleIcon />,
   },
 ];

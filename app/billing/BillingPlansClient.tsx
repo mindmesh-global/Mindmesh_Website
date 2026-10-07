@@ -11,8 +11,10 @@ const FREE_PLAN_FEATURES = [
   'Connect up to 2 email accounts (Gmail, Outlook, or SMTP)',
   'Unified inbox — see all your mail in one view',
   'Calendar view — see your schedule at a glance',
+  'Email and Calendar sync every 5 minutes',
   'Meeting notifications — reminders before your calendar meetings',
   'Works with Gmail, Outlook, and any SMTP provider',
+  'Everything stored locally on your device',
 ] as const;
 
 const PRO_PLAN_FEATURES = [
