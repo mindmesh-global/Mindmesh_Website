@@ -30,7 +30,6 @@ const PLATFORMS = [
     key: 'windows' as OS,
     name: 'Windows',
     subtitle: 'Windows 10, 11',
-    primaryLabel: '.exe',
     href: '/downloads/MindMesh-windows.exe',
     icon: <WindowsIcon />,
   },
@@ -38,7 +37,6 @@ const PLATFORMS = [
     key: 'mac' as OS,
     name: 'Mac',
     subtitle: 'macOS 12.0+',
-    primaryLabel: '.dmg',
     href: '/downloads/MindMesh-mac.dmg',
     icon: <AppleIcon />,
   },
@@ -107,7 +105,7 @@ export function DownloadModal({ onClose }: { onClose: () => void }) {
                     <path d="M8 11.5L3.5 7H6V2h4v5h2.5L8 11.5z"/>
                     <path d="M2 13h12v1.5H2z"/>
                   </svg>
-                  {p.primaryLabel} &nbsp; {p.name}
+                  {p.name}
                 </span>
               </a>
 
