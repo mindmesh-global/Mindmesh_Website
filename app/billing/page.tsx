@@ -27,8 +27,8 @@ export default function BillingPage() {
   return (
     <MarketingDepthLayout
       eyebrow="Plans & billing"
-      title="Simple pricing for serious focus."
-      subtitle="Pick a tier that fits how you work. Switch between monthly and yearly for Pro; Enterprise is tailored to your team."
+      title="Choose the plan that works for you"
+      subtitle="Start free and upgrade when you need more."
       backHref="/#features"
       backLabel="Explore the product →"
     >

@@ -3,10 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
 import { MARKETING_INTEGRATIONS } from '@/lib/marketing-integrations';
-import {
-  MARKETING_CTA_HREF,
-  MARKETING_DEPTH_BACK_LINKS,
-} from '@/lib/marketing-routes';
+import { MARKETING_DEPTH_BACK_LINKS } from '@/lib/marketing-routes';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
 
 const depthBack = MARKETING_DEPTH_BACK_LINKS['/connected-apps'];
@@ -148,24 +145,6 @@ export default function ConnectedAppsPage() {
         </div>
       </section>
 
-      <section className="border-t border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
-        <div className="mx-auto w-full max-w-[640px] px-6 text-center">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Bring every app into one place.
-          </h2>
-          <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            Join the waitlist for early access to MindMesh, the cognitive layer for modern work.
-          </p>
-          <p className="mt-8">
-            <Link
-              href={MARKETING_CTA_HREF}
-              className="inline-flex rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
-            >
-              Join waitlist
-            </Link>
-          </p>
-        </div>
-      </section>
     </MarketingDepthLayout>
   );
 }

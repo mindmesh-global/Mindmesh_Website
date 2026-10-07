@@ -203,10 +203,6 @@ export function ContactForm() {
         <Link href="/privacy" className="font-medium text-mm-primary hover:text-mm-primary-dim">
           Privacy Policy
         </Link>
-        . Prefer early access?{' '}
-        <Link href="/#cta" className="font-medium text-mm-primary hover:text-mm-primary-dim">
-          Join the waitlist →
-        </Link>
       </p>
     </form>
   );

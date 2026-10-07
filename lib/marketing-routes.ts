@@ -47,7 +47,7 @@ export const MARKETING_NAV_LINKS = [
 ] as const;
 
 export const MARKETING_PRIMARY_CTA = {
-  label: 'Join waitlist',
+  label: 'Download',
   hash: MARKETING_SECTION_HASHES.cta,
 } as const;
 

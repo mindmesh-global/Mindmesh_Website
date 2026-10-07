@@ -105,7 +105,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#0a0a14] text-gray-100 antialiased`}>
         <ThemeScript />
         <RootAppShell>{children}</RootAppShell>
-        <DeferredGoogleAnalytics gaId="G-NWRP4F6JWN" />
+        <DeferredGoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
       </body>
     </html>
   );

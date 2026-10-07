@@ -61,8 +61,13 @@ export function FeatureGridSection() {
               href={card.href}
               className="flex min-h-14 items-center justify-between gap-4 py-3.5 text-left transition-colors hover:text-mm-primary"
             >
-              <span className="font-display text-base font-semibold text-mm-on-background">
+              <span className="flex items-center gap-2 font-display text-base font-semibold text-mm-on-background">
                 {card.title}
+                {card.href === '/mascot' && (
+                  <span className="rounded-full bg-yellow-500/15 px-2 py-0.5 text-xs font-medium text-yellow-400">
+                    Coming Soon
+                  </span>
+                )}
               </span>
               <ArrowRight
                 className="h-4 w-4 shrink-0 text-mm-on-surface-variant"
@@ -79,8 +84,13 @@ export function FeatureGridSection() {
           <Link
             key={card.href}
             href={card.href}
-            className="group rounded-lg border border-mm-outline-variant bg-mm-surface-container p-6 transition hover:-translate-y-0.5 hover:border-mm-primary"
+            className="group relative rounded-lg border border-mm-outline-variant bg-mm-surface-container p-6 transition hover:-translate-y-0.5 hover:border-mm-primary"
           >
+            {card.href === '/mascot' && (
+              <span className="absolute right-4 top-4 rounded-full bg-yellow-500/15 px-2.5 py-1 text-xs font-medium text-yellow-400">
+                Coming Soon
+              </span>
+            )}
             <h3 className="font-display text-xl font-semibold text-mm-on-background">
               {card.title}
             </h3>

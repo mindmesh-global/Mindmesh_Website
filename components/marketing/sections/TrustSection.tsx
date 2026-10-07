@@ -11,7 +11,7 @@ export function TrustSection() {
   return (
     <section
       id="trust"
-      className="bg-mm-background pb-24 pt-10 lg:pb-28 lg:pt-12"
+      className="bg-mm-background pb-10 pt-10 lg:pb-12 lg:pt-12"
       aria-labelledby="trust-heading"
     >
       <div className="mm-content flex flex-col gap-14 md:gap-16 lg:gap-20">
@@ -43,7 +43,6 @@ export function TrustSection() {
           </div>
         </div>
 
-        <MarketingSectionDivider />
       </div>
     </section>
   );

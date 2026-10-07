@@ -29,7 +29,7 @@ export function ProductOverviewHome() {
 
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:items-center">
           <Link href="#cta" className={primaryButtonClassName}>
-            Join the waitlist
+            Download MindMesh
           </Link>
           <Link href="#connect" className={ghostButtonClassName}>
             See how it works

@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Download, Menu, X } from 'lucide-react';
+import { DownloadModal } from '@/components/marketing/DownloadModal';
 import {
   MARKETING_HOMEPAGE_PATH,
   MARKETING_NAV_LINKS,
@@ -18,10 +19,10 @@ const linkClassName =
   'text-sm font-medium text-mm-on-surface-variant transition-colors hover:text-mm-on-background';
 
 const primaryButtonClassName =
-  'rounded-md bg-mm-primary-fixed px-4 py-2 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim';
+  'inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-4 py-2 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim';
 
 const mobilePrimaryButtonClassName =
-  'rounded-md bg-mm-primary-fixed px-3 py-1.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim';
+  'inline-flex items-center gap-1.5 rounded-md bg-mm-primary-fixed px-3 py-1.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim';
 
 function handleHomepageAnchorClick(
   href: string,
@@ -43,6 +44,7 @@ export function MarketingNav() {
   const pathname = usePathname();
   const onHomepage = isMarketingHomepage(pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [downloadOpen, setDownloadOpen] = useState(false);
 
   useEffect(() => {
     if (!mobileOpen) return undefined;
@@ -68,25 +70,19 @@ export function MarketingNav() {
     ? MARKETING_PRIMARY_CTA.hash
     : homepageSectionHref(MARKETING_PRIMARY_CTA.hash, false);
 
-  const primaryCta = onHomepage ? (
-    <a
-      href={MARKETING_PRIMARY_CTA.hash}
-      onClick={handleHomepageAnchorClick(MARKETING_PRIMARY_CTA.hash, closeMobile)}
+  const primaryCta = (
+    <button
+      type="button"
+      onClick={() => { closeMobile(); setDownloadOpen(true); }}
       className={mobilePrimaryButtonClassName}
     >
+      <Download className="h-4 w-4" aria-hidden />
       {MARKETING_PRIMARY_CTA.label}
-    </a>
-  ) : (
-    <Link
-      href={ctaHref}
-      onClick={closeMobile}
-      className={mobilePrimaryButtonClassName}
-    >
-      {MARKETING_PRIMARY_CTA.label}
-    </Link>
+    </button>
   );
 
   return (
+    <>
     <header className="fixed inset-x-0 top-0 z-50">
       <div className="flex h-16 items-center border-b border-mm-outline-variant/40 bg-mm-surface-container/90 backdrop-blur-md">
         <div className="mm-content flex items-center justify-between gap-4">
@@ -145,22 +141,17 @@ export function MarketingNav() {
                 </Link>
               );
             })}
-            {onHomepage ? (
-              <a
-                href={MARKETING_PRIMARY_CTA.hash}
-                onClick={handleHomepageAnchorClick(MARKETING_PRIMARY_CTA.hash)}
-                className={primaryButtonClassName}
-              >
-                {MARKETING_PRIMARY_CTA.label}
-              </a>
-            ) : (
-              <Link
-                href={homepageSectionHref(MARKETING_PRIMARY_CTA.hash, false)}
-                className={primaryButtonClassName}
-              >
-                {MARKETING_PRIMARY_CTA.label}
-              </Link>
-            )}
+            <Link href="/billing" className={linkClassName}>
+              Pricing
+            </Link>
+            <button
+              type="button"
+              onClick={() => setDownloadOpen(true)}
+              className={primaryButtonClassName}
+            >
+              <Download className="h-4 w-4" aria-hidden />
+              {MARKETING_PRIMARY_CTA.label}
+            </button>
           </nav>
 
           {/* Linear-style mobile chrome: primary CTA outside, other links in the menu. */}
@@ -209,9 +200,19 @@ export function MarketingNav() {
                 </Link>
               );
             })}
+            <Link
+              href="/billing"
+              onClick={closeMobile}
+              className="rounded-md px-2 py-3 text-sm font-medium text-mm-on-background"
+            >
+              Pricing
+            </Link>
           </div>
         </nav>
       ) : null}
     </header>
+
+    {downloadOpen && <DownloadModal onClose={() => setDownloadOpen(false)} />}
+  </>
   );
 }

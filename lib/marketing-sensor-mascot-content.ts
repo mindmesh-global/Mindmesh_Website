@@ -369,70 +369,10 @@ export type MascotIconSkin = {
  */
 export const MASCOT_ICON_SKINS: readonly MascotIconSkin[] = [
   {
-    id: 'sherpa',
-    name: 'Sherpa',
-    description: 'Friendly guide energy for everyday check-ins.',
-    src: '/images/mascot-skins/sherpa.png',
-    productLottieUrl:
-      'https://lottie.host/225c420c-2766-4492-95e6-c5919c4b22ce/uUodXUtl4V.lottie',
-    width: 1024,
-    height: 1024,
-  },
-  {
-    id: 'robo',
-    name: 'Robo',
-    description: 'A calm tech companion for quick questions.',
-    src: '/images/mascot-skins/robo.png',
-    productLottieUrl:
-      'https://lottie.host/e0609cab-9f43-45bc-bb6a-7aca120370fd/53VP4mY0uR.lottie',
-    width: 1024,
-    height: 1024,
-  },
-  {
-    id: 'boy',
-    name: 'Boy',
-    description: 'A human look for a more personal companion.',
-    src: '/images/mascot-skins/boy.png',
-    productLottieUrl:
-      'https://lottie.host/b1b961aa-0e9f-44da-ba76-8a6dd58fbc09/v6hQv7mXIq.lottie',
-    width: 1024,
-    height: 1024,
-  },
-  {
-    id: 'girl',
-    name: 'Girl',
-    description: 'Another human look for the same grounded chat.',
-    src: '/images/mascot-skins/girl.png',
-    productLottieUrl:
-      'https://lottie.host/a5b4e126-7cc7-4aac-9bdb-a3893082c5f3/W49fhgkrwT.lottie',
-    width: 1024,
-    height: 1024,
-  },
-  {
-    id: 'luna',
-    name: 'Luna',
-    description: 'Soft presence when you want a quieter vibe.',
-    src: '/images/mascot-skins/luna.png',
-    productLottieUrl:
-      'https://lottie.host/018e4d06-8815-437d-bed0-5634ed59315c/HcMtWTaAMW.lottie',
-    width: 1024,
-    height: 1024,
-  },
-  {
-    id: 'mini',
-    name: 'Mini',
-    description: 'Compact companion for a lighter feel.',
-    src: '/images/mascot-skins/mini.png',
-    productLottieUrl:
-      'https://lottie.host/972ee003-96b6-424d-aa08-1e0a0ebbc5a5/cuk1txLhrr.lottie',
-    width: 1024,
-    height: 1024,
-  },
-  {
     id: 'whiskers',
     name: 'Whiskers',
     description: 'The cat companion used in the floating Mascot chat.',
-    src: '/images/mascot-skins/whiskers.png',
+    src: '/images/mascot-skins/whiskers-v2.png',
     productLottieUrl:
       'https://lottie.host/7ac5c67a-7983-42a0-b290-2e0429865911/uvdYl2wxbT.lottie',
     width: 1024,
@@ -441,7 +381,7 @@ export const MASCOT_ICON_SKINS: readonly MascotIconSkin[] = [
 ] as const;
 
 /** Default selected skin id for the `/mascot` showcase. */
-export const MASCOT_ICON_SKIN_DEFAULT_ID = MASCOT_ICON_SKINS[0].id;
+export const MASCOT_ICON_SKIN_DEFAULT_ID = 'whiskers';
 
 /** Section chrome for the mascot icon / skin showcase (P10-T08). */
 export const MASCOT_ICON_SHOWCASE_SECTION = {
@@ -450,7 +390,7 @@ export const MASCOT_ICON_SHOWCASE_SECTION = {
   title: 'Pick a companion.',
   subtitle:
     'In MindMesh you can choose how Mascot looks. These are the companions available in the product.',
-  note: 'Stills only on this page. Animated Lottie characters play in the product, not on the marketing funnel.',
+  note: 'Stills only on this page. Animated characters play in the product, not on the marketing funnel.',
 } as const;
 
 /** Inventory audit for P10-T08 Approach A. */

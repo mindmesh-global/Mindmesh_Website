@@ -40,6 +40,15 @@ export default function MascotPage() {
       backHref={hero.backHref}
       backLabel={hero.backLabel}
     >
+      <div className="mm-content pt-8">
+        <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 px-5 py-4 text-center">
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-blue-300">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-400" />
+            Coming Soon — Mascot is currently in development.
+          </span>
+        </div>
+      </div>
+
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mm-content">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
@@ -161,30 +170,6 @@ export default function MascotPage() {
         </div>
       </section>
 
-      <section className="bg-mm-background py-16 lg:py-24">
-        <div className="mx-auto w-full max-w-[640px] px-6 text-center">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            {SENSOR_MASCOT_CTA.headline}
-          </h2>
-          <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            {SENSOR_MASCOT_CTA.body}
-          </p>
-          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link
-              href={SENSOR_MASCOT_CTA.primary.href}
-              className="inline-flex rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
-            >
-              {SENSOR_MASCOT_CTA.primary.label}
-            </Link>
-            <Link
-              href={SENSOR_MASCOT_COMPARISON.mascotSiblingCta.href}
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
-            >
-              {SENSOR_MASCOT_COMPARISON.mascotSiblingCta.label}
-            </Link>
-          </div>
-        </div>
-      </section>
     </MarketingDepthLayout>
   );
 }

@@ -192,8 +192,7 @@ export default function SecurityPage() {
             Built on trust you can verify.
           </h2>
           <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            {marketingTrustContent.subhead} Read how we talk about memberships, product boundaries,
-            and the waitlist on the trust page.
+            {marketingTrustContent.subhead} Read how we talk about memberships and product boundaries on the trust page.
           </p>
           <p className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             <Link
@@ -218,24 +217,6 @@ export default function SecurityPage() {
         </div>
       </section>
 
-      <section className="border-t border-mm-outline-variant/40 bg-mm-background py-16 lg:py-24">
-        <div className="mx-auto w-full max-w-[640px] px-6 text-center">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Work with your data, not extract value from it.
-          </h2>
-          <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            Join the waitlist for early access to MindMesh, the cognitive layer for modern work.
-          </p>
-          <p className="mt-8">
-            <Link
-              href={MARKETING_CTA_HREF}
-              className="inline-flex rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
-            >
-              Join waitlist
-            </Link>
-          </p>
-        </div>
-      </section>
     </MarketingDepthLayout>
   );
 }

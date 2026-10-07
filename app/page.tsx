@@ -7,7 +7,6 @@ import { ProblemSection } from '@/components/marketing/sections/ProblemSection';
 import { HowItWorksSection } from '@/components/marketing/sections/HowItWorksSection';
 import { FeatureGridSection } from '@/components/marketing/sections/FeatureGridSection';
 import { TrustSection } from '@/components/marketing/sections/TrustSection';
-import { FinalCTASection } from '@/components/marketing/sections/FinalCTASection';
 import { OG_IMAGE, OG_IMAGE_URL, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/seo';
 
 const jsonLd = {
@@ -64,7 +63,6 @@ export default function HomePage() {
         <MarketingTheaterSections />
         <FeatureGridSection />
         <TrustSection />
-        <FinalCTASection />
       </MarketingLayout>
     </>
   );

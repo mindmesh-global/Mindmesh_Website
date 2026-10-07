@@ -7,36 +7,38 @@ import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
 
 type Cycle = 'monthly' | 'yearly';
 
-const freeFeatures = [
-  'Connect up to 2 email accounts (Gmail or SMTP)',
-  'Unified inbox: see all your mail in one view',
-  'Calendar view: see your schedule at a glance',
+const FREE_PLAN_FEATURES = [
+  'Connect up to 2 email accounts (Gmail, Outlook, or SMTP)',
+  'Unified inbox — see all your mail in one view',
+  'Calendar view — see your schedule at a glance',
+  'Meeting notifications — reminders before your calendar meetings',
   'Works with Gmail, Outlook, and any SMTP provider',
 ] as const;
 
-const proFeatures = [
-  'Unlimited email accounts: connect every inbox you have',
-  'Inbox syncs every 5 minutes: always stay up to date',
-  'Morning Juice: a daily briefing of what matters today',
-  'Yesterday in 60 seconds: a quick recap of what happened',
-  'Auto-extracted todos with priorities and deadlines',
-  'Bills, orders, and shipments tracked automatically',
+const PRO_PLAN_FEATURES = [
+  'Attention Board — what needs you now, later today, and what was already handled',
+  'Unlimited email, Slack, Jira, and Calendar — all in one place',
+  'Unlimited AI enrichments — no daily caps on any feature',
+  'Inbox syncs every 5 minutes — always stay up to date',
+  'Yesterday Narrative — a recap of what happened yesterday',
+  'Notifications — reminders for meetings, travel, bills, Slack follow-ups, and Jira due dates',
   'Calendar clash detection so you never double-book',
-  'Search your emails in plain English: "invoices from Acme last month"',
-  'Mascot: your desktop AI buddy that notifies you of what matters',
-  'Choose your Mascot: pick from cat, dog, butler, or orb',
-  'Sensor Bar: intuitive command bar for quick tasks (Cmd+Shift+M)',
-  'Unlimited memory: your assistant never forgets anything, ever',
-  'Everything encrypted and processed locally on your device',
+  'Sensor Bar — intuitive command bar for quick tasks',
+  'Everything stored locally on your device',
 ] as const;
 
-function FeatureCheck() {
+function FeatureCheck({ white = false }: { white?: boolean }) {
   return (
     <span
-      className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-mm-primary/20 text-mm-primary"
+      className={`mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full ${
+        white ? 'bg-white/25' : 'bg-blue-100 dark:bg-blue-900/50'
+      }`}
       aria-hidden
     >
-      <Check className="h-2.5 w-2.5" strokeWidth={3} />
+      <Check
+        className={`h-2.5 w-2.5 ${white ? 'text-white' : 'text-blue-600 dark:text-blue-400'}`}
+        strokeWidth={3}
+      />
     </span>
   );
 }
@@ -46,47 +48,41 @@ export default function BillingPlansClient() {
 
   return (
     <>
-      <div className="mb-8 flex justify-center">
+      {/* Billing cycle toggle */}
+      <div className="mb-8 flex justify-center sm:mb-10">
         <div
-          className="inline-flex gap-1 rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-1"
+          className="inline-flex gap-1 rounded-full border border-mm-outline-variant/60 bg-mm-surface-container p-1"
           role="group"
           aria-label="Billing cycle"
         >
-          <button
-            type="button"
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
-              cycle === 'monthly'
-                ? 'bg-mm-primary-fixed text-mm-on-primary-fixed'
-                : 'text-mm-on-surface-variant hover:text-mm-on-background'
-            }`}
-            onClick={() => setCycle('monthly')}
-            aria-pressed={cycle === 'monthly'}
-          >
-            Monthly
-          </button>
-          <button
-            type="button"
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
-              cycle === 'yearly'
-                ? 'bg-mm-primary-fixed text-mm-on-primary-fixed'
-                : 'text-mm-on-surface-variant hover:text-mm-on-background'
-            }`}
-            onClick={() => setCycle('yearly')}
-            aria-pressed={cycle === 'yearly'}
-          >
-            Yearly
-          </button>
+          {(['monthly', 'yearly'] as const).map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setCycle(c)}
+              aria-pressed={cycle === c}
+              className={`min-w-[88px] rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 sm:min-w-[100px] sm:px-5 sm:py-2.5 ${
+                cycle === c
+                  ? 'bg-blue-500 text-white shadow-sm'
+                  : 'text-mm-on-surface-variant hover:text-mm-on-background'
+              }`}
+            >
+              {c.charAt(0).toUpperCase() + c.slice(1)}
+            </button>
+          ))}
         </div>
       </div>
 
+      {/* Cards — side by side */}
       <div className="grid items-stretch gap-6 lg:grid-cols-3">
-        <article className="flex flex-col rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
-          <h2 className="font-display text-xl font-semibold text-mm-on-background">Free</h2>
+        {/* Free */}
+        <article className="flex flex-col rounded-2xl border border-mm-outline-variant/60 bg-mm-surface-container p-6 shadow-md">
+          <h2 className="text-xl font-bold text-mm-on-background">Free</h2>
           <p className="mt-2 text-sm text-mm-on-surface-variant">
             Connect your email and calendar in one place.
           </p>
           <ul className="mt-6 flex-1 space-y-3">
-            {freeFeatures.map((f) => (
+            {FREE_PLAN_FEATURES.map((f) => (
               <li key={f} className="flex items-start gap-2 text-sm text-mm-on-surface-variant">
                 <FeatureCheck />
                 <span>{f}</span>
@@ -94,54 +90,41 @@ export default function BillingPlansClient() {
             ))}
           </ul>
           <div className="mt-6 border-t border-mm-outline-variant/40 pt-5">
-            <p className="font-display text-2xl font-bold tracking-tight text-mm-on-background">
-              $0{' '}
-              <span className="text-sm font-semibold text-mm-on-surface-variant">/ month</span>
+            <p className="text-2xl font-bold tracking-tight text-mm-on-background">
+              $0 <span className="text-sm font-semibold text-mm-on-surface-variant">/ month</span>
             </p>
           </div>
         </article>
 
-        <article className="relative flex flex-col rounded-lg border border-mm-primary/50 bg-mm-surface-container-high p-6 shadow-mm-elevated">
-          <span className="absolute right-4 top-4 rounded-md bg-mm-primary-fixed px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-mm-on-primary-fixed">
-            Most popular
-          </span>
-          <h2 className="font-display text-xl font-semibold text-mm-on-background">Pro</h2>
-          <p className="mt-2 text-sm text-mm-on-surface-variant">
+        {/* Pro */}
+        <article className="relative flex flex-col rounded-2xl border border-transparent bg-gradient-to-b from-blue-300 to-blue-500 p-6 shadow-xl dark:from-blue-400 dark:to-blue-600">
+<h2 className="text-xl font-bold text-white">Pro</h2>
+          <p className="mt-2 text-sm text-white/90">
             Your AI-powered email assistant that reads, remembers, and briefs you.
           </p>
           <ul className="mt-6 flex-1 space-y-3">
-            {proFeatures.map((f) => (
-              <li key={f} className="flex items-start gap-2 text-sm text-mm-on-surface-variant">
-                <FeatureCheck />
+            {PRO_PLAN_FEATURES.map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-white">
+                <FeatureCheck white />
                 <span>{f}</span>
               </li>
             ))}
           </ul>
-          <div className="mt-6 border-t border-mm-outline-variant/40 pt-5">
-            <p className="font-display text-2xl font-bold tracking-tight text-mm-on-background">
-              {cycle === 'monthly' ? '$20 / month' : '$200 / year'}
+          <div className="mt-6 border-t border-white/30 pt-5">
+            <p className="text-2xl font-bold tracking-tight text-white">
+              {cycle === 'monthly' ? '$499 / month' : '$5,988 / year'}
             </p>
-            {cycle === 'yearly' ? (
-              <p className="mt-1 text-xs text-mm-on-surface-variant">
-                Save with annual billing vs. twelve monthly payments.
-              </p>
-            ) : null}
-            <button
-              type="button"
-              className="mt-4 w-full rounded-md bg-mm-primary-fixed px-4 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
-            >
-              Upgrade
-            </button>
           </div>
         </article>
 
-        <article className="flex flex-col rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
-          <h2 className="font-display text-xl font-semibold text-mm-on-background">Enterprise</h2>
+        {/* Enterprise */}
+        <article className="flex flex-col rounded-2xl border border-mm-outline-variant/60 bg-mm-surface-container p-6 shadow-md">
+          <h2 className="text-xl font-bold text-mm-on-background">Enterprise</h2>
           <p className="mt-2 text-sm text-mm-on-surface-variant">
             Everything in Pro, plus custom integrations, SSO, and dedicated support.
           </p>
           <div className="mt-8 flex flex-1 flex-col items-center justify-center gap-2 py-8 text-center">
-            <p className="font-display text-2xl font-bold tracking-tight text-mm-on-background">
+            <p className="text-2xl font-bold tracking-tight text-mm-on-background">
               Let&apos;s talk
             </p>
             <p className="text-sm text-mm-on-surface-variant">
@@ -157,21 +140,21 @@ export default function BillingPlansClient() {
         </article>
       </div>
 
+      {/* Billing notes */}
       <section className="mt-12 grid gap-6 md:grid-cols-2" aria-label="Billing notes">
         <div className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
           <h2 className="font-display text-lg font-semibold text-mm-on-background">
             How billing works
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-mm-on-surface-variant">
-            When MindMesh billing goes live, you&apos;ll manage your plan in the app. Until then, join
-            the{' '}
+            Manage your plan directly in the MindMesh app after{' '}
             <Link
               href={MARKETING_CTA_HREF}
               className="font-medium text-mm-primary underline underline-offset-2 hover:text-mm-primary-dim"
             >
-              waitlist
-            </Link>{' '}
-            to hear first about Pro availability and launch pricing.
+              downloading
+            </Link>
+            . Free plan is always available; Pro unlocks when you upgrade inside the app.
           </p>
         </div>
         <div className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">

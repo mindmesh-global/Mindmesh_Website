@@ -9,9 +9,6 @@ import type { NextRequest } from 'next/server';
 const HASH_REDIRECTS: Record<string, string> = {
   '/features': '/#features',
   '/waitlist': '/#cta',
-  // Waitlist-only: hide pricing until billing launches. 307 so we can restore /billing later.
-  // Restore steps: docs/unhide-billing.md
-  '/billing': '/#cta',
   '/subscription': '/#cta',
 };
 
@@ -28,5 +25,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/features', '/waitlist', '/billing', '/subscription'],
+  matcher: ['/features', '/waitlist', '/subscription'],
 };

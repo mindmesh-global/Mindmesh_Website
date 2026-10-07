@@ -171,19 +171,7 @@ export default function FaqPage() {
 
       <section className="border-t border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
         <div className="mx-auto max-w-[720px] px-6 text-center">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Still evaluating? Start with the product built around clarity and control.
-          </h2>
-          <p className="mt-4 text-base text-mm-on-surface-variant">
-            Join the waitlist, or dig into security and privacy detail first.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href={MARKETING_CTA_HREF}
-              className="inline-flex items-center justify-center rounded-md bg-mm-primary-fixed px-6 py-3 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
-            >
-              Join waitlist
-            </Link>
+<div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/security"
               className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
