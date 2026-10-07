@@ -17,9 +17,9 @@ const FREE_PLAN_FEATURES = [
 
 const PRO_PLAN_FEATURES = [
   'Attention Board — what needs you now, later today, and what was already handled',
-  'Unlimited email, Slack, Jira, and Calendar — all in one place',
+  'Unlimited email accounts, calendars, Slack workspaces, and Jira sites — all in one place',
   'Unlimited AI enrichments — no daily caps on any feature',
-  'Inbox syncs every 5 minutes — always stay up to date',
+  'All apps sync every 30 seconds — always stay up to date',
   'Yesterday Narrative — a recap of what happened yesterday',
   'Notifications — reminders for meetings, travel, bills, Slack follow-ups, and Jira due dates',
   'Calendar clash detection so you never double-book',
