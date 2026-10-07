@@ -112,7 +112,7 @@ export default function BillingPlansClient() {
           </ul>
           <div className="mt-6 border-t border-white/30 pt-5">
             <p className="text-2xl font-bold tracking-tight text-white">
-              {cycle === 'monthly' ? '$598 / month' : '$499 / month'}
+              {cycle === 'monthly' ? '$549 / month' : '$499 / month'}
             </p>
           </div>
         </article>
