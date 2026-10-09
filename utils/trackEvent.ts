@@ -10,11 +10,15 @@ function gtagEvent(
 ): void {
   if (typeof window === 'undefined') return;
   // If gtag isn't loaded yet (deferred homepage), stub it so events queue in dataLayer and GA processes them on load
-  if (typeof window.gtag !== 'function') {
-    (window as any).dataLayer = (window as any).dataLayer ?? [];
-    (window as any).gtag = function () { (window as any).dataLayer.push(arguments); };
+  let gtag = window.gtag;
+  if (typeof gtag !== 'function') {
+    const dataLayer = ((window as any).dataLayer ??= []) as IArguments[];
+    gtag = function () {
+      dataLayer.push(arguments);
+    };
+    window.gtag = gtag;
   }
-  window.gtag('event', eventName, params);
+  gtag('event', eventName, params);
 }
 
 /**
