@@ -48,7 +48,7 @@ export function ProductOverviewHome() {
         </div>
       </section>
 
-      {modalOpen && <DownloadModal onClose={() => setModalOpen(false)} />}
+      {modalOpen && <DownloadModal onClose={() => setModalOpen(false)} source="hero" />}
     </>
   );
 }

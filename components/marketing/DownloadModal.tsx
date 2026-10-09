@@ -44,7 +44,7 @@ const PLATFORMS = [
   },
 ];
 
-export function DownloadModal({ onClose }: { onClose: () => void }) {
+export function DownloadModal({ onClose, source = 'unknown' }: { onClose: () => void; source?: string }) {
   const [os, setOS] = useState<OS>('mac');
 
   useEffect(() => { setOS(detectOS()); }, []);
@@ -92,7 +92,7 @@ export function DownloadModal({ onClose }: { onClose: () => void }) {
                 download
                 onClick={() => {
                   if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-                    (window as any).gtag('event', 'download_click', { os: p.key });
+                    (window as any).gtag('event', 'download_click', { os: p.key, source });
                   }
                   onClose();
                 }}

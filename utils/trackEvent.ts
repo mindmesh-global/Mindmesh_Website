@@ -8,9 +8,13 @@ function gtagEvent(
   eventName: string,
   params: Record<string, string | number | boolean>
 ): void {
-  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-    window.gtag('event', eventName, params);
+  if (typeof window === 'undefined') return;
+  // If gtag isn't loaded yet (deferred homepage), stub it so events queue in dataLayer and GA processes them on load
+  if (typeof window.gtag !== 'function') {
+    (window as any).dataLayer = (window as any).dataLayer ?? [];
+    (window as any).gtag = function () { (window as any).dataLayer.push(arguments); };
   }
+  window.gtag('event', eventName, params);
 }
 
 /**

@@ -212,7 +212,7 @@ export function MarketingNav() {
       ) : null}
     </header>
 
-    {downloadOpen && <DownloadModal onClose={() => setDownloadOpen(false)} />}
+    {downloadOpen && <DownloadModal onClose={() => setDownloadOpen(false)} source="navbar" />}
   </>
   );
 }
