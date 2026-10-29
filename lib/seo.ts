@@ -5,7 +5,7 @@
 export const SITE_NAME = 'MindMesh' as const;
 
 /** Canonical absolute document title (homepage + root default). */
-export const SITE_TITLE = 'MindMesh - The Cognitive Layer for modern work' as const;
+export const SITE_TITLE = 'MindMesh - Proactive AI for fractional leaders' as const;
 
 /** Canonical meta / OG / Twitter description (homepage + root default). */
 export const SITE_DESCRIPTION =
