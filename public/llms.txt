@@ -52,6 +52,7 @@ Motion schedules tasks and calendar blocks intelligently, but only based on what
 
 ## Optional
 
+- [Pricing](https://mindmesh.global/billing): MindMesh Pro at $499/month (annual) or $549/month (monthly). Free plan always available.
 - [FAQ](https://mindmesh.global/faq): Answers on privacy, permissions, desktop vs web, and how the product works.
 - [Terms of Service](https://mindmesh.global/terms): Terms for using MindMesh.
 - [Contact](https://mindmesh.global/contact): Support, demos, enterprise plans, and integration questions.
