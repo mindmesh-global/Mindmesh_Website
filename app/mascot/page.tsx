@@ -77,16 +77,6 @@ export default function MascotPage() {
       title="The companion that already knows your work."
       subtitle="Mascot lives at the edge of your desktop, connected to your email, calendar, and memory. Ask it anything, let it act — always with your approval."
     >
-      {/* Coming Soon banner */}
-      <div className="mm-content pt-8">
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-center">
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-amber-300">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
-            Coming Soon — Mascot is currently in development.
-          </span>
-        </div>
-      </div>
-
       {/* How it works */}
       <section className="bg-mm-background pb-10 pt-10 lg:pb-12 lg:pt-12">
         <div className="mm-content">
