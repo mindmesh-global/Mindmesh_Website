@@ -31,7 +31,7 @@ const PLATFORMS = [
     name: 'Windows',
     subtitle: 'Windows 10, 11',
     primaryLabel: '.exe',
-    href: 'https://mindmesh-downloads.s3.ap-southeast-2.amazonaws.com/installers/windows/338/MindMesh_0.3.2_x64-setup.exe',
+    href: 'https://mindmesh-downloads.s3.ap-southeast-2.amazonaws.com/installers/windows/346/MindMesh_0.3.4_x64-setup.exe',
     icon: <WindowsIcon />,
   },
   {
@@ -39,7 +39,7 @@ const PLATFORMS = [
     name: 'Mac',
     subtitle: 'macOS 12.0+',
     primaryLabel: '.dmg',
-    href: 'https://mindmesh-downloads.s3.ap-southeast-2.amazonaws.com/installers/macos/338/MindMesh_0.3.2_universal.dmg',
+    href: 'https://mindmesh-downloads.s3.ap-southeast-2.amazonaws.com/installers/macos/346/MindMesh_0.3.4_universal.dmg',
     icon: <AppleIcon />,
   },
 ];
