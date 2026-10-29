@@ -40,6 +40,10 @@ export type ProductOverviewFrameProps = {
   revealed?: boolean;
   /** Sidebar scene switching (same as progress tabs). */
   onSelectScene?: (scene: ProductOverviewSceneId) => void;
+  /** Active email folder (passed through to Nav for highlight). */
+  activeFolder?: string;
+  /** Sidebar email folder switching. */
+  onSelectFolder?: (folder: string) => void;
 };
 
 /**
@@ -65,6 +69,8 @@ export function ProductOverviewFrame({
   wide = false,
   revealed = true,
   onSelectScene,
+  activeFolder,
+  onSelectFolder,
 }: ProductOverviewFrameProps) {
   const outerClassName = sticky ? 'absolute inset-0' : 'relative';
   const sidebarVisibleBelowMd = showSidebar && forceSidebar;
@@ -83,34 +89,64 @@ export function ProductOverviewFrame({
         well-known `width: 100vw; margin-left: calc(50% - 50vw)` full-bleed
         formula correct (P12-T04 / P12-T06).
       */}
-      <div data-overview-frame-bleed={wide ? 'true' : undefined}>
+      <div className="relative" data-overview-frame-bleed={wide ? 'true' : undefined}>
         <div
           className={sticky ? 'theater-sticky-frame' : undefined}
           style={sticky ? { top: THEATER_STICKY_TOP_PX } : undefined}
           data-overview-frame-wide={wide ? 'true' : undefined}
           data-overview-revealed={wide ? (revealed ? 'true' : 'false') : undefined}
         >
-          <div className="theater-frame-chrome relative z-[1] flex flex-col overflow-hidden rounded-lg border border-mm-outline-variant bg-mm-surface-container-high shadow-mm-elevated">
+          {/* Ambient glow — sits behind the window frame */}
+          <div
+            className="pointer-events-none absolute -inset-12 z-[0] blur-3xl"
+            style={{
+              background:
+                'radial-gradient(ellipse 75% 55% at 50% 44%, rgba(37,99,235,0.22) 0%, rgba(99,60,220,0.1) 45%, transparent 72%)',
+            }}
+            aria-hidden
+          />
+
+          <div
+            data-light-window=""
+            className="theater-frame-chrome relative z-[1] flex flex-col overflow-hidden rounded-xl"
+            style={{
+              border: '1px solid rgba(0,0,0,0.18)',
+              boxShadow:
+                '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+            }}
+          >
+            {/* macOS light-mode title bar */}
             <div
-              className="flex h-10 shrink-0 items-center gap-3 border-b border-mm-outline-variant/60 bg-mm-surface px-3"
-              style={{ opacity: shellOpacity }}
+              className="relative flex h-8 shrink-0 items-center px-3"
+              style={{
+                background: 'linear-gradient(180deg, #f0f0f2 0%, #e8e8ea 100%)',
+                borderBottom: '1px solid rgba(0,0,0,0.12)',
+                opacity: shellOpacity,
+              }}
             >
-              <div className="flex items-center gap-1.5" aria-hidden>
-                <span className="h-2.5 w-2.5 rounded-full bg-mm-outline-variant" />
-                <span className="h-2.5 w-2.5 rounded-full bg-mm-outline-variant" />
-                <span className="h-2.5 w-2.5 rounded-full bg-mm-outline-variant" />
+              {/* Traffic lights */}
+              <div className="flex items-center gap-2" aria-hidden>
+                <span className="h-3 w-3 rounded-full" style={{ background: '#FF5F57' }} />
+                <span className="h-3 w-3 rounded-full" style={{ background: '#FEBC2E' }} />
+                <span className="h-3 w-3 rounded-full" style={{ background: '#28C840' }} />
               </div>
-              <div className="flex min-w-0 flex-1 items-center gap-2">
-                <span className="text-sm font-medium text-mm-on-surface">MindMesh</span>
+
+              {/* Centered app title */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <span className="text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
+                  MindMesh
+                </span>
                 {sceneLabel && !sidebarVisibleBelowMd ? (
-                  <span className="truncate rounded-md bg-mm-primary/10 px-2 py-0.5 text-xs text-mm-primary md:hidden">
+                  <span className="ml-2 truncate rounded-md bg-mm-primary/10 px-2 py-0.5 text-xs text-mm-primary md:hidden">
                     {sceneLabel}
                   </span>
                 ) : null}
               </div>
-              <div className="hidden shrink-0 items-center gap-2.5 pr-2 text-mm-on-surface-variant sm:flex" aria-hidden>
-                <Bell className="h-4 w-4" />
-                <Settings className="h-4 w-4" />
+
+              {/* Right controls */}
+              <div className="ml-auto hidden shrink-0 items-center gap-2.5 sm:flex" style={{ color: 'rgba(0,0,0,0.35)' }} aria-hidden>
+                <Bell className="h-3.5 w-3.5" />
+                <Settings className="h-3.5 w-3.5" />
               </div>
             </div>
 
@@ -125,6 +161,8 @@ export function ProductOverviewFrame({
                     emailExpanded={emailExpanded}
                     appsSecondary={appsSecondary}
                     onSelectScene={onSelectScene}
+                    activeFolder={activeFolder}
+                    onSelectFolder={onSelectFolder}
                   />
                 </div>
               ) : null}

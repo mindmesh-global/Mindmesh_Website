@@ -182,8 +182,8 @@ export type SensorResultRow = {
 /** Theater demo fixtures for Sensor (P8-T05). */
 export const SENSOR_THEATER_FIXTURES = {
   idleHint: 'Ask or open anything…',
-  query: 'Open Cal',
-  confirmChip: 'Opening Calendar…',
+  query: 'Open Calendar',
+  confirmChip: 'Opening Calendar',
   primaryResultId: 'calendar' as const,
   results: [
     { id: 'calendar', title: 'Calendar', hint: 'Enter', icon: 'calendar' },
@@ -302,11 +302,11 @@ export const MASCOT_PAGE_CONTENT: DepthPageChrome = {
 
 /** Theater demo fixtures for Mascot (P8-T03; beat numbers lock in P8-T06). */
 export const MASCOT_THEATER_FIXTURES = {
-  userAsk: 'Did I get any emails today?',
+  userAsk: 'What did I leave open with Acme last week?',
   replyParagraphs: [
-    'Yes. You received 12 emails today.',
-    'Breakdown: 7 work, 3 personal, 2 newsletters.',
-    'Review all 12 in your MindMesh inbox.',
+    'Three things are still open: the Q2 scope needs your sign-off, PROD-142 is pending a final check, and Dana\'s waiting on your reply about the rollout timeline.',
+    'The Q2 scope thread is most urgent — she needs a response before your 2pm call today.',
+    'Nothing else is blocking on the Acme side.',
   ] as const,
   /** Full reply joined for scroll-synced typing if demos prefer one string. */
   replyBody: [
@@ -316,33 +316,36 @@ export const MASCOT_THEATER_FIXTURES = {
     '',
     'Review all 12 in your MindMesh inbox.',
   ].join('\n'),
-  secondaryControl: { label: 'Open inbox', href: '/inbox' },
+  followUpQuestion: 'Should I block some prep time in your calendar before the call?',
+  userConfirm: 'Yes',
+  calendarDone: 'Done. 30-minute prep block added at 1:30 PM.',
+  secondaryControl: { label: 'View Acme threads', href: '/inbox' },
   caption: MASCOT_PAGE_CONTENT.theater.caption,
 } as const;
 
 /** Theater demo fixtures for Mascot attachment search (P10-T05 / P10-T06). */
 export const MASCOT_ATTACHMENT_THEATER_FIXTURES = {
-  userAsk: 'Find the attachment from Acme last year',
+  userAsk: 'Draft a reply to Dana confirming the rollout scope',
   replyLines: [
-    'Found it. One matching file from Dana last March.',
-    'Grounded in your connected Gmail.',
+    "Here's a draft based on your thread with Dana and the current scope document:",
+    '"Hi Dana — confirmed. Q2 scope is aligned, PROD-142 dependencies are cleared. Looking forward to the 2pm call."',
   ] as const,
   hit: {
-    filename: 'Acme_Q3_Plan.pdf',
-    from: 'Dana Reyes',
-    date: 'Mar 12, 2025',
+    filename: 'Re: Q2 rollout timeline',
+    from: 'Dana Reyes · Today, 9:14 AM · Gmail',
+    date: 'Today, 9:14 AM',
     source: 'Gmail',
   },
-  secondaryControl: { label: 'Open attachment', href: '/inbox' },
+  secondaryControl: { label: 'Review and send', href: '/inbox' },
   caption:
-    'Mascot finds the Acme attachment from last year without you hunting folders.',
+    'Mascot drafts the reply using your actual email thread — you review it, then send.',
 } as const;
 
 /** Section chrome for the second Mascot attachment theater (P10-T05). */
 export const MASCOT_ATTACHMENT_THEATER_SECTION = {
-  title: 'Find the file without the hunt.',
+  title: 'General questions. Personal context.',
   subtitle:
-    'Ask for an attachment in plain language and get a grounded hit you can open.',
+    'Ask Mascot anything — it combines broad LLM knowledge with your connected memory to give answers that know your actual work.',
   caption: MASCOT_ATTACHMENT_THEATER_FIXTURES.caption,
   footer: { label: 'Explore Sensor →', href: '/sensor' },
 } as const;

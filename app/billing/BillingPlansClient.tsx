@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { Check } from 'lucide-react';
+import { Check, User } from 'lucide-react';
 import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
 
 type Cycle = 'monthly' | 'yearly';
@@ -50,6 +51,62 @@ export default function BillingPlansClient() {
 
   return (
     <>
+      {/* EA comparison callout */}
+      <div
+        data-light-window=""
+        className="mb-12 overflow-hidden rounded-xl"
+        style={{
+          background: '#ffffff',
+          border: '1px solid rgba(0,0,0,0.18)',
+          boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+        }}
+      >
+        <div className="border-b px-6 py-5" style={{ borderColor: '#e0e0e5' }}>
+          <h2 className="font-display text-xl font-semibold text-mm-on-background md:text-2xl">
+            Less than a part-time EA. Already briefed on every client.
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-2">
+          {/* Human EA */}
+          <div className="border-b p-6 md:border-b-0 md:border-r" style={{ borderColor: '#e0e0e5' }}>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: '#f2f2f7', border: '1px solid #d1d1d6' }}>
+              <User className="h-6 w-6" style={{ color: '#6e6e73' }} aria-hidden />
+            </div>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-mm-on-surface-variant">
+              Part-time executive assistant
+            </p>
+            <p className="mt-1 text-2xl font-bold text-mm-on-background">$800–1,500<span className="text-sm font-semibold text-mm-on-surface-variant"> / month</span></p>
+            <ul className="mt-4 space-y-2 text-sm text-mm-on-surface-variant">
+              <li>Needs briefing on every client and context</li>
+              <li>Available during business hours only</li>
+              <li>One person, one client at a time</li>
+              <li>Context lives in their head, not yours</li>
+            </ul>
+          </div>
+          {/* MindMesh Pro */}
+          <div className="p-6">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: '#060e20', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <Image src="/images/Logo/mindmesh-logo-tight.png" alt="" width={32} height={32} className="h-8 w-8 object-contain" aria-hidden />
+            </div>
+            <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#0066cc' }}>
+              MindMesh Pro
+            </p>
+            <p className="mt-1 text-2xl font-bold text-mm-on-background">{cycle === 'yearly' ? '$499' : '$549'}<span className="text-sm font-semibold text-mm-on-surface-variant"> / month</span></p>
+            <ul className="mt-4 space-y-2 text-sm text-mm-on-surface-variant">
+              <li>Already knows every client and their context</li>
+              <li>Works continuously — no hours, no gaps</li>
+              <li>Handles every client simultaneously</li>
+              <li>Your context, on your device, under your control</li>
+            </ul>
+          </div>
+        </div>
+        <div className="px-6 py-4" style={{ background: '#f8f8fa', borderTop: '1px solid #e0e0e5' }}>
+          <p className="text-sm text-mm-on-surface-variant">
+            For fractional leaders managing multiple clients, MindMesh does what an EA can&apos;t — across every client, every source, at once.
+          </p>
+        </div>
+      </div>
+
       {/* Billing cycle toggle */}
       <div className="mb-8 flex justify-center sm:mb-10">
         <div
@@ -144,22 +201,31 @@ export default function BillingPlansClient() {
 
       {/* Billing notes */}
       <section className="mt-12 grid gap-6 md:grid-cols-2" aria-label="Billing notes">
-        <div className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
+        <div
+          data-light-window=""
+          className="rounded-xl p-6"
+          style={{
+            background: '#ffffff',
+            border: '1px solid rgba(0,0,0,0.18)',
+            boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+          }}
+        >
           <h2 className="font-display text-lg font-semibold text-mm-on-background">
             How billing works
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-mm-on-surface-variant">
-            Manage your plan directly in the MindMesh app after{' '}
-            <Link
-              href={MARKETING_CTA_HREF}
-              className="font-medium text-mm-primary underline underline-offset-2 hover:text-mm-primary-dim"
-            >
-              downloading
-            </Link>
-            . Free plan is always available; Pro unlocks when you upgrade inside the app.
+            Manage your plan directly in the MindMesh app. Free plan is always available; Pro unlocks when you upgrade inside the app.
           </p>
         </div>
-        <div className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
+        <div
+          data-light-window=""
+          className="rounded-xl p-6"
+          style={{
+            background: '#ffffff',
+            border: '1px solid rgba(0,0,0,0.18)',
+            boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+          }}
+        >
           <h2 className="font-display text-lg font-semibold text-mm-on-background">
             Cancellations &amp; refunds
           </h2>

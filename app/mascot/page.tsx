@@ -1,61 +1,100 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
-import { MascotIconShowcase } from '@/components/marketing/sections/MascotIconShowcase';
 import { ProductTheaterMascot } from '@/components/marketing/sections/ProductTheaterMascot';
 import { ProductTheaterMascotAttachment } from '@/components/marketing/sections/ProductTheaterMascotAttachment';
-import {
-  MASCOT_PAGE_CONTENT,
-  SENSOR_MASCOT_COMPARISON,
-  SENSOR_MASCOT_CTA,
-  SENSOR_MASCOT_PRIVACY,
-} from '@/lib/marketing-sensor-mascot-content';
+import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
 
-const { metadata: pageMeta, hero, howItWorks, capabilities } = MASCOT_PAGE_CONTENT;
-
 export const metadata: Metadata = {
-  title: pageMeta.title,
-  description: pageMeta.description,
+  title: 'Mascot',
+  description:
+    'Mascot lives at the edge of your desktop, connected to your email, calendar, and memory. Ask it anything, let it act — always with your approval.',
   openGraph: {
-    title: pageMeta.ogTitle,
-    description: pageMeta.description,
+    title: 'MindMesh | Mascot',
+    description:
+      'Mascot lives at the edge of your desktop, connected to your email, calendar, and memory. Ask it anything, let it act — always with your approval.',
     url: 'https://mindmesh.global/mascot',
     images: [OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
-    title: pageMeta.ogTitle,
-    description: pageMeta.description,
+    title: 'MindMesh | Mascot',
+    description:
+      'Mascot lives at the edge of your desktop, connected to your email, calendar, and memory. Ask it anything, let it act — always with your approval.',
     images: [OG_IMAGE_URL],
   },
 };
 
+const howItWorksSteps = [
+  {
+    number: '01',
+    title: 'Lives on your desktop',
+    description:
+      'Mascot sits as a floating character at the corner of your screen — always accessible, never in the way. No tab to open, no app to switch to.',
+  },
+  {
+    number: '02',
+    title: 'Already read everything',
+    description:
+      'From the moment you connect your apps, Mascot builds memory from your email, Slack, calendar, and tasks. When you ask, it already knows.',
+  },
+  {
+    number: '03',
+    title: 'Asks, answers, and acts',
+    description:
+      "Mascot doesn't just answer questions — it drafts replies, blocks calendar time, and follows through. Everything waits for your sign-off.",
+  },
+] as const;
+
+const capabilityCards = [
+  {
+    title: 'Always there, never in the way',
+    description:
+      'Mascot lives at the corner of your desktop as a floating character. Click to open a conversation, close it when done. It stays out of your flow until you need it.',
+  },
+  {
+    title: 'Knows what you left open',
+    description:
+      "Ask 'What did I leave open with Acme?' and get specific answers — open threads, pending decisions, outstanding replies — across all your connected clients.",
+  },
+  {
+    title: 'Acts, with your sign-off',
+    description:
+      "When Mascot drafts a reply, blocks prep time, or stages a calendar update, nothing happens until you confirm it. It prepares, you decide.",
+  },
+  {
+    title: 'LLM reasoning + your memory',
+    description:
+      'Mascot combines broad AI knowledge with the specific context of your actual work. Ask general questions or deeply specific ones — it handles both.',
+  },
+] as const;
+
 export default function MascotPage() {
   return (
     <MarketingDepthLayout
-      eyebrow={hero.eyebrow}
-      title={hero.title}
-      subtitle={hero.subtitle}
-      backHref={hero.backHref}
-      backLabel={hero.backLabel}
+      eyebrow="Mascot"
+      title="The companion that already knows your work."
+      subtitle="Mascot lives at the edge of your desktop, connected to your email, calendar, and memory. Ask it anything, let it act — always with your approval."
     >
+      {/* Coming Soon banner */}
       <div className="mm-content pt-8">
-        <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 px-5 py-4 text-center">
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-blue-300">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-400" />
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-center">
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-amber-300">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
             Coming Soon — Mascot is currently in development.
           </span>
         </div>
       </div>
 
-      <section className="bg-mm-background py-16 lg:py-24">
+      {/* How it works */}
+      <section className="bg-mm-background pb-10 pt-10 lg:pb-12 lg:pt-12">
         <div className="mm-content">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            {howItWorks.title}
+            More than a chatbot.
           </h2>
           <ol className="mt-10 grid gap-6 sm:grid-cols-3">
-            {howItWorks.steps.map((step) => (
+            {howItWorksSteps.map((step) => (
               <li key={step.number} className="min-w-0">
                 <p className="font-display text-sm font-semibold tabular-nums text-mm-on-surface-variant">
                   {step.number}
@@ -73,21 +112,29 @@ export default function MascotPage() {
       </section>
 
       <ProductTheaterMascot />
-
       <ProductTheaterMascotAttachment />
 
-      <MascotIconShowcase />
-
-      <section className="border-y border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
+      {/* Capabilities */}
+      <section className="border-y border-mm-outline-variant/40 bg-mm-surface-container-low pb-10 pt-10 lg:pb-12 lg:pt-12">
         <div className="mm-content">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            {capabilities.title}
+            Built to act, not just answer.
           </h2>
+          <p className="mt-4 max-w-[640px] text-base text-mm-on-surface-variant lg:text-lg">
+            Mascot knows what landed, what changed, and what's still open — because it reads from the same local context that powers MindMesh.
+          </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {capabilities.items.map(({ title, description }) => (
+            {capabilityCards.map(({ title, description }) => (
               <div
                 key={title}
-                className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6"
+                data-light-window=""
+                className="rounded-xl p-6"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.18)',
+                  boxShadow:
+                    '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+                }}
               >
                 <h3 className="font-display text-lg font-semibold text-mm-on-background">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mm-on-surface-variant">
@@ -99,74 +146,100 @@ export default function MascotPage() {
         </div>
       </section>
 
-      <section className="bg-mm-background py-16 lg:py-24">
+      {/* Sensor vs Mascot — same two-card layout as Sensor page */}
+      <section className="bg-mm-background pb-10 pt-10 lg:pb-12 lg:pt-12">
         <div className="mm-content">
-          <p className="text-sm font-medium text-mm-on-surface-variant">
-            {SENSOR_MASCOT_COMPARISON.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            {SENSOR_MASCOT_COMPARISON.title}
+          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
+            Two companion surfaces. Different jobs.
           </h2>
-          <p className="mt-4 max-w-[720px] text-base text-mm-on-surface-variant lg:text-lg">
-            {SENSOR_MASCOT_COMPARISON.relationshipLine}
+          <p className="mt-4 max-w-[640px] text-base text-mm-on-surface-variant lg:text-lg">
+            Sensor is for the 30-second task. Mascot is for the conversation that needs context. Together they handle everything between.
           </p>
 
-          <div className="mt-10 overflow-x-auto">
-            <table className="w-full min-w-[28rem] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-mm-outline-variant/60">
-                  <th className="py-3 pr-4 font-medium text-mm-on-surface-variant" scope="col">
-                    <span className="sr-only">Dimension</span>
-                  </th>
-                  <th className="py-3 px-4 font-semibold text-mm-on-background" scope="col">
-                    Sensor
-                  </th>
-                  <th className="py-3 pl-4 font-semibold text-mm-on-background" scope="col">
-                    Mascot
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {SENSOR_MASCOT_COMPARISON.rows.map((row) => (
-                  <tr key={row.label} className="border-b border-mm-outline-variant/40">
-                    <th
-                      className="py-3 pr-4 font-medium text-mm-on-surface-variant"
-                      scope="row"
-                    >
-                      {row.label}
-                    </th>
-                    <td className="py-3 px-4 text-mm-on-background">{row.sensor}</td>
-                    <td className="py-3 pl-4 text-mm-on-background">{row.mascot}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <p className="mt-8">
-            <Link
-              href={SENSOR_MASCOT_COMPARISON.mascotSiblingCta.href}
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {/* Sensor card */}
+            <div
+              data-light-window=""
+              className="rounded-xl p-6"
+              style={{
+                background: '#ffffff',
+                border: '1px solid rgba(0,0,0,0.18)',
+                boxShadow:
+                  '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+              }}
             >
-              {SENSOR_MASCOT_COMPARISON.mascotSiblingCta.label}
-            </Link>
-          </p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-mm-primary">Sensor</p>
+              <h3 className="mt-1 font-display text-xl font-semibold text-mm-on-background">Instant action.</h3>
+              <p className="mt-3 text-sm leading-relaxed text-mm-on-surface-variant">
+                For commands and jumps that need to happen in seconds — open apps, calculate, find a file, search your emails — without needing to build context first.
+              </p>
+              <ul className="mt-4 space-y-2">
+                {['"Open Calendar"', '"15% of 240"', '"Find emails from Dana"'].map((ex) => (
+                  <li key={ex} className="flex items-center gap-2 text-sm text-mm-on-surface-variant">
+                    <span className="text-mm-primary">→</span>
+                    <span className="font-mono text-xs">{ex}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5">
+                <Link
+                  href="/sensor"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+                >
+                  Explore Sensor →
+                </Link>
+              </div>
+            </div>
+
+            {/* Mascot card */}
+            <div
+              data-light-window=""
+              className="rounded-xl p-6"
+              style={{
+                background: '#ffffff',
+                border: '1px solid rgba(0,0,0,0.18)',
+                boxShadow:
+                  '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+              }}
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-mm-primary">Mascot</p>
+              <h3 className="mt-1 font-display text-xl font-semibold text-mm-on-background">Grounded conversation.</h3>
+              <p className="mt-3 text-sm leading-relaxed text-mm-on-surface-variant">
+                For questions that need your actual work context — what happened yesterday, what's been left open, what should you focus on next.
+              </p>
+              <ul className="mt-4 space-y-2">
+                {['"What should I focus on?"', '"Did Dana reply to my email?"', '"Summarise yesterday"'].map((ex) => (
+                  <li key={ex} className="flex items-center gap-2 text-sm text-mm-on-surface-variant">
+                    <span className="text-mm-primary">→</span>
+                    <span className="font-mono text-xs">{ex}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="border-t border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
+      {/* Privacy */}
+      <section className="border-t border-mm-outline-variant/40 bg-mm-surface-container-low pb-10 pt-10 lg:pb-12 lg:pt-12">
         <div className="mx-auto w-full max-w-[640px] px-6 text-center">
           <p className="text-base text-mm-on-surface-variant lg:text-lg">
-            {SENSOR_MASCOT_PRIVACY.line}
+            Mascot reads from your locally-indexed MindMesh memory. Answers are grounded in context that lives on your device — nothing leaves your machine unless you use a cloud AI key.
           </p>
-          <p className="mt-8">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href={SENSOR_MASCOT_PRIVACY.link.href}
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              href="/security"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              {SENSOR_MASCOT_PRIVACY.link.label}
+              Learn about security
             </Link>
-          </p>
+            <Link
+              href={MARKETING_CTA_HREF}
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
+            >
+              Download MindMesh
+            </Link>
+          </div>
         </div>
       </section>
 

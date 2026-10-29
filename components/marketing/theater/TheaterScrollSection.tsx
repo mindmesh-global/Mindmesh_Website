@@ -1,9 +1,11 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useScrollSection } from '@/hooks/useScrollSection';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import {
+  getTheaterStep,
   getTheaterWrapperMinHeightClass,
   type TheaterId,
 } from '@/lib/marketing-theater-scroll';
@@ -21,6 +23,9 @@ export type TheaterScrollSectionProps = {
   /** Optional left rail (Connect theater; Phase 4). */
   sidebar?: ReactNode;
   className?: string;
+  lightWindow?: boolean;
+  /** Disable sticky positioning — use when animation is auto-played, not scroll-driven. */
+  noSticky?: boolean;
 };
 
 /**
@@ -34,27 +39,59 @@ export function TheaterScrollSection({
   footer,
   sidebar,
   className,
+  lightWindow,
+  noSticky = false,
 }: TheaterScrollSectionProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const scrollState = useScrollSection({ theaterId });
-  const wrapperClass = getTheaterWrapperMinHeightClass(theaterId, prefersReducedMotion);
+
+  // Lightweight in-view state for noSticky: single passive scroll listener,
+  // no RAF loop — avoids the three-section jank of useScrollSection.
+  const noStickyRef = useRef<HTMLDivElement>(null);
+  const [noStickyInView, setNoStickyInView] = useState(false);
+  useEffect(() => {
+    if (!noSticky) return;
+    const check = () => {
+      const el = noStickyRef.current;
+      if (!el) return;
+      const { top, bottom } = el.getBoundingClientRect();
+      setNoStickyInView(bottom > 0 && top < window.innerHeight);
+    };
+    check(); // initial check after mount
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [noSticky]);
+
+  const noStickyState = useMemo(() => ({
+    ref: noStickyRef,
+    progress: 0,
+    step: getTheaterStep(theaterId, 0),
+    isInView: noStickyInView,
+    isPaused: !noStickyInView || prefersReducedMotion,
+  }), [theaterId, noStickyInView, prefersReducedMotion]);
+
+  const activeState = noSticky ? noStickyState : scrollState;
+  const wrapperClass = noSticky ? 'relative' : getTheaterWrapperMinHeightClass(theaterId, prefersReducedMotion);
 
   return (
     <div
-      ref={scrollState.ref}
+      ref={noSticky ? noStickyRef : scrollState.ref}
       className={`${wrapperClass}${className ? ` ${className}` : ''}`}
-      data-theater={theaterId}
+      data-theater={noSticky ? undefined : theaterId}
       data-reduced-motion={prefersReducedMotion ? 'true' : 'false'}
-      data-theater-in-view={scrollState.isInView ? 'true' : 'false'}
-      data-theater-paused={scrollState.isPaused ? 'true' : 'false'}
-      data-theater-progress={scrollState.progress.toFixed(3)}
     >
-      <TheaterScrollProvider value={scrollState}>
+      <TheaterScrollProvider value={activeState}>
         <ProductFrame
           caption={caption}
           footer={footer}
           sidebar={sidebar}
-          sticky={!prefersReducedMotion}
+          sticky={noSticky ? false : !prefersReducedMotion}
+          lightWindow={lightWindow}
         >
           {children}
         </ProductFrame>

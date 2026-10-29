@@ -32,24 +32,24 @@ export const metadata: Metadata = {
 
 const principleCards = [
   {
-    title: 'Local-first by default',
+    title: 'Your data stays on your device',
     description:
-      'Indexed work context stays close to you. Vector memory remains on your device by default, with encrypted (TLS) connections when traffic leaves the machine.',
+      'Everything MindMesh reads about your work is indexed locally. Vector memory, work context, and enriched data remain on your machine by default — not uploaded to a cloud server.',
+  },
+  {
+    title: 'Bring your own AI key (BYOK)',
+    description:
+      'Connect your own API key so AI enrichments — summaries, prioritisation, and context — run through your account, not ours. Your data never passes through MindMesh\'s AI infrastructure when you do.',
   },
   {
     title: 'Read-only where it matters',
     description:
-      'Supported Gmail and Google Calendar connections use read-only permissions so you can search, summarize, and stay organized without granting unnecessary control.',
+      'Connected apps use read-only permissions where it matters. MindMesh reads what you give it permission to read — it cannot send emails, edit calendar events, or modify anything without your explicit approval.',
   },
   {
     title: 'Encrypted sensitive paths',
     description:
-      'MindMesh uses modern encryption protections, including AES-256-GCM in key flows such as sensitive token protection and some encrypted local storage paths.',
-  },
-  {
-    title: 'Desktop trust signals',
-    description:
-      'Signed desktop updates and a deliberate desktop-first architecture keep the product more controlled and transparent than typical browser-first AI tools.',
+      'MindMesh uses AES-256-GCM encryption in key flows including sensitive token protection and local storage paths. Connections use TLS when traffic leaves the machine.',
   },
 ] as const;
 
@@ -64,34 +64,38 @@ const cannotAccess = [
   'Claim ownership of your work data',
   'Train on your personal inbox data',
   'Delete or change your emails',
-  'Send Gmail messages or edit Google Calendar events through the standard read-only connection flow',
+  'Send email messages or edit calendar events through the standard read-only connection flow',
 ] as const;
 
 export default function SecurityPage() {
   return (
     <MarketingDepthLayout
       eyebrow="Security"
-      title="Private by design: local-first architecture and clear data boundaries"
-      subtitle={marketingTrustContent.securityLine}
+      title="Your data. Your device. Your key."
+      subtitle="MindMesh is built for professionals who handle confidential client work. Privacy isn't a setting — it's the default architecture."
       backHref={depthBack.href}
       backLabel={depthBack.label}
     >
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mm-content">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Local-first architecture, designed for privacy.
+            How we keep your data private.
           </h2>
           <p className="mt-4 max-w-[720px] text-base text-mm-on-surface-variant lg:text-lg">
-            MindMesh is built for professionals who want AI orchestration without giving up control
-            of their data. Privacy is a product principle that shapes permissions, architecture, and
-            experience from the start.
+            When you work with confidential client data, a privacy policy isn&apos;t enough. MindMesh makes privacy a structural decision — your context stays on your device, your AI key stays in your control, and nothing changes without your approval.
           </p>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {principleCards.map(({ title, description }) => (
               <div
                 key={title}
-                className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6"
+                data-light-window=""
+                className="rounded-xl p-6"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.18)',
+                  boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+                }}
               >
                 <h3 className="font-display text-lg font-semibold text-mm-on-background">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mm-on-surface-variant">
@@ -116,7 +120,15 @@ export default function SecurityPage() {
           </p>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
+            <div
+              data-light-window=""
+              className="rounded-xl p-6"
+              style={{
+                background: '#ffffff',
+                border: '1px solid rgba(0,0,0,0.18)',
+                boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+              }}
+            >
               <h3 className="font-display text-lg font-semibold text-mm-on-background">
                 MindMesh can
               </h3>
@@ -129,7 +141,15 @@ export default function SecurityPage() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6">
+            <div
+              data-light-window=""
+              className="rounded-xl p-6"
+              style={{
+                background: '#ffffff',
+                border: '1px solid rgba(0,0,0,0.18)',
+                boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+              }}
+            >
               <h3 className="font-display text-lg font-semibold text-mm-on-background">
                 MindMesh cannot
               </h3>
@@ -153,36 +173,35 @@ export default function SecurityPage() {
         id="report-security-issue"
         className="bg-mm-background py-16 lg:py-24"
       >
-        <div className="mx-auto w-full max-w-[640px] px-6">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Report a security issue
-          </h2>
-          <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            If you believe you have found a vulnerability in MindMesh or related services, email our
-            security team. Please include enough detail to reproduce the issue, and avoid sharing
-            sensitive customer data in the initial report when possible. We monitor this inbox and
-            aim to acknowledge reports promptly.
-          </p>
-          <p className="mt-6 text-base text-mm-on-surface-variant lg:text-lg">
-            <strong className="text-mm-on-background">Security contact:</strong>{' '}
-            <a
-              href="mailto:team@mindmesh.global?subject=Security%20report"
-              className="font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
-            >
-              team@mindmesh.global
-            </a>
-          </p>
-          <p className="mt-3 text-sm text-mm-on-surface-variant">
-            Use the subject line &quot;Security report&quot; so we can prioritize the message. For
-            other product questions, the same address or our{' '}
-            <Link
-              href="/contact"
-              className="font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
-            >
-              contact form
-            </Link>{' '}
-            works.
-          </p>
+        <div className="mm-content">
+          <div
+            data-light-window=""
+            className="mx-auto max-w-[640px] rounded-xl p-8"
+            style={{
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.18)',
+              boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+            }}
+          >
+            <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
+              Report a security issue
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-mm-on-surface-variant">
+              Found a vulnerability? We want to hear about it. Email us with enough detail to reproduce
+              the issue — avoid including sensitive customer data in the first message. We monitor this
+              inbox and respond promptly.
+            </p>
+            <div className="mt-6 rounded-lg p-4" style={{ background: '#f2f2f7', border: '1px solid #d1d1d6' }}>
+              <p className="text-xs font-semibold uppercase tracking-wider text-mm-on-surface-variant">Security contact</p>
+              <a
+                href="mailto:team@mindmesh.global?subject=Security%20report"
+                className="mt-1 block text-base font-semibold text-mm-on-background transition-colors hover:text-mm-primary"
+              >
+                team@mindmesh.global
+              </a>
+              <p className="mt-1 text-xs text-mm-on-surface-variant">Use the subject line "Security report" so we can prioritise it.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -194,26 +213,26 @@ export default function SecurityPage() {
           <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
             {marketingTrustContent.subhead} Read how we talk about memberships and product boundaries on the trust page.
           </p>
-          <p className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/trust"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              How we build trust →
+              How we build trust
             </Link>
             <Link
               href="/privacy"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Privacy policy →
+              Privacy policy
             </Link>
             <Link
               href="/sub-processors"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Sub-processors →
+              Sub-processors
             </Link>
-          </p>
+          </div>
         </div>
       </section>
 

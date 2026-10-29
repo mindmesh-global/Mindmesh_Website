@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { MarketingCalendarBlock } from '@/components/marketing/theater/marketing/MarketingCalendarBlock';
 import { MarketingDraftPanel } from '@/components/marketing/theater/marketing/MarketingDraftPanel';
 import { MarketingExecuteSuccess } from '@/components/marketing/theater/marketing/MarketingExecuteSuccess';
@@ -9,23 +10,39 @@ import { useTheaterScroll } from '@/components/marketing/theater/TheaterScrollCo
 import { getExecuteVisualStateFromProgress } from '@/lib/marketing-theater-scroll';
 
 type ExecuteTheaterDemoProps = {
-  /**
-   * Pin to the settled hold stack (draft + calendar + Jira + success).
-   * Used by the mobile static peek so it never lands mid-scrub.
-   */
   forceFinal?: boolean;
 };
 
-/**
- * Scroll-driven Execute theater demo (P4-T10).
- * Priority carry-over → draft → calendar → Jira → success per P1-T08.
- */
+const AUTO_PLAY_DURATION_MS = 5000;
+
 export function ExecuteTheaterDemo({ forceFinal = false }: ExecuteTheaterDemoProps) {
   const scroll = useTheaterScroll();
-  const progress = forceFinal ? 1 : scroll.progress;
+const isPaused = forceFinal ? false : scroll.isPaused;
+
+  const [autoProgress, setAutoProgress] = useState(0);
+  const startTimeRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (forceFinal) return;
+    if (isPaused) {
+      startTimeRef.current = null;
+      if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+      return;
+    }
+    if (startTimeRef.current === null) startTimeRef.current = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - (startTimeRef.current ?? now)) / AUTO_PLAY_DURATION_MS);
+      setAutoProgress(p);
+      if (p < 1) { rafRef.current = requestAnimationFrame(tick); } else { rafRef.current = null; }
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
+  }, [isPaused, forceFinal]);
+
+  const progress = forceFinal ? 1 : Math.max(scroll.progress, autoProgress);
   const visual = getExecuteVisualStateFromProgress(progress);
   const step = forceFinal ? 7 : scroll.step;
-  const isPaused = forceFinal ? false : scroll.isPaused;
 
   return (
     <div

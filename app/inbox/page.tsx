@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
-import { MARKETING_DEPTH_BACK_LINKS } from '@/lib/marketing-routes';
+import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
-
-const depthBack = MARKETING_DEPTH_BACK_LINKS['/inbox'];
+import { InboxSceneWrapper } from './InboxSceneWrapper';
 
 const pageDescription =
-  'One inbox for email across every connected account, without tab chaos. Scan faster, search in plain English, and stay focused inside MindMesh.';
+  'MindMesh brings every client email account into one place — Gmail, Outlook, and SMTP — so you can scan, filter, and reply without switching between inboxes.';
 
 export const metadata: Metadata = {
   title: 'Inbox',
@@ -29,24 +27,24 @@ export const metadata: Metadata = {
 
 const capabilityCards = [
   {
-    title: 'One view across accounts',
+    title: 'Every client inbox, one view',
     description:
-      'Connect Gmail, Outlook, and SMTP mailboxes, then scan everything in a single focused list instead of hopping between tabs.',
+      'Connect Gmail, Outlook, and SMTP accounts for each client. MindMesh reads them together so you see what arrived across all your clients without opening a single extra tab.',
   },
   {
-    title: 'Filter when you need one mailbox',
+    title: 'Filter to one client when you need to',
     description:
-      'Isolate a single address when several accounts are connected. Switch filters without signing out or losing context.',
+      'Isolate a single client\'s inbox when you need to focus on them. Switch back to the full view without losing your place.',
   },
   {
-    title: 'Plain-English search',
+    title: 'AI-drafted replies, waiting for your approval',
     description:
-      'Find receipts, contracts, and follow-ups by asking naturally. Get to the right thread without remembering exact senders or keywords.',
+      'MindMesh reads the email, understands the context, and drafts a reply using your connected memory and working style. The draft waits in an approval queue — nothing sends until you confirm it. Every client gets a response you actually reviewed.',
   },
   {
-    title: 'Less triage, more clarity',
+    title: 'Find any email in plain English',
     description:
-      'Inbox is built to cut mental overhead so important messages surface faster and the day feels manageable.',
+      'Search across every connected account at once. No need to remember which inbox it was in or which client it came from.',
   },
 ] as const;
 
@@ -54,39 +52,50 @@ export default function InboxPage() {
   return (
     <MarketingDepthLayout
       eyebrow="Inbox"
-      title="One inbox for email across every connected account"
-      subtitle="Without tab chaos. MindMesh brings your connected mail into one focused workspace so you can scan faster and stay on top of what matters."
-      backHref={depthBack.href}
-      backLabel={depthBack.label}
+      title="All your client email. One place."
+      subtitle="MindMesh connects every Gmail, Outlook, and SMTP account you manage and gives you one clear view — no account switching, no missed threads."
     >
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mm-content grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div>
             <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-              Stop switching tabs to find the right thread.
+              Multiple clients. Multiple inboxes. MindMesh sees them all.
             </h2>
             <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-              Connected email accounts land in one calm list. Filter by mailbox when you need to
-              isolate an address, then jump back to the full view without leaving MindMesh.
+              As a fractional professional you might be managing Gmail for one client, Outlook for
+              another, and a shared SMTP mailbox for a third. MindMesh reads them all in one place
+              and keeps each client&apos;s threads clearly separated.
             </p>
-            <p className="mt-8">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/connected-apps"
-                className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+                className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
               >
-                Connect your mail accounts →
+                See connected apps
               </Link>
-            </p>
+              <Link
+                href={MARKETING_CTA_HREF}
+                className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
+              >
+                Download MindMesh
+              </Link>
+            </div>
           </div>
-          <div className="overflow-hidden rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container shadow-mm-elevated">
-            <Image
-              src="/images/hero-inbox-mockup.jpg"
-              alt="MindMesh Inbox: unified email list with account filters, search, and message previews"
-              width={1024}
-              height={531}
-              className="h-auto w-full"
-              sizes="(max-width: 1024px) 100vw, 560px"
-            />
+
+          {/* Animated inbox demo */}
+          <div
+            data-light-window=""
+            className="overflow-hidden rounded-xl p-4 md:p-5"
+            style={{
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.18)',
+              boxShadow:
+                '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+              height: '640px',
+              overflow: 'hidden',
+            }}
+          >
+            <InboxSceneWrapper />
           </div>
         </div>
       </section>
@@ -94,18 +103,26 @@ export default function InboxPage() {
       <section className="border-y border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
         <div className="mm-content">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Built for how email actually shows up at work.
+            Built for professionals who manage multiple clients.
           </h2>
           <p className="mt-4 max-w-[640px] text-base text-mm-on-surface-variant lg:text-lg">
-            Inbox sits in the Prioritize and Execute path: the same signals that feed Focus and the
-            draft you send from Execute.
+            Most email clients are built for one company. MindMesh Inbox is built for the reality of
+            fractional work — multiple clients, multiple accounts, one clear picture. And when
+            something needs a reply, MindMesh drafts it for you and holds it for your approval.
           </p>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {capabilityCards.map(({ title, description }) => (
               <div
                 key={title}
-                className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6"
+                data-light-window=""
+                className="rounded-xl p-6"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.18)',
+                  boxShadow:
+                    '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+                }}
               >
                 <h3 className="font-display text-lg font-semibold text-mm-on-background">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mm-on-surface-variant">
@@ -120,20 +137,21 @@ export default function InboxPage() {
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mx-auto w-full max-w-[640px] px-6 text-center">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Email visibility with privacy-first design.
+            Read-only. Private by design.
           </h2>
           <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            MindMesh uses a local-first, privacy-conscious architecture. It organizes and retrieves
-            your connected work context with care, without turning your inbox into a data product.
+            Connected email accounts are read using read-only access where it matters. Your inbox
+            is indexed locally on your device — not stored on a cloud server. Nothing sends without
+            your approval.
           </p>
-          <p className="mt-8">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/security"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Learn about security →
+              Learn about security
             </Link>
-          </p>
+          </div>
         </div>
       </section>
 

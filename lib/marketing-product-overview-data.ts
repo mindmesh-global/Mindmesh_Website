@@ -58,7 +58,6 @@ export const PRODUCT_OVERVIEW_NAV = [
   { scene: 3 as const, label: 'Email', sidebarTab: 'inbox' },
   { scene: 4 as const, label: 'Yesterday narrative', sidebarTab: 'narrative' },
   { scene: 5 as const, label: 'Connected apps', sidebarTab: 'apps' },
-  { scene: 6 as const, label: 'Companions', sidebarTab: 'companions' },
 ] as const;
 
 export type ProductOverviewSidebarTab =
@@ -293,7 +292,7 @@ export const ATTENTION_BOARD_FIXTURES_ACME: AttentionBoardFixture = {
     id: 'overlap-prep-client-call',
     title: 'Schedule overlap',
     detail:
-      'Client-call prep (1:30–2:30 PM) overlaps Client call: Acme x ClientCo at 2:00 PM.',
+      'Client-call prep (1:30–2:30 PM) overlaps with Acme x ClientCo call (2:00–2:30 PM).',
   },
   dossier: ATTENTION_DOSSIER_FIXTURE_ACME,
 } as const;
@@ -347,9 +346,9 @@ export type InboxCalendarSceneFixture = UpcomingEventsSceneFixture &
   };
 
 export const EMAIL_FOLDER_FIXTURES_ACME: readonly EmailFolderFixture[] = [
-  { id: 'inbox', label: 'Inbox', count: 12 },
-  { id: 'all', label: 'All', count: 48 },
-  { id: 'sent', label: 'Sent', count: 9 },
+  { id: 'inbox', label: 'Inbox', count: 3 },
+  { id: 'all', label: 'All', count: 4 },
+  { id: 'sent', label: 'Sent', count: 2 },
   { id: 'drafts', label: 'Drafts', count: 1 },
 ] as const;
 
@@ -444,9 +443,9 @@ export const YESTERDAY_NARRATIVE_FIXTURE_ACME: YesterdayNarrativeFixture = {
   title: "Yesterday's narrative",
   dateLabel: 'Yesterday',
   summary:
-    'Alex closed the Q2 scope thread with Dana and left PROD-142 open before EOD.',
-  highlight: 'Aligned rollout scope language with Dana before leaving.',
-  openLoop: 'PROD-142 still needs a final pass before the client call.',
+    'Yesterday you attended two client meetings, wrapped the Q2 scope discussion with Dana, and pushed a key Jira ticket forward. Three email threads were resolved. One decision is still pending going into today.',
+  highlight: 'Aligned on Q2 rollout scope with Dana ahead of the 2pm client call.',
+  openLoop: 'PROD-142 still needs a final review before it can be closed.',
   stats: [
     { id: 'emails', label: 'Emails', value: '12' },
     { id: 'events', label: 'Events', value: '3' },

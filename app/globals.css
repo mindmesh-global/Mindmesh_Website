@@ -262,6 +262,7 @@ html, body {
   }
 }
 
+
 /**
  * Product overview mount reveal, widened frame, and glow (P12-T02 / P12-T04 / P12-T06).
  * Hold-then-reveal is JS-driven (useProductOverviewReveal flips
@@ -385,42 +386,18 @@ html, body {
 }
 
 @keyframes problem-orbit-core-aura {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.55;
-  }
-  50% {
-    transform: scale(1.08);
-    opacity: 0.85;
-  }
+  0%, 100% { transform: scale(1);    opacity: 0.65; }
+  50%       { transform: scale(1.14); opacity: 1;    }
 }
 
 /* Heartbeat rings: grow from the logo out to the last app orbit, then draw back in. */
 @keyframes problem-orbit-heartbeat {
-  0% {
-    transform: translate(-50%, -50%) scale(0.18);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.55;
-  }
-  42% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.32;
-  }
-  52% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.18;
-  }
-  90% {
-    transform: translate(-50%, -50%) scale(0.22);
-    opacity: 0.2;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(0.18);
-    opacity: 0;
-  }
+  0%   { transform: translate(-50%, -50%) scale(0.14); opacity: 0; }
+  8%   { opacity: 0.7; }
+  40%  { transform: translate(-50%, -50%) scale(1);    opacity: 0.45; }
+  55%  { transform: translate(-50%, -50%) scale(1);    opacity: 0.2; }
+  88%  { transform: translate(-50%, -50%) scale(0.18); opacity: 0.15; }
+  100% { transform: translate(-50%, -50%) scale(0.14); opacity: 0; }
 }
 
 @keyframes problem-orbit-badge-pop {
@@ -686,13 +663,20 @@ html, body {
 
 [data-attention-board-plane] {
   transform-origin: 50% 20%;
+  filter: none;
+  transform: none;
+  opacity: 1;
   transition:
     filter 520ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 520ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-attention-dossier-open='true'] [data-attention-board-plane] {
+/* Only blur while the dossier is open and NOT in the middle of closing.
+   The :not(…exit) makes the board start un-blurring the moment close is
+   clicked, so the blur fades in parallel with the panel exit animation
+   instead of waiting 420 ms after it completes. */
+[data-attention-dossier-open='true']:not([data-attention-dossier-motion='exit']) [data-attention-board-plane] {
   filter: blur(7px) saturate(85%);
   transform: scale(0.965);
   opacity: 0.55;
@@ -776,7 +760,7 @@ html, body {
     transition: none;
   }
 
-  [data-attention-dossier-open='true'] [data-attention-board-plane] {
+  [data-attention-dossier-open='true']:not([data-attention-dossier-motion='exit']) [data-attention-board-plane] {
     filter: none;
     transform: none;
     opacity: 0.35;
@@ -874,148 +858,88 @@ html, body {
 /* Problem section figures (FIG 0.2–0.5): sleek, looping micro-animations under
    each pain-point heading and the MindMesh "long-term memory" close. */
 @keyframes problem-figure-float-a {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-1deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(1deg);
-  }
+  0%, 100% { transform: translateY(0) translateX(0) rotate(-2deg); }
+  33%       { transform: translateY(-14px) translateX(5px) rotate(2.5deg); }
+  66%       { transform: translateY(-5px) translateX(-5px) rotate(-1deg); }
 }
 
 @keyframes problem-figure-float-b {
-  0%,
-  100% {
-    transform: translateY(-4px) rotate(1deg);
-  }
-  50% {
-    transform: translateY(8px) rotate(-1deg);
-  }
+  0%, 100% { transform: translateY(-6px) translateX(0) rotate(2deg); }
+  40%       { transform: translateY(13px) translateX(-5px) rotate(-2.5deg); }
+  70%       { transform: translateY(3px) translateX(6px) rotate(1deg); }
 }
 
 @keyframes problem-figure-float-c {
-  0%,
-  100% {
-    transform: translateY(6px) rotate(0.5deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(-1.5deg);
-  }
+  0%, 100% { transform: translateY(8px) rotate(1deg); }
+  45%       { transform: translateY(-12px) translateX(-5px) rotate(-3deg); }
 }
 
 @keyframes problem-figure-pulse-dot {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.85);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50%       { opacity: 1;   transform: scale(1.3); }
 }
 
 @keyframes problem-figure-dash-flicker {
-  0% {
-    stroke-dashoffset: 0;
-    opacity: 0.2;
-  }
-  50% {
-    stroke-dashoffset: 16;
-    opacity: 0.5;
-  }
-  100% {
-    stroke-dashoffset: 32;
-    opacity: 0.2;
-  }
+  0%   { stroke-dashoffset: 0;  opacity: 0.15; }
+  50%  { stroke-dashoffset: 20; opacity: 0.6;  }
+  100% { stroke-dashoffset: 40; opacity: 0.15; }
 }
 
 @keyframes problem-figure-shuffle {
-  0% {
-    transform: translate(-50%, -50%) translateY(0) translateX(0) scale(1) rotate(0deg);
-    opacity: 1;
-    z-index: 4;
-  }
-  30% {
-    transform: translate(-50%, -50%) translateY(6px) translateX(30px) scale(0.94) rotate(4deg);
-    opacity: 0.7;
-    z-index: 2;
-  }
-  55% {
-    transform: translate(-50%, -50%) translateY(14px) translateX(0) scale(0.86) rotate(0deg);
-    opacity: 0.4;
-    z-index: 1;
-  }
-  80% {
-    transform: translate(-50%, -50%) translateY(6px) translateX(-30px) scale(0.94) rotate(-4deg);
-    opacity: 0.7;
-    z-index: 2;
-  }
-  100% {
-    transform: translate(-50%, -50%) translateY(0) translateX(0) scale(1) rotate(0deg);
-    opacity: 1;
-    z-index: 4;
-  }
+  0%   { transform: translate(-50%, -50%) translateY(0)     translateX(0)     scale(1)    rotate(0deg);  opacity: 1;    z-index: 4; filter: blur(0);    }
+  22%  { transform: translate(-50%, -50%) translateY(-10px) translateX(44px)  scale(0.91) rotate(6deg);  opacity: 0.72; z-index: 3; filter: blur(0.5px); }
+  48%  { transform: translate(-50%, -50%) translateY(20px)  translateX(0)     scale(0.82) rotate(-1deg); opacity: 0.4;  z-index: 2; filter: blur(1px);   }
+  74%  { transform: translate(-50%, -50%) translateY(-8px)  translateX(-44px) scale(0.91) rotate(-6deg); opacity: 0.72; z-index: 3; filter: blur(0.5px); }
+  100% { transform: translate(-50%, -50%) translateY(0)     translateX(0)     scale(1)    rotate(0deg);  opacity: 1;    z-index: 4; filter: blur(0);    }
 }
 
 @keyframes problem-figure-ring-draw {
-  0% {
-    stroke-dashoffset: var(--ring-circumference);
-    opacity: 0;
-  }
-  35% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  80% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: var(--ring-circumference);
-    opacity: 0;
-  }
+  0%   { stroke-dashoffset: var(--ring-circumference); opacity: 0;   }
+  35%  { stroke-dashoffset: 0;                         opacity: 0.9; }
+  80%  { stroke-dashoffset: 0;                         opacity: 0.9; }
+  100% { stroke-dashoffset: var(--ring-circumference); opacity: 0;   }
 }
 
 @keyframes problem-figure-chip-fade {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) translateY(4px) scale(0.9);
-  }
-  35% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translateY(0) scale(1);
-  }
-  80% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) translateY(4px) scale(0.9);
-  }
+  0%   { opacity: 0; transform: translate(-50%, -50%) translateY(6px) scale(0.85); }
+  35%  { opacity: 1; transform: translate(-50%, -50%) translateY(0)   scale(1);    }
+  80%  { opacity: 1; transform: translate(-50%, -50%) translateY(0)   scale(1);    }
+  100% { opacity: 0; transform: translate(-50%, -50%) translateY(6px) scale(0.85); }
 }
 
 @keyframes problem-figure-ghost-fade {
-  0%,
-  100% {
-    opacity: 0.25;
-    transform: translate(-50%, -50%) scale(0.95);
-  }
-  50% {
-    opacity: 0.55;
-    transform: translate(-50%, -50%) scale(1.02);
-  }
+  0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.92); }
+  50%       { opacity: 0.6; transform: translate(-50%, -50%) scale(1.06); }
 }
 
 @keyframes problem-figure-core-pulse {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.08);
-  }
+  0%, 100% { transform: translate(-50%, -50%) scale(1);    box-shadow: 0 0 0 0   rgba(173,198,255,0); }
+  50%       { transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 0 0 8px rgba(173,198,255,0); }
+}
+
+/* Radar ring expanding outward from chip */
+@keyframes problem-figure-ring-out {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(3.2); opacity: 0;   }
+}
+
+/* Notification badge bounce */
+@keyframes problem-figure-badge-bounce {
+  0%, 100% { transform: scale(1);    }
+  40%       { transform: scale(1.35); }
+  60%       { transform: scale(0.95); }
+}
+
+/* Robot scan beam rotation */
+@keyframes problem-figure-scan {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Per-source question mark pulse */
+@keyframes problem-figure-question-pulse {
+  0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(0.75); }
+  50%       { opacity: 1;    transform: translate(-50%, -50%) scale(1.2);  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1116,6 +1040,137 @@ html, body {
   color: rgb(15 23 42) !important; /* gray-900-scale for contrast on white hover bg */
 }
 
+/* Mascot floating idle animation */
+@keyframes mascot-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
 /* Custom cursor - default cursor visible, follower image trails alongside */
+
+/* ─── Light-window override ──────────────────────────────────────────────────
+   Scoped to [data-light-window] on the marketing product frame chrome.
+   Overrides all dark mm-* tokens so the window reads as macOS light mode
+   against the dark page background.
+   ─────────────────────────────────────────────────────────────────────────── */
+[data-light-window],
+[data-light-window] .bg-mm-background,
+[data-light-window] .bg-mm-surface        { background-color: #ffffff !important; }
+[data-light-window] .bg-mm-surface-raised { background-color: #f0f0f2 !important; }
+[data-light-window] .bg-mm-surface-container         { background-color: #f5f5f7 !important; }
+[data-light-window] .bg-mm-surface-container-high    { background-color: #ebebed !important; }
+[data-light-window] .bg-mm-surface-container-highest { background-color: #e0e0e2 !important; }
+[data-light-window] .bg-mm-surface-container-low     { background-color: #fafafc !important; }
+[data-light-window] .bg-mm-surface-container-lowest  { background-color: #f8f8fa !important; }
+[data-light-window] .bg-mm-surface-bright            { background-color: #f0f0f2 !important; }
+[data-light-window] .bg-mm-surface-dim               { background-color: #e8e8ea !important; }
+[data-light-window] .bg-mm-surface-variant           { background-color: #ebebed !important; }
+
+[data-light-window] .text-mm-on-surface              { color: #1d1d1f !important; }
+[data-light-window] .text-mm-on-surface-variant      { color: #3a3a3c !important; }
+/* Tailwind opacity-modifier variants e.g. text-mm-on-surface-variant/80 */
+[data-light-window] .text-mm-on-surface-variant\/80  { color: rgb(58 58 60 / 0.85) !important; }
+[data-light-window] .text-mm-on-surface-variant\/70  { color: rgb(58 58 60 / 0.75) !important; }
+[data-light-window] .text-mm-on-surface-variant\/60  { color: rgb(58 58 60 / 0.65) !important; }
+[data-light-window] .text-mm-on-surface-variant\/50  { color: rgb(58 58 60 / 0.6)  !important; }
+[data-light-window] .text-mm-on-background           { color: #1d1d1f !important; }
+[data-light-window] .text-mm-on-secondary-container  { color: #1d1d1f !important; }
+[data-light-window] .text-mm-on-primary              { color: #ffffff !important; }
+[data-light-window] .text-mm-primary-dim             { color: #0055aa !important; }
+[data-light-window] .text-mm-error                   { color: #dc2626 !important; }
+[data-light-window] .text-mm-on-error-container      { color: #991b1b !important; }
+
+/* ── Dossier panel in light window ──────────────────────────────────────── */
+
+/* Veil: frosted light overlay instead of dark smear */
+[data-light-window] [data-attention-dossier-veil] {
+  background: rgba(230, 232, 238, 0.55) !important;
+}
+
+/* Shell: white card with a clean shadow */
+[data-light-window] [data-attention-dossier-shell] {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(0, 102, 204, 0.18) !important;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Header strip */
+[data-light-window] [data-attention-dossier-shell] .bg-mm-primary\/10 {
+  background-color: #eff6ff !important;
+}
+[data-light-window] [data-attention-dossier-shell] .border-mm-primary\/25 {
+  border-color: rgba(0, 102, 204, 0.12) !important;
+}
+
+/* Close button hover */
+[data-light-window] [data-attention-dossier-shell] [data-attention-dossier-close]:hover {
+  background-color: #f0f0f2 !important;
+}
+
+/* Evidence rows */
+[data-light-window] [data-attention-evidence] {
+  background-color: #f8f8fa !important;
+  border-color: #e0e0e5 !important;
+}
+
+/* Deep-link button inside evidence rows */
+[data-light-window] [data-attention-evidence-link] {
+  background-color: #ffffff !important;
+  border-color: #d1d1d6 !important;
+  color: #0066cc !important;
+}
+[data-light-window] [data-attention-evidence-link]:hover {
+  background-color: #eff6ff !important;
+  border-color: rgba(0, 102, 204, 0.3) !important;
+}
+
+/* Open Dossier button in light window — clean blue, no dark-mode glow */
+[data-light-window] [data-attention-open] {
+  background-color: #0066cc !important;
+  border-color: rgba(0,80,180,0.3) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 1px 0 rgba(255,255,255,0.12) inset !important;
+  color: #ffffff !important;
+}
+[data-light-window] [data-attention-open]:hover {
+  background-color: #0055aa !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2), 0 1px 0 rgba(255,255,255,0.12) inset !important;
+}
+
+/* Overlap alert card in light window — proper red-toned box */
+[data-light-window] [data-attention-overlap] {
+  background-color: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+}
+[data-light-window] [data-attention-overlap] .bg-mm-error\/35,
+[data-light-window] [data-attention-overlap] .bg-mm-error\/20 {
+  background-color: #fee2e2 !important;
+}
+/* Catch-all: any remaining light-on-dark text that wasn't explicitly mapped */
+[data-light-window] { color: #1d1d1f; }
+
+[data-light-window] .border-mm-outline-variant  { border-color: #d1d1d6 !important; }
+[data-light-window] .border-mm-outline          { border-color: #aeaeb2 !important; }
+
+[data-light-window] .text-mm-primary             { color: #0066cc !important; }
+[data-light-window] .bg-mm-primary\/10           { background-color: rgba(0,102,204,0.08) !important; }
+[data-light-window] .bg-mm-primary\/15           { background-color: rgba(0,102,204,0.12) !important; }
+[data-light-window] .bg-mm-primary\/20           { background-color: rgba(0,102,204,0.15) !important; }
+[data-light-window] .border-mm-primary\/30       { border-color: rgba(0,102,204,0.25) !important; }
+
+[data-light-window] .text-mm-primary-dim         { color: #0055aa !important; }
+
+/* Sidebar & nav items */
+[data-light-window] nav,
+[data-light-window] [class*="bg-mm-surface-container"]
+                                                   { background-color: #f2f2f7 !important; }
+[data-light-window] .border-t { border-color: #d1d1d6 !important; }
+[data-light-window] .divide-mm-outline-variant\/50 > * + * { border-color: #d1d1d6 !important; }
+
+/* Skeleton shimmer on light bg */
+[data-light-window] [class*="animate-pulse"],
+[data-light-window] [class*="skeleton"]           { background-color: #e5e5ea !important; }
 
 

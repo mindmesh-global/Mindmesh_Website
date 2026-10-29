@@ -29,8 +29,8 @@ export default function BillingPage() {
       eyebrow="Plans & billing"
       title="Choose the plan that works for you"
       subtitle="Start free and upgrade when you need more."
-      backHref="/#features"
-      backLabel="Explore the product →"
+      backHref="/#product-overview"
+      backLabel="Explore the product"
     >
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mm-content">

@@ -104,7 +104,7 @@ function DashboardConnectedAppsPanel() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-1 text-xs rounded font-medium bg-green-50 text-green-700 border border-green-200">
+              <span className="px-2 py-1 text-xs rounded font-medium bg-green-500 text-white border border-green-600">
                 connected
               </span>
               <button type="button" className="p-1 hover:bg-gray-100 rounded">
@@ -135,7 +135,7 @@ function DashboardConnectedAppsPanel() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-1 text-xs rounded font-medium bg-green-50 text-green-700 border border-green-200">
+              <span className="px-2 py-1 text-xs rounded font-medium bg-green-500 text-white border border-green-600">
                 connected
               </span>
               <button type="button" className="p-1 hover:bg-gray-100 rounded">
@@ -166,7 +166,7 @@ function DashboardConnectedAppsPanel() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-1 text-xs rounded font-medium bg-green-50 text-green-700 border border-green-200">
+              <span className="px-2 py-1 text-xs rounded font-medium bg-green-500 text-white border border-green-600">
                 connected
               </span>
               <button type="button" className="p-1 hover:bg-gray-100 rounded">
@@ -197,7 +197,7 @@ function DashboardConnectedAppsPanel() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-1 text-xs rounded font-medium bg-green-50 text-green-700 border border-green-200">
+              <span className="px-2 py-1 text-xs rounded font-medium bg-green-500 text-white border border-green-600">
                 connected
               </span>
               <button type="button" className="p-1 hover:bg-gray-100 rounded">
@@ -352,7 +352,7 @@ function MarketingConnectedAppsPanel({
                   </div>
                   {showBadge ? (
                     <span
-                      className="shrink-0 rounded border border-emerald-700/50 bg-emerald-950/40 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-300"
+                      className="shrink-0 rounded border border-green-600 bg-green-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
                       style={useScrollScrub ? { opacity: badgeOpacity } : undefined}
                     >
                       connected

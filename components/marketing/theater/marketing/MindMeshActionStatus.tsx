@@ -16,7 +16,7 @@ const KIND_CLASS: Record<MindMeshActionStatusKind, string> = {
   ready: 'border-mm-primary/40 bg-mm-primary-container/20 text-mm-primary',
   action:
     'border-mm-primary/60 bg-mm-primary/15 text-mm-primary shadow-[0_0_0_1px_color-mix(in_srgb,var(--mm-primary)_25%,transparent)]',
-  success: 'border-emerald-600/50 bg-emerald-950/35 text-emerald-300',
+  success: 'border-green-600 bg-green-500 text-white',
 };
 
 /**

@@ -3,11 +3,9 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { MarketingSection } from '@/components/marketing/MarketingSection';
-import { TheaterScrollSection } from '@/components/marketing/theater';
-import {
-  SENSOR_CALC_THEATER_FIXTURES,
-  SENSOR_CALC_THEATER_SECTION,
-} from '@/lib/marketing-sensor-mascot-content';
+import { SensorWindowsWrapper } from '@/components/marketing/theater/SensorWindowsWrapper';
+import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
+import { SENSOR_CALC_THEATER_FIXTURES } from '@/lib/marketing-sensor-mascot-content';
 
 const SensorCalcTheaterDemo = dynamic(
   () =>
@@ -17,36 +15,24 @@ const SensorCalcTheaterDemo = dynamic(
   { ssr: false }
 );
 
-/**
- * Sensor calc depth-page scroll theater (P10-T04).
- * Second scrub story after Open Cal; theaterId sensorCalc.
- */
 export function ProductTheaterSensorCalc() {
-  const theater = SENSOR_CALC_THEATER_SECTION;
-
   return (
     <MarketingSection
       id="sensor-calc-theater"
-      title={theater.title}
-      subtitle={theater.subtitle}
+      title="Quick answers, not another tab."
+      subtitle="Type a calculation, unit conversion, or quick lookup — Sensor answers in the bar without opening anything new."
       className="relative isolate"
+      compactTop
     >
-      <TheaterScrollSection
-        theaterId="sensorCalc"
-        caption={SENSOR_CALC_THEATER_FIXTURES.caption}
-        footer={
-          <p>
-            <Link
-              href={theater.footer.href}
-              className="text-base font-medium text-mm-primary hover:text-mm-primary-dim"
-            >
-              {theater.footer.label}
-            </Link>
-          </p>
-        }
-      >
+      <SensorWindowsWrapper>
         <SensorCalcTheaterDemo />
-      </TheaterScrollSection>
+      </SensorWindowsWrapper>
+
+      <div className="mm-content mt-6">
+        <p className="text-sm text-mm-on-surface-variant">
+          {SENSOR_CALC_THEATER_FIXTURES.caption}
+        </p>
+      </div>
     </MarketingSection>
   );
 }

@@ -10,58 +10,45 @@ import {
 export type ProductOverviewProgressNavProps = {
   activeScene: ProductOverviewSceneId;
   onSelectScene: (scene: ProductOverviewSceneId) => void;
-  /** When true, tabs are visible but not interactive (reduced-motion pin). */
   interactive?: boolean;
-  /**
-   * `wrap` (default): flex-wrap centered grid.
-   * `scroll`: single horizontal row with overflow scroll (mobile peek).
-   */
   layout?: 'wrap' | 'scroll';
   className?: string;
 };
 
 /**
- * Scene progress navigation for the product overview (P11-T10).
- * Labels + selected state (not color alone); keyboard arrow support.
+ * Apple Dynamic Island-style scene picker: a single floating pill with all
+ * scenes inline. Active scene gets an inner highlight pill.
  */
 export function ProductOverviewProgressNav({
   activeScene,
   onSelectScene,
   interactive = true,
-  layout = 'wrap',
   className,
 }: ProductOverviewProgressNavProps) {
   const labelId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const focusScene = useCallback((scene: ProductOverviewSceneId) => {
-    const index = scene - 1;
-    tabRefs.current[index]?.focus();
+    tabRefs.current[scene - 1]?.focus();
   }, []);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
       if (!interactive) return;
-
       let next: ProductOverviewSceneId | null = null;
       if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-        next = (
-          activeScene === PRODUCT_OVERVIEW_SCENE_COUNT
-            ? 1
-            : ((activeScene + 1) as ProductOverviewSceneId)
-        );
+        next = activeScene === PRODUCT_OVERVIEW_SCENE_COUNT
+          ? 1
+          : ((activeScene + 1) as ProductOverviewSceneId);
       } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-        next = (
-          activeScene === 1
-            ? PRODUCT_OVERVIEW_SCENE_COUNT
-            : ((activeScene - 1) as ProductOverviewSceneId)
-        );
+        next = activeScene === 1
+          ? PRODUCT_OVERVIEW_SCENE_COUNT
+          : ((activeScene - 1) as ProductOverviewSceneId);
       } else if (event.key === 'Home') {
         next = 1;
       } else if (event.key === 'End') {
         next = PRODUCT_OVERVIEW_SCENE_COUNT;
       }
-
       if (!next) return;
       event.preventDefault();
       onSelectScene(next);
@@ -70,33 +57,27 @@ export function ProductOverviewProgressNav({
     [activeScene, focusScene, interactive, onSelectScene]
   );
 
-  const scrollLayout = layout === 'scroll';
-
   return (
     <div
-      className={['space-y-3', scrollLayout ? 'text-left' : 'text-center', className]
-        .filter(Boolean)
-        .join(' ')}
+      className={['flex justify-center', className].filter(Boolean).join(' ')}
       data-overview-progress-nav
-      data-overview-progress-layout={layout}
       data-overview-progress-interactive={interactive ? 'true' : 'false'}
     >
-      <p id={labelId} className="text-xs font-medium text-mm-on-surface-variant">
-        Product overview
-        <span className="ml-2 tabular-nums text-mm-on-surface">
-          {activeScene} / {PRODUCT_OVERVIEW_SCENE_COUNT} ·{' '}
-          {PRODUCT_OVERVIEW_NAV[activeScene - 1].label}
-        </span>
-      </p>
+      {/* Island pill */}
       <div
         role="tablist"
-        aria-labelledby={labelId}
+        aria-label="Product overview scenes"
         aria-orientation="horizontal"
-        className={
-          scrollLayout
-            ? 'flex flex-nowrap justify-start gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
-            : 'grid grid-cols-3 gap-2'
-        }
+        id={labelId}
+        className="flex items-center gap-1 overflow-x-auto rounded-full p-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{
+          background: 'rgba(6,10,22,0.80)',
+          backdropFilter: 'blur(24px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+          border: '1px solid rgba(255,255,255,0.09)',
+          boxShadow:
+            '0 2px 12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}
         onKeyDown={handleKeyDown}
       >
         {PRODUCT_OVERVIEW_NAV.map((item) => {
@@ -104,9 +85,7 @@ export function ProductOverviewProgressNav({
           return (
             <button
               key={item.scene}
-              ref={(node) => {
-                tabRefs.current[item.scene - 1] = node;
-              }}
+              ref={(node) => { tabRefs.current[item.scene - 1] = node; }}
               type="button"
               role="tab"
               id={`overview-scene-tab-${item.scene}`}
@@ -114,36 +93,23 @@ export function ProductOverviewProgressNav({
               aria-controls={`overview-scene-panel-${item.scene}`}
               tabIndex={selected ? 0 : -1}
               disabled={!interactive}
-              onClick={() => {
-                if (!interactive) return;
-                onSelectScene(item.scene);
-              }}
+              onClick={() => { if (interactive) onSelectScene(item.scene); }}
               className={[
-                'flex min-h-11 min-w-[2.75rem] items-center justify-center gap-2 rounded-md border px-3 py-2.5 text-center text-xs font-medium transition-[opacity,transform]',
-                scrollLayout ? 'shrink-0 whitespace-nowrap' : 'w-full',
+                'shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
+                interactive ? 'cursor-pointer' : 'cursor-default',
                 selected
-                  ? 'border-mm-primary bg-mm-primary/15 text-mm-on-surface ring-1 ring-mm-primary/40'
-                  : 'border-mm-outline-variant/60 text-mm-on-surface-variant hover:border-mm-outline-variant hover:text-mm-on-surface',
-                !interactive ? 'cursor-default opacity-90' : '',
+                  ? 'text-white'
+                  : 'text-white/70 hover:text-white/90',
               ].join(' ')}
+              style={selected ? {
+                background: 'rgba(255,255,255,0.13)',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)',
+              } : undefined}
               data-overview-progress-tab={item.scene}
               data-overview-progress-selected={selected ? 'true' : 'false'}
             >
-              <span
-                className={[
-                  'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold tabular-nums',
-                  selected
-                    ? 'bg-mm-primary text-mm-on-primary'
-                    : 'bg-mm-surface-container-high text-mm-on-surface-variant',
-                ].join(' ')}
-                aria-hidden
-              >
-                {item.scene}
-              </span>
-              <span className="truncate whitespace-nowrap">{item.label}</span>
-              {selected ? (
-                <span className="sr-only">(current scene)</span>
-              ) : null}
+              {item.label}
+              {selected && <span className="sr-only"> (current scene)</span>}
             </button>
           );
         })}

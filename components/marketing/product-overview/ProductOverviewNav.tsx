@@ -22,6 +22,10 @@ type ProductOverviewNavProps = {
   appsSecondary?: boolean;
   /** Switch overview scene in-place (same model as progress tabs). */
   onSelectScene?: (scene: ProductOverviewSceneId) => void;
+  /** Currently active email folder (for highlight). */
+  activeFolder?: string;
+  /** Called when a folder item is clicked. */
+  onSelectFolder?: (folder: string) => void;
   className?: string;
 };
 
@@ -51,6 +55,8 @@ export function ProductOverviewNav({
   emailExpanded,
   appsSecondary = false,
   onSelectScene,
+  activeFolder = 'inbox',
+  onSelectFolder,
   className,
 }: ProductOverviewNavProps) {
   const interactive = typeof onSelectScene === 'function';
@@ -59,7 +65,7 @@ export function ProductOverviewNav({
   const inboxActive = activeTab === 'inbox';
   const narrativeActive = activeTab === 'narrative';
   const appsActive = activeTab === 'apps';
-  const companionsActive = activeTab === 'companions';
+  const companionsActive = false;
 
   const select = (scene: ProductOverviewSceneId) => {
     onSelectScene?.(scene);
@@ -135,7 +141,7 @@ export function ProductOverviewNav({
               role="list"
             >
               {EMAIL_FOLDER_FIXTURES_ACME.map((folder) => {
-                const folderActive = inboxActive && folder.id === 'inbox';
+                const folderActive = inboxActive && folder.id === activeFolder;
                 return (
                   <li key={folder.id}>
                     <button
@@ -150,7 +156,10 @@ export function ProductOverviewNav({
                           : 'text-mm-on-surface-variant',
                       ].join(' ')}
                       disabled={!interactive}
-                      onClick={() => select(3)}
+                      onClick={() => {
+                        select(3);
+                        onSelectFolder?.(folder.id);
+                      }}
                     >
                       <span>{folder.label}</span>
                       <span className="tabular-nums opacity-70">{folder.count}</span>
@@ -193,9 +202,13 @@ export function ProductOverviewNav({
       </div>
 
       <div className="mt-auto flex items-center gap-2 border-t border-mm-outline-variant/40 px-3 py-3">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mm-primary/20 text-sm font-semibold text-mm-primary">
-          {MARKETING_PERSONA_ACME.name.charAt(0)}
-        </span>
+        <Image
+          src="/images/avatar-alex.svg"
+          alt={MARKETING_PERSONA_ACME.name}
+          width={32}
+          height={32}
+          className="h-8 w-8 rounded-full object-cover"
+        />
         <div className="min-w-0">
           <p className="truncate text-sm font-medium text-mm-on-surface">
             {MARKETING_PERSONA_ACME.name}

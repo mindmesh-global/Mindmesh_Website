@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
 import { PartnerTrustBadges } from '@/components/marketing/PartnerTrustBadges';
-import { MARKETING_INTEGRATIONS } from '@/lib/marketing-integrations';
 import {
-  MARKETING_CTA_HREF,
   MARKETING_DEPTH_BACK_LINKS,
 } from '@/lib/marketing-routes';
 import { marketingTrustContent } from '@/lib/marketing-trust-content';
@@ -14,8 +12,6 @@ const depthBack = MARKETING_DEPTH_BACK_LINKS['/trust'];
 
 const pageDescription =
   'Built on trust you can verify. MindMesh is built for professionals who want AI orchestration without giving up control of their data.';
-
-const integrationNames = MARKETING_INTEGRATIONS.map((app) => app.displayName).join(', ');
 
 export const metadata: Metadata = {
   title: 'Trust',
@@ -34,37 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqItems = [
-  {
-    question: 'What is MindMesh?',
-    answer:
-      'MindMesh is a cognitive layer for modern work. It connects the tools you already use, surfaces what matters, and helps you act without tab chaos.',
-  },
-  {
-    question: 'Where is my data stored?',
-    answer:
-      'We use a local-first architecture. Your core context and vector memory stay on your device by default, with encrypted (TLS) connections when traffic leaves the machine.',
-  },
-  {
-    question: 'Does MindMesh train on my data?',
-    answer: 'No. Your personal inbox and connected context are not used for model training.',
-  },
-  {
-    question: 'Can it send emails or edit my calendar?',
-    answer:
-      'Supported Gmail and Google Calendar connections use read-only permissions in the standard flow. MindMesh does not send mail or create, delete, or change calendar events through that flow.',
-  },
-  {
-    question: 'Which apps can I connect?',
-    answer: `MindMesh supports ${integrationNames}. See Connected apps for the full list and how each category fits Connect, Focus, and Execute.`,
-  },
-  {
-    question: 'How does MindMesh help with work-life balance?',
-    answer:
-      'Faster triage by highlighting what matters, clearer morning catch-up with daily narrative, and cleaner shutdown with open-loop visibility so the day ends with less cognitive residue.',
-  },
-] as const;
-
 export default function TrustPage() {
   return (
     <MarketingDepthLayout
@@ -77,7 +42,7 @@ export default function TrustPage() {
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mx-auto w-full max-w-[1280px] px-6">
           <h2 className="max-w-[720px] font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            External validation, stated carefully.
+            Independently validated infrastructure.
           </h2>
           <div className="mt-8">
             <PartnerTrustBadges />
@@ -88,45 +53,62 @@ export default function TrustPage() {
           <p className="mt-6">
             <Link
               href="/security"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Learn about security →
+              Learn about security
             </Link>
           </p>
         </div>
       </section>
 
-      <section className="border-y border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
-        <div className="mx-auto w-full max-w-[720px] px-6">
-          <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Questions people ask before trusting an AI with their workday.
+      <section className="bg-mm-background py-16 lg:py-24">
+        <div className="mm-content">
+          <h2 className="max-w-[720px] font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
+            Technical signals you can verify.
           </h2>
-          <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            Straight answers on storage, permissions, training, and integrations. No endorsement
-            language beyond what we can verify.
+          <p className="mt-4 max-w-[640px] text-base text-mm-on-surface-variant lg:text-lg">
+            These are implementation details from the codebase — not marketing claims. Each one is specific and checkable.
           </p>
-
-          <div className="mt-10 space-y-4">
-            {faqItems.map(({ question, answer }) => (
-              <article
-                key={question}
-                className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6"
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: 'AES-256-GCM token encryption',
+                detail: 'OAuth tokens are encrypted at rest using AES-256-GCM with a random 12-byte nonce per token — stronger than standard AES-256-CBC.',
+              },
+              {
+                title: 'Apple Notarized builds',
+                detail: 'macOS installers are code-signed and Apple Notarized through CI before release. Windows builds go through the same pipeline.',
+              },
+              {
+                title: 'Vector memory on your device',
+                detail: 'Qdrant runs locally — embeddings, context, and vector memory are stored on your machine, not uploaded to a cloud vector database.',
+              },
+              {
+                title: 'Per-token JWT revocation',
+                detail: 'Tokens can be individually revoked via a JTI blocklist. Auth decisions are never cached beyond 30 seconds — a revoked token expires within one window.',
+              },
+              {
+                title: 'Tauri, not Electron',
+                detail: 'The desktop shell is built with Tauri (Rust), not Electron. This reduces the browser-runtime attack surface present in most Electron-based apps.',
+              },
+              {
+                title: 'Row-level data isolation',
+                detail: 'Every backend query is scoped to your user ID in PostgreSQL. No query patterns allow cross-user data access.',
+              },
+            ].map(({ title, detail }) => (
+              <div
+                key={title}
+                data-light-window=""
+                className="rounded-xl p-5"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.18)',
+                  boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+                }}
               >
-                <h3 className="font-display text-lg font-semibold text-mm-on-background">
-                  {question}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-mm-on-surface-variant">{answer}</p>
-                {question === 'Which apps can I connect?' ? (
-                  <p className="mt-4">
-                    <Link
-                      href="/connected-apps"
-                      className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
-                    >
-                      View connected apps →
-                    </Link>
-                  </p>
-                ) : null}
-              </article>
+                <h3 className="font-display text-base font-semibold text-mm-on-background">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-mm-on-surface-variant">{detail}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -135,26 +117,31 @@ export default function TrustPage() {
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mx-auto w-full max-w-[640px] px-6 text-center">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Privacy policy and product depth.
+            Go deeper.
           </h2>
           <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            For legal detail, read the privacy policy. For architecture and access boundaries, start
-            with security.
+            For architecture and access boundaries, read security. For straight answers, check the FAQ. For legal detail, read the privacy policy.
           </p>
-          <p className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/security"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Learn about security →
+              Security
+            </Link>
+            <Link
+              href="/faq"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
+            >
+              FAQ
             </Link>
             <Link
               href="/privacy"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Privacy policy →
+              Privacy policy
             </Link>
-          </p>
+          </div>
         </div>
       </section>
 

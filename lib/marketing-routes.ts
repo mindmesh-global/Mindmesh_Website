@@ -41,9 +41,11 @@ export const MARKETING_SECTION_HASHES = {
  * Sticky nav primary links. On homepage: hash only. On depth pages: `/#section`.
  */
 export const MARKETING_NAV_LINKS = [
-  { label: 'Product', hash: MARKETING_SECTION_HASHES.connect },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Product', hash: '#product-overview' },
   { label: 'Features', hash: MARKETING_SECTION_HASHES.features },
-  { label: 'Security', hash: MARKETING_SECTION_HASHES.trust },
+  { label: 'Security', href: '/security' },
+  { label: 'Trust', href: '/trust' },
 ] as const;
 
 export const MARKETING_PRIMARY_CTA = {
@@ -82,16 +84,16 @@ export const MARKETING_DEPTH_BACK_LINKS = {
     label: 'See Focus theater →',
   },
   '/yesterdays-narrative': {
-    href: homepageSectionHref(MARKETING_SECTION_HASHES.focus, false),
-    label: 'See Focus theater →',
+    href: homepageSectionHref(MARKETING_SECTION_HASHES.features, false),
+    label: 'Explore all features',
   },
   '/upcoming-events': {
     href: homepageSectionHref(MARKETING_SECTION_HASHES.execute, false),
     label: 'See Execute theater →',
   },
   '/security': {
-    href: homepageSectionHref(MARKETING_SECTION_HASHES.trust, false),
-    label: 'See Trust section →',
+    href: '/trust',
+    label: 'How we build trust',
   },
   '/trust': {
     href: homepageSectionHref(MARKETING_SECTION_HASHES.trust, false),

@@ -19,9 +19,9 @@ export type MarketingPartnerBadge = {
 
 export const marketingTrustContent = {
   eyebrow: 'Trust',
-  headline: 'Built on trust you can verify.',
+  headline: 'Private by design, not by policy.',
   subhead:
-    'AI orchestration for people who will not trade control of their data for convenience.',
+    'Local-first architecture means your work context lives on your device. Read-only integrations where it matters. Nothing sends or changes without your explicit approval.',
   /**
    * Partner / infrastructure badges for `#trust` and `/trust`.
    * Add Microsoft after an official Logo Builder export lands in
@@ -54,10 +54,10 @@ export const marketingTrustContent = {
     },
   ] as const satisfies readonly MarketingPartnerBadge[],
   securityLine:
-    'Private by design: local-first architecture, encrypted connections, and read-only integrations where it matters.',
+    'Everything MindMesh reads about your work stays on your device. The connections to Gmail, Slack, and Jira are read-only where it matters — MindMesh reads what you give it permission to read, nothing more. Nothing is uploaded to train a model or stored on a server you don\'t control.',
   links: [
-    { label: 'Learn about security →', href: '/security' },
-    { label: 'How we build trust →', href: '/trust' },
+    { label: 'Learn about security', href: '/security' },
+    { label: 'How we build trust', href: '/trust' },
   ],
   waitlistLine: '25+ professionals already on the waitlist.',
 } as const;

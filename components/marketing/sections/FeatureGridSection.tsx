@@ -19,10 +19,10 @@ const featureCards = [
     linkLabel: 'Explore inbox',
   },
   {
-    title: 'Daily narrative',
+    title: "Yesterday's narrative",
     description: 'Yesterday, summarized, so today starts with context.',
     href: '/yesterdays-narrative',
-    linkLabel: 'See daily narrative',
+    linkLabel: "See yesterday's narrative",
   },
   {
     title: 'Upcoming events',
@@ -47,11 +47,11 @@ export function FeatureGridSection() {
   return (
     <MarketingSection
       id="features"
-      eyebrow="Features"
       title="Go deeper on what MindMesh does."
-      subtitle="Depth pages for the layers behind connect, prioritize, and execute."
+      subtitle="Explore each feature in detail — what it does, what it connects, and what it gives back."
       subtitleClassName="hidden md:block"
       withDivider
+      compactTop
     >
       {/* Phone: compact link list */}
       <ul className="divide-y divide-mm-outline-variant/50 border-y border-mm-outline-variant/50 md:hidden">
@@ -84,10 +84,16 @@ export function FeatureGridSection() {
           <Link
             key={card.href}
             href={card.href}
-            className="group relative rounded-lg border border-mm-outline-variant bg-mm-surface-container p-6 transition hover:-translate-y-0.5 hover:border-mm-primary"
+            data-light-window=""
+            className="group relative rounded-xl p-6 transition hover:-translate-y-0.5"
+            style={{
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.18)',
+              boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+            }}
           >
             {card.href === '/mascot' && (
-              <span className="absolute right-4 top-4 rounded-full bg-yellow-500/15 px-2.5 py-1 text-xs font-medium text-yellow-400">
+              <span className="absolute right-4 top-4 rounded-full bg-amber-500 px-2.5 py-1 text-xs font-bold text-white">
                 Coming Soon
               </span>
             )}

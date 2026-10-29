@@ -11,31 +11,35 @@ export function TrustSection() {
   return (
     <section
       id="trust"
-      className="bg-mm-background pb-10 pt-10 lg:pb-12 lg:pt-12"
+      className="bg-mm-background pb-10 pt-6 lg:pb-12 lg:pt-8"
       aria-labelledby="trust-heading"
     >
       <div className="mm-content flex flex-col gap-14 md:gap-16 lg:gap-20">
-        <h2
-          id="trust-heading"
-          className="w-full font-display text-2xl font-semibold leading-[1.35] tracking-[-0.01em] text-mm-on-background md:text-3xl lg:text-[2.5rem] lg:leading-[1.3]"
-        >
-          <span className="text-mm-on-background">{marketingTrustContent.headline}</span>{' '}
-          <span className="text-mm-on-surface-variant">{marketingTrustContent.subhead}</span>
-        </h2>
+        <div>
+          <h2
+            id="trust-heading"
+            className="w-full font-display text-2xl font-semibold leading-[1.35] tracking-[-0.01em] text-mm-on-background md:text-3xl lg:text-[2.5rem] lg:leading-[1.3]"
+          >
+            {marketingTrustContent.headline}
+          </h2>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-mm-on-surface-variant md:text-lg">
+            {marketingTrustContent.subhead}
+          </p>
+        </div>
 
         <PartnerTrustBadges />
 
-        <div className="max-w-[720px] space-y-6">
+        <div className="mx-auto max-w-[720px] space-y-6 text-center">
           <p className="text-base leading-relaxed text-mm-on-background md:text-lg">
             {marketingTrustContent.securityLine}
           </p>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <div className="flex flex-wrap justify-center gap-3">
             {marketingTrustContent.links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-base font-medium text-mm-primary hover:text-mm-primary-dim"
+                className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
               >
                 {link.label}
               </Link>

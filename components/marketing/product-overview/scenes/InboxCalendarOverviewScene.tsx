@@ -14,6 +14,7 @@ import type {
   InboxEmailSource,
   InboxMessageFixture,
 } from '@/lib/marketing-demo-data';
+import type { EmailFolderId } from '@/lib/marketing-product-overview-data';
 
 const SOURCE_ICON: Record<InboxEmailSource, string | undefined> = {
   Gmail: MARKETING_INTEGRATIONS.find((app) => app.id === 'gmail')?.iconSrc,
@@ -201,15 +202,17 @@ function FocusedEmailPanel({
         {email.body}
       </p>
 
-      {email.needsApproval ? (
-        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-mm-outline-variant/40 pt-3">
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-mm-outline-variant/60 bg-mm-surface px-2.5 py-1.5 text-xs font-medium text-mm-on-surface-variant">
-            <ShieldCheck className="h-3.5 w-3.5 text-mm-primary" aria-hidden />
-            Needs approval
-          </span>
-          <span className="text-xs text-mm-on-surface-variant">{approvalHint}</span>
-        </div>
-      ) : null}
+      <div
+        className="mt-4 flex flex-wrap items-center gap-2 border-t border-mm-outline-variant/40 pt-3"
+        style={{ visibility: email.needsApproval ? 'visible' : 'hidden' }}
+        aria-hidden={!email.needsApproval}
+      >
+        <span className="inline-flex items-center gap-1.5 rounded-md border border-mm-outline-variant/60 bg-mm-surface px-2.5 py-1.5 text-xs font-medium text-mm-on-surface-variant">
+          <ShieldCheck className="h-3.5 w-3.5 text-mm-primary" aria-hidden />
+          Needs approval
+        </span>
+        <span className="text-xs text-mm-on-surface-variant">{approvalHint}</span>
+      </div>
     </article>
   );
 }
@@ -252,37 +255,57 @@ export function UpcomingEventsOverviewScene({
 export type InboxOverviewSceneProps = {
   scene?: InboxSceneFixture;
   className?: string;
+  activeFolder?: EmailFolderId;
+  onFolderChange?: (folder: EmailFolderId) => void;
 };
 
 /**
  * Email Inbox overview: source filters, clickable rows, detail pane on the right.
  */
+function threadsForFolder(
+  threads: readonly InboxMessageFixture[],
+  folder: EmailFolderId
+): readonly InboxMessageFixture[] {
+  if (folder === 'all') return threads.filter((t) => t.folder !== 'sent' && t.folder !== 'drafts');
+  if (folder === 'inbox') return threads.filter((t) => !t.folder);
+  return threads.filter((t) => t.folder === folder);
+}
+
 export function InboxOverviewScene({
   scene = INBOX_SCENE_FIXTURES_ACME,
   className,
+  activeFolder: activeFolderProp,
+  onFolderChange,
 }: InboxOverviewSceneProps) {
+  const [internalFolder, setInternalFolder] = useState<EmailFolderId>('inbox');
+  const activeFolder = activeFolderProp ?? internalFolder;
   const [sourceFilter, setSourceFilter] = useState<SourceFilterId>('all');
   const [selectedId, setSelectedId] = useState<string>(
     scene.threads.find((thread) => thread.highlight)?.id ?? scene.threads[0]?.id ?? ''
   );
 
+  const folderThreads = useMemo(
+    () => threadsForFolder(scene.threads, activeFolder),
+    [scene.threads, activeFolder]
+  );
+
   const counts = useMemo(() => {
     const next: Record<SourceFilterId, number> = {
-      all: scene.threads.length,
+      all: folderThreads.length,
       Gmail: 0,
       'Outlook Email': 0,
       'SMTP Mailbox': 0,
     };
-    for (const thread of scene.threads) {
+    for (const thread of folderThreads) {
       next[thread.source] += 1;
     }
     return next;
-  }, [scene.threads]);
+  }, [folderThreads]);
 
   const visibleThreads = useMemo(() => {
-    if (sourceFilter === 'all') return scene.threads;
-    return scene.threads.filter((thread) => thread.source === sourceFilter);
-  }, [scene.threads, sourceFilter]);
+    if (sourceFilter === 'all') return folderThreads;
+    return folderThreads.filter((thread) => thread.source === sourceFilter);
+  }, [folderThreads, sourceFilter]);
 
   const selected =
     visibleThreads.find((thread) => thread.id === selectedId) ??
@@ -291,12 +314,20 @@ export function InboxOverviewScene({
 
   const unreadCount = visibleThreads.filter((thread) => thread.unread).length;
 
+  const handleFolderChange = (folder: EmailFolderId) => {
+    setInternalFolder(folder);
+    onFolderChange?.(folder);
+    setSourceFilter('all');
+    const next = threadsForFolder(scene.threads, folder);
+    setSelectedId(next[0]?.id ?? '');
+  };
+
   const handleFilterChange = (next: SourceFilterId) => {
     setSourceFilter(next);
     const nextRows =
       next === 'all'
-        ? scene.threads
-        : scene.threads.filter((thread) => thread.source === next);
+        ? folderThreads
+        : folderThreads.filter((thread) => thread.source === next);
     if (!nextRows.some((thread) => thread.id === selectedId)) {
       setSelectedId(nextRows[0]?.id ?? '');
     }

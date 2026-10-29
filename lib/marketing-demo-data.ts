@@ -36,6 +36,8 @@ export type InboxMessageFixture = {
   source: InboxEmailSource;
   highlight?: boolean;
   needsApproval?: boolean;
+  /** Omit = inbox. 'all-only' = archived (shows in All, not Inbox). 'sent' | 'drafts' = respective folder. */
+  folder?: 'all-only' | 'sent' | 'drafts';
 };
 
 export const INBOX_FIXTURES_ACME: readonly InboxMessageFixture[] = [
@@ -87,6 +89,73 @@ People Ops`,
     receivedAt: 'Yesterday, 4:40 PM',
     unread: false,
     source: 'Outlook Email',
+  },
+  // All-only: archived marketing email (not in Inbox)
+  {
+    id: 'saas-weekly',
+    from: 'SaaS Weekly',
+    to: MARKETING_PERSONA_ACME.email,
+    subject: 'The tools top operators actually use',
+    preview: "Issue #204 — workflows, AI, and what's working.",
+    body: `Hi Alex,
+
+Issue #204 is out. This week: the productivity stack senior operators are actually shipping with, plus a deep-dive on async-first teams.
+
+— SaaS Weekly`,
+    receivedAt: 'Monday, 7:45 AM',
+    unread: false,
+    source: 'Gmail',
+    folder: 'all-only',
+  },
+  // Sent
+  {
+    id: 'sent-dana-reply',
+    from: MARKETING_PERSONA_ACME.email,
+    to: 'Dana Reyes',
+    subject: 'Re: Q2 rollout timeline',
+    preview: 'Locking scope now — PROD-142 confirmed for the call.',
+    body: `Hi Dana,
+
+Locking scope now. PROD-142 is confirmed and the remaining dependencies are cleared. See you at 2pm.
+
+Alex`,
+    receivedAt: 'Today, 9:42 AM',
+    unread: false,
+    source: 'Gmail',
+    folder: 'sent',
+  },
+  {
+    id: 'sent-ben-update',
+    from: MARKETING_PERSONA_ACME.email,
+    to: 'Ben Cartwright',
+    subject: 'ClientCo onboarding — status update',
+    preview: 'Phase 1 wrapped. Phase 2 kicks off next Monday.',
+    body: `Hi Ben,
+
+Phase 1 wrapped on Friday. Phase 2 kicks off Monday — I'll send the detailed plan Thursday EOD.
+
+Alex`,
+    receivedAt: 'Yesterday, 5:10 PM',
+    unread: false,
+    source: 'Outlook Email',
+    folder: 'sent',
+  },
+  // Drafts
+  {
+    id: 'draft-marcus',
+    from: MARKETING_PERSONA_ACME.email,
+    to: 'Marcus Hill',
+    subject: 'Re: Retainer renewal — next steps',
+    preview: "Happy to extend. Let me pull together the scope and I'll send it over by EOW.",
+    body: `Hi Marcus,
+
+Happy to extend. Let me pull together the updated scope and send it over by end of week for your review.
+
+Alex`,
+    receivedAt: 'Draft · Today',
+    unread: false,
+    source: 'Gmail',
+    folder: 'drafts',
   },
 ] as const;
 
@@ -205,14 +274,14 @@ export const THEATER_DEMO_FIXTURES = {
   connect: {
     apps: CONNECTED_APP_FIXTURES_ACME,
     appCount: CONNECTED_APP_FIXTURES_ACME.length,
-    caption: 'Seven sources connected. Syncing into one layer.',
+    caption: 'MindMesh only requests the access it needs — read-only where possible, so your data stays yours.',
   },
   focus: {
     inbox: INBOX_FIXTURES_ACME,
     calendar: CALENDAR_FIXTURES_ACME,
     signals: SIGNAL_FIXTURES_ACME,
     priority: PRIORITY_FIXTURE_ACME,
-    caption: 'A clear focus for 2pm, backed by email, calendar, and Jira.',
+    caption: 'MindMesh reads the context across every source and surfaces the next action by priority — so your attention stays on the work that matters.',
   },
   execute: {
     priority: PRIORITY_FIXTURE_ACME,

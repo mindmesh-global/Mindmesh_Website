@@ -124,20 +124,23 @@ export function MarketingNav() {
             aria-label="Primary"
             className="hidden items-center gap-8 md:flex"
           >
-            {MARKETING_NAV_LINKS.map(({ label, hash }) => {
-              const href = homepageSectionHref(hash, onHomepage);
-              return onHomepage ? (
+            {MARKETING_NAV_LINKS.map((item) => {
+              const resolvedHref = 'href' in item
+                ? item.href
+                : homepageSectionHref((item as { hash: string }).hash, onHomepage);
+              const isAnchor = resolvedHref.startsWith('#');
+              return isAnchor && onHomepage ? (
                 <a
-                  key={hash}
-                  href={href}
-                  onClick={handleHomepageAnchorClick(href)}
+                  key={resolvedHref}
+                  href={resolvedHref}
+                  onClick={handleHomepageAnchorClick(resolvedHref)}
                   className={linkClassName}
                 >
-                  {label}
+                  {item.label}
                 </a>
               ) : (
-                <Link key={hash} href={href} className={linkClassName}>
-                  {label}
+                <Link key={resolvedHref} href={resolvedHref} className={linkClassName}>
+                  {item.label}
                 </Link>
               );
             })}
@@ -178,25 +181,28 @@ export function MarketingNav() {
           className="border-b border-mm-outline-variant/40 bg-mm-surface-container md:hidden"
         >
           <div className="mm-content flex flex-col gap-1 py-4">
-            {MARKETING_NAV_LINKS.map(({ label, hash }) => {
-              const href = homepageSectionHref(hash, onHomepage);
-              return onHomepage ? (
+            {MARKETING_NAV_LINKS.map((item) => {
+              const resolvedHref = 'href' in item
+                ? item.href
+                : homepageSectionHref((item as { hash: string }).hash, onHomepage);
+              const isAnchor = resolvedHref.startsWith('#');
+              return isAnchor && onHomepage ? (
                 <a
-                  key={hash}
-                  href={href}
-                  onClick={handleHomepageAnchorClick(href, closeMobile)}
+                  key={resolvedHref}
+                  href={resolvedHref}
+                  onClick={handleHomepageAnchorClick(resolvedHref, closeMobile)}
                   className="rounded-md px-2 py-3 text-sm font-medium text-mm-on-background"
                 >
-                  {label}
+                  {item.label}
                 </a>
               ) : (
                 <Link
-                  key={hash}
-                  href={href}
+                  key={resolvedHref}
+                  href={resolvedHref}
                   onClick={closeMobile}
                   className="rounded-md px-2 py-3 text-sm font-medium text-mm-on-background"
                 >
-                  {label}
+                  {item.label}
                 </Link>
               );
             })}

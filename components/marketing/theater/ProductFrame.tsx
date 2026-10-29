@@ -3,15 +3,13 @@ import { THEATER_STICKY_TOP_PX } from '@/lib/marketing-theater-scroll';
 
 export type ProductFrameProps = {
   children: ReactNode;
-  /** Caption below the frame (reduced-motion / final state copy). */
   caption?: string;
-  /** Depth links / actions below the caption; sticks with the frame. */
   footer?: ReactNode;
-  /** Optional left rail (Connect theater nav icons in Phase 4). */
   sidebar?: ReactNode;
-  /** Sticky positioning inside theater scroll wrapper (default true). */
   sticky?: boolean;
   className?: string;
+  /** Render as macOS light-mode window (white bg, traffic lights, dark text). */
+  lightWindow?: boolean;
 };
 
 const frameChromeClassName =
@@ -26,12 +24,9 @@ export function ProductFrame({
   sidebar,
   sticky = true,
   className,
+  lightWindow = false,
 }: ProductFrameProps) {
   const stickyClassName = sticky ? 'theater-sticky-frame' : '';
-  // Sticky positioning needs a containing block as tall as the scroll
-  // wrapper (220vh/240vh); without this, the sticky frame's own normal-flow
-  // parent is only as tall as its content and the frame has no room to
-  // pin, so it just scrolls through `top: 80px` instead of sticking there.
   const outerClassName = sticky ? 'absolute inset-0' : 'relative';
 
   return (
@@ -40,14 +35,55 @@ export function ProductFrame({
         className={stickyClassName}
         style={sticky ? { top: THEATER_STICKY_TOP_PX } : undefined}
       >
-        <div className={frameChromeClassName}>
-          {sidebar ? (
-            <aside className="hidden shrink-0 border-r border-mm-outline-variant/60 md:flex md:w-14 md:flex-col md:items-center md:py-4">
-              {sidebar}
-            </aside>
-          ) : null}
-          <div className={contentClassName}>{children}</div>
-        </div>
+        {lightWindow ? (
+          <div
+            data-light-window=""
+            className="flex flex-col overflow-hidden rounded-xl"
+            style={{
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.18)',
+              boxShadow:
+                '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+            }}
+          >
+            {/* macOS light title bar */}
+            <div
+              className="relative flex h-8 shrink-0 items-center px-3"
+              style={{
+                background: 'linear-gradient(180deg, #f0f0f2 0%, #e8e8ea 100%)',
+                borderBottom: '1px solid rgba(0,0,0,0.12)',
+              }}
+            >
+              <div className="flex items-center gap-2" aria-hidden>
+                <span className="h-3 w-3 rounded-full" style={{ background: '#FF5F57' }} />
+                <span className="h-3 w-3 rounded-full" style={{ background: '#FEBC2E' }} />
+                <span className="h-3 w-3 rounded-full" style={{ background: '#28C840' }} />
+              </div>
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <span className="text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
+                  MindMesh
+                </span>
+              </div>
+            </div>
+            <div className="flex min-h-0 flex-1">
+              {sidebar ? (
+                <aside className="hidden shrink-0 border-r md:flex md:w-14 md:flex-col md:items-center md:py-4" style={{ borderColor: '#d1d1d6' }}>
+                  {sidebar}
+                </aside>
+              ) : null}
+              <div className="min-h-0 flex-1 overflow-auto p-4 md:p-5">{children}</div>
+            </div>
+          </div>
+        ) : (
+          <div className={frameChromeClassName}>
+            {sidebar ? (
+              <aside className="hidden shrink-0 border-r border-mm-outline-variant/60 md:flex md:w-14 md:flex-col md:items-center md:py-4">
+                {sidebar}
+              </aside>
+            ) : null}
+            <div className={contentClassName}>{children}</div>
+          </div>
+        )}
         {caption || footer ? (
           // Caption + depth links live inside the sticky box so they stay
           // attached below the frame while pinned, instead of scrolling up

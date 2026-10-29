@@ -18,15 +18,13 @@ export function HeroSection() {
           id="hero-heading"
           className="hero-lcp max-w-[720px] font-display text-[2.25rem] font-bold leading-[1.08] tracking-[-0.03em] text-mm-on-background md:text-[3.25rem] lg:text-[4rem]"
         >
-          The Cognitive
+          Work across every client
           <br />
-          Layer for
-          <br />
-          modern work
+          like you only have one.
         </h1>
-        <p className="mt-4 text-sm text-mm-on-surface-variant md:text-base lg:whitespace-nowrap">
-          MindMesh connects your apps, ranks what needs your attention right now, and helps you act
-          with approval.
+        <p className="mt-4 max-w-[560px] text-sm text-mm-on-surface-variant md:text-base">
+          MindMesh reads every client&apos;s email, Slack and calendar — ranked by what needs you
+          now, with everything else accounted for.
         </p>
       </div>
     </section>

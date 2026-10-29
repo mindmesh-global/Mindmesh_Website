@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StaticCalendarEvents } from '@/components/dashboard/StaticCalendarEvents';
 import { StaticInboxList } from '@/components/dashboard/StaticInboxList';
 import { MarketingPriorityCard } from '@/components/marketing/theater/marketing/MarketingPriorityCard';
@@ -28,17 +28,41 @@ type FocusTheaterDemoProps = {
  * Noisy inbox/calendar → signal chips → cross-highlight → priority emerge.
  * "Act on this" jumps into Execute and plays the action sequence as a guide.
  */
+const AUTO_PLAY_DURATION_MS = 5000;
+
 export function FocusTheaterDemo({ forceFinal = false }: FocusTheaterDemoProps) {
   const scroll = useTheaterScroll();
-  const progress = forceFinal
+  const [autoProgress, setAutoProgress] = useState(0);
+  const startTimeRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  const isPausedForAutoPlay = forceFinal ? false : scroll.isPaused;
+
+  useEffect(() => {
+    if (isPausedForAutoPlay) {
+      startTimeRef.current = null;
+      if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+      return;
+    }
+    if (startTimeRef.current === null) startTimeRef.current = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - (startTimeRef.current ?? now)) / AUTO_PLAY_DURATION_MS);
+      setAutoProgress(p);
+      if (p < 1) { rafRef.current = requestAnimationFrame(tick); } else { rafRef.current = null; }
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
+  }, [isPausedForAutoPlay]);
+
+  const effectiveProgress = forceFinal
     ? getReducedMotionFinalProgress('focus')
-    : scroll.progress;
-  // Final beat is progressEnd of focus-final (1.0). Reduced-motion pin is
-  // 0.85 (start of that beat); force the true hold so extras are fully in.
+    : Math.max(scroll.progress, autoProgress);
+
+  const progress = effectiveProgress;
   const settledProgress = forceFinal ? 1 : progress;
   const step = forceFinal ? getTheaterStep('focus', settledProgress) : scroll.step;
   const visual = getFocusVisualStateFromProgress(settledProgress);
-  const isPaused = forceFinal ? false : scroll.isPaused;
+  const isPaused = isPausedForAutoPlay;
 
   // Stagger Slack in before Jira during the entrance beat only; once the
   // beat has passed, the shared opacity takes over so both chips recede

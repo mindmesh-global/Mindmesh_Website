@@ -73,39 +73,46 @@ function workspaceCopy(scene: ProductOverviewSceneId): {
  */
 function ProductOverviewDesktopMotion() {
   const [activeScene, setActiveScene] = useState<ProductOverviewSceneId>(1);
-  const [sensorVisible, setSensorVisible] = useState(false);
-  const [mascotVisible, setMascotVisible] = useState(false);
+  const [activeFolder, setActiveFolder] = useState<string>('inbox');
   const [platformTourActive, setPlatformTourActive] = useState(true);
   const [attentionTourPlayed, setAttentionTourPlayed] = useState(false);
   const revealed = useProductOverviewReveal();
   const platformTimersRef = useRef<number[]>([]);
   const userNavigatedRef = useRef(false);
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const clearPlatformTimers = useCallback(() => {
     for (const id of platformTimersRef.current) window.clearTimeout(id);
     platformTimersRef.current = [];
   }, []);
 
+  // Reset to scene 1 when the section scrolls out of view so it's always
+  // fresh on the Attention board when the user returns.
   useEffect(() => {
-    if (activeScene !== 6) {
-      setSensorVisible(false);
-      setMascotVisible(false);
-      return undefined;
-    }
-
-    const sensorTimer = window.setTimeout(() => setSensorVisible(true), 120);
-    const mascotTimer = window.setTimeout(() => setMascotVisible(true), 280);
-    return () => {
-      window.clearTimeout(sensorTimer);
-      window.clearTimeout(mascotTimer);
-    };
-  }, [activeScene]);
+    const el = wrapperRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setActiveScene(1);
+          setActiveFolder('inbox');
+          clearPlatformTimers();
+          setPlatformTourActive(true);
+          setAttentionTourPlayed(false);
+          userNavigatedRef.current = false;
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [clearPlatformTimers]);
 
   useEffect(() => () => clearPlatformTimers(), [clearPlatformTimers]);
 
   const visual = getProductOverviewVisualStateFromScene(activeScene, {
-    sensorVisible: activeScene === 6 ? sensorVisible : false,
-    mascotVisible: activeScene === 6 ? mascotVisible : false,
+    sensorVisible: false,
+    mascotVisible: false,
   });
   const workspace = workspaceCopy(activeScene);
 
@@ -124,12 +131,12 @@ function ProductOverviewDesktopMotion() {
       setAttentionTourPlayed(true);
       if (!completed || !platformTourActive || userNavigatedRef.current) return;
 
-      const scenes: ProductOverviewSceneId[] = [2, 3, 4, 5, 6];
+      const scenes: ProductOverviewSceneId[] = [2, 3, 4, 5];
       scenes.forEach((scene, index) => {
         const id = window.setTimeout(() => {
           if (userNavigatedRef.current) return;
           setActiveScene(scene);
-          if (scene === 6) setPlatformTourActive(false);
+          if (scene === 5) setPlatformTourActive(false);
         }, 900 + index * 3400);
         platformTimersRef.current.push(id);
       });
@@ -139,6 +146,7 @@ function ProductOverviewDesktopMotion() {
 
   return (
     <div
+      ref={wrapperRef}
       className="relative"
       data-theater="productOverview"
       data-reduced-motion="false"
@@ -156,7 +164,9 @@ function ProductOverviewDesktopMotion() {
         wide
         revealed={revealed}
         onSelectScene={handleSelectScene}
-        sceneLabel={PRODUCT_OVERVIEW_NAV[activeScene - 1].label}
+        activeFolder={activeFolder}
+        onSelectFolder={setActiveFolder}
+        sceneLabel={PRODUCT_OVERVIEW_NAV[Math.min(activeScene, PRODUCT_OVERVIEW_NAV.length) - 1].label}
         progressNav={
           <ProductOverviewProgressNav
             activeScene={activeScene}
@@ -164,24 +174,7 @@ function ProductOverviewDesktopMotion() {
             interactive
           />
         }
-        footer={
-          activeScene === 6 ? (
-            <p className="flex flex-wrap gap-x-4 gap-y-2 text-base font-medium">
-              <Link
-                href={PRODUCT_OVERVIEW_DEPTH_LINKS.sensor.href}
-                className="inline-flex min-h-11 items-center text-mm-primary hover:text-mm-primary-dim"
-              >
-                {PRODUCT_OVERVIEW_DEPTH_LINKS.sensor.label}
-              </Link>
-              <Link
-                href={PRODUCT_OVERVIEW_DEPTH_LINKS.mascot.href}
-                className="inline-flex min-h-11 items-center text-mm-primary hover:text-mm-primary-dim"
-              >
-                {PRODUCT_OVERVIEW_DEPTH_LINKS.mascot.label}
-              </Link>
-            </p>
-          ) : null
-        }
+        footer={null}
       >
         <div
           id={`overview-scene-panel-${activeScene}`}
@@ -201,19 +194,16 @@ function ProductOverviewDesktopMotion() {
             <UpcomingEventsOverviewScene />
           </SceneLayer>
           <SceneLayer active={activeScene === 3}>
-            <InboxOverviewScene />
+            <InboxOverviewScene
+              activeFolder={activeFolder as import('@/lib/marketing-product-overview-data').EmailFolderId}
+              onFolderChange={setActiveFolder}
+            />
           </SceneLayer>
           <SceneLayer active={activeScene === 4}>
             <YesterdayNarrativeOverviewScene />
           </SceneLayer>
           <SceneLayer active={activeScene === 5}>
             <ConnectedAppsOverviewScene />
-          </SceneLayer>
-          <SceneLayer active={activeScene === 6}>
-            <CompanionsOverviewScene
-              sensorVisible={sensorVisible}
-              mascotVisible={mascotVisible}
-            />
           </SceneLayer>
         </div>
       </ProductOverviewFrame>

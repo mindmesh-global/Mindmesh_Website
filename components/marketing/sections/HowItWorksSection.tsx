@@ -5,21 +5,21 @@ import { IntegrationsMarquee } from '@/components/marketing/sections/Integration
 const steps = [
   {
     number: '01',
-    title: 'Connect your apps',
+    title: 'Connect every client\'s apps',
     description:
-      'Connect Gmail, Slack, Jira, calendars, and more. MindMesh reads them as sources without replacing your tools.',
+      'Bring Gmail, Slack, Jira, and calendars together for every client you work with. MindMesh reads them as sources and never replaces the tools your clients already use.',
   },
   {
     number: '02',
-    title: 'See what needs attention',
+    title: 'See exactly what needs you',
     description:
-      'A ranked Attention Board shows what is Now, Later Today, and Quietly Handled, with clear why-now reasons.',
+      'One ranked view shows what\'s urgent, what can wait, and what\'s already handled — with a plain-English reason for each, tagged by client.',
   },
   {
     number: '03',
-    title: 'Act with approval',
+    title: 'Act with your approval',
     description:
-      'Prepare the reply, block the time, and stage the task update. You approve before anything sends or writes.',
+      'MindMesh drafts the reply, blocks the time, and stages the task update. Nothing sends, books, or writes until you say so.',
   },
 ] as const;
 
@@ -28,14 +28,14 @@ const steps = [
  */
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="bg-mm-background pb-24 pt-10 lg:pb-28 lg:pt-12">
+    <section id="how-it-works" className="bg-mm-background pb-24 pt-6 lg:pb-28 lg:pt-8">
       <div className="mm-content">
         <div className="flex flex-col gap-16 md:gap-20 lg:gap-24">
           <h2
             id="how-it-works-heading"
             className="font-display text-[2rem] font-bold tracking-tight text-mm-on-background md:text-[2.75rem] lg:text-5xl"
           >
-            Three steps from noise to action.
+            Three steps from noise to clarity.
           </h2>
 
           <div className="grid gap-10 md:grid-cols-3 md:gap-6">
@@ -59,16 +59,14 @@ export function HowItWorksSection() {
         className="mt-16 scroll-mt-[var(--mm-scroll-offset)] md:mt-20"
       >
         <IntegrationsMarquee className="py-2" />
-        <div className="mm-content mt-8">
+        <div className="mm-content mt-8 flex flex-col items-center gap-4 text-center">
           <p className="text-sm text-mm-on-surface-variant">More connectors added regularly.</p>
-          <p className="mt-4">
-            <Link
-              href="/connected-apps"
-              className="text-base font-medium text-mm-primary hover:text-mm-primary-dim"
-            >
-              See all integrations →
-            </Link>
-          </p>
+          <Link
+            href="/connected-apps"
+            className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
+          >
+            See all integrations
+          </Link>
         </div>
       </div>
 

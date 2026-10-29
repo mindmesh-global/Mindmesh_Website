@@ -36,7 +36,7 @@ export type TheaterWrapperVh = {
 
 /** Scroll wrapper min-height in vh units (P1-T15). */
 export const THEATER_WRAPPER_VH: Record<TheaterId, TheaterWrapperVh> = {
-  connect: { desktop: 220, mobile: 120 },
+  connect: { desktop: 110, mobile: 100 },
   focus: { desktop: 240, mobile: 120 },
   execute: { desktop: 280, mobile: 140 },
   sensor: { desktop: 170, mobile: 120 },
@@ -49,7 +49,7 @@ export const THEATER_WRAPPER_VH: Record<TheaterId, TheaterWrapperVh> = {
 
 /** Tailwind classes for scroll wrappers (static strings for JIT). */
 export const THEATER_WRAPPER_CLASS: Record<TheaterId, string> = {
-  connect: 'relative min-h-[120vh] md:min-h-[220vh]',
+  connect: 'relative min-h-[100vh] md:min-h-[110vh]',
   focus: 'relative min-h-[120vh] md:min-h-[240vh]',
   execute: 'relative min-h-[140vh] md:min-h-[280vh]',
   sensor: 'relative min-h-[120vh] md:min-h-[170vh]',
@@ -1257,6 +1257,11 @@ export type MascotVisualState = {
   replyVisibleCount: 0 | 1 | 2 | 3;
   actionOpacity: number;
   showHold: boolean;
+  // Extended multi-turn: Mascot follow-up → user confirms → calendar done
+  showFollowUp: boolean;
+  showUserConfirm: boolean;
+  showCalendarTyping: boolean;
+  showCalendarDone: boolean;
 };
 
 export function getMascotUserAskMotion(progress: number): MascotUserAskMotion {
@@ -1299,7 +1304,12 @@ export function getMascotVisualStateFromProgress(progress: number): MascotVisual
     showTyping: clamped >= 0.28 && clamped < 0.55,
     replyVisibleCount: getMascotReplyVisibleCount(clamped),
     actionOpacity: getMascotActionOpacity(clamped),
-    showHold: clamped >= 0.88,
+    showHold: clamped >= 0.97,
+    // Extended multi-turn beats (0.65–1.0)
+    showFollowUp: clamped >= 0.65,
+    showUserConfirm: clamped >= 0.74,
+    showCalendarTyping: clamped >= 0.76 && clamped < 0.86,
+    showCalendarDone: clamped >= 0.86,
   };
 }
 

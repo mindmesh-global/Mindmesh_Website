@@ -12,20 +12,19 @@ function withVars(vars: Record<string, string | number>): CSSProperties {
 }
 
 /**
- * FIG 0.2 — four source chips (Slack, Jira, Gmail, Outlook) drift out of phase
- * with each other and flash mismatched priority dots, visualizing ecosystems
- * that each run their own siloed sense of what matters.
+ * FIG 0.2 — four source chips drift out of phase with radar rings and
+ * notification badges showing chaotic, disconnected priority signals.
  */
 export function AppsDisagreeFigure() {
   const chips = [
-    { id: 'slack', label: 'Slack', dot: '#818cf8', top: '6%', left: '6%', anim: 'problem-figure-float-a', delay: '0s' },
-    { id: 'jira', label: 'Jira', dot: '#4388fd', top: '4%', left: '58%', anim: 'problem-figure-float-b', delay: '-1.4s' },
-    { id: 'outlook-email', label: 'Outlook', dot: '#699cff', top: '58%', left: '58%', anim: 'problem-figure-float-a', delay: '-2.1s' },
-    { id: 'gmail', label: 'Gmail', dot: '#fa746f', top: '60%', left: '4%', anim: 'problem-figure-float-c', delay: '-2.6s' },
+    { id: 'slack',        label: 'Slack',   dot: '#818cf8', top: '6%',  left: '6%',  anim: 'problem-figure-float-a', delay: '0s',    badge: true  },
+    { id: 'jira',         label: 'Jira',    dot: '#4388fd', top: '4%',  left: '58%', anim: 'problem-figure-float-b', delay: '-1.4s', badge: true  },
+    { id: 'outlook-email',label: 'Outlook', dot: '#699cff', top: '58%', left: '58%', anim: 'problem-figure-float-a', delay: '-2.1s', badge: false },
+    { id: 'gmail',        label: 'Gmail',   dot: '#fa746f', top: '60%', left: '4%',  anim: 'problem-figure-float-c', delay: '-2.6s', badge: false },
   ] as const;
 
   return (
-    <div data-problem-figure className="relative h-40 w-full select-none overflow-hidden md:h-44">
+    <div data-problem-figure className="relative h-40 w-full select-none md:h-44">
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 240 160" fill="none" aria-hidden>
         <path
           d="M 34 30 L 150 22 L 168 108 L 46 118 Z"
@@ -39,17 +38,34 @@ export function AppsDisagreeFigure() {
       {chips.map((chip) => (
         <div
           key={chip.id}
-          className="absolute flex items-center gap-2 rounded-full border border-mm-outline-variant/60 bg-mm-surface-container/90 px-3 py-1.5 shadow-mm-elevated [animation-duration:4.8s] [animation-iteration-count:infinite] [animation-timing-function:ease-in-out]"
+          className="absolute [animation-duration:4.8s] [animation-iteration-count:infinite] [animation-timing-function:ease-in-out]"
           style={withVars({ top: chip.top, left: chip.left, animationName: chip.anim, animationDelay: chip.delay })}
         >
+          {/* Radar ring expanding outward */}
           <span
-            className="h-1.5 w-1.5 rounded-full [animation:problem-figure-pulse-dot_2.2s_ease-in-out_infinite]"
-            style={{ backgroundColor: chip.dot, animationDelay: chip.delay }}
+            className="absolute inset-0 rounded-full [animation:problem-figure-ring-out_2.4s_ease-out_infinite]"
+            style={{ animationDelay: chip.delay, borderWidth: '1px', borderStyle: 'solid', borderColor: chip.dot }}
             aria-hidden
           />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={integrationIcon(chip.id)} alt="" className="h-4 w-4" aria-hidden />
-          <span className="text-xs font-medium text-mm-on-surface-variant">{chip.label}</span>
+          {/* Chip pill */}
+          <div className="relative flex items-center gap-2 rounded-full border border-mm-outline-variant/60 bg-mm-surface-container/90 px-3 py-1.5 shadow-mm-elevated">
+            <span
+              className="h-1.5 w-1.5 rounded-full [animation:problem-figure-pulse-dot_2.2s_ease-in-out_infinite]"
+              style={{ backgroundColor: chip.dot, animationDelay: chip.delay }}
+              aria-hidden
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={integrationIcon(chip.id)} alt="" className="h-4 w-4" aria-hidden />
+            <span className="text-xs font-medium text-mm-on-surface-variant">{chip.label}</span>
+            {/* Notification badge on Slack and Jira only */}
+            {chip.badge && (
+              <span
+                className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-mm-error text-[9px] font-bold text-white [animation:problem-figure-badge-bounce_1.8s_ease-in-out_infinite]"
+                style={{ animationDelay: chip.delay }}
+                aria-hidden
+              >!</span>
+            )}
+          </div>
         </div>
       ))}
     </div>
@@ -57,16 +73,17 @@ export function AppsDisagreeFigure() {
 }
 
 /**
- * FIG 0.3 — a small deck of app "tabs" perpetually shuffles front-to-back,
- * visualizing hours lost to tab switching instead of finishing the work.
+ * FIG 0.3 — a deck of app tabs shuffles front-to-back with notification dots
+ * and a blur effect on the back cards, visualizing context-switch cost.
  */
 export function TabShuffleFigure() {
   const cards = [
-    { id: 'gmail', label: 'Gmail' },
-    { id: 'jira', label: 'Jira' },
-    { id: 'slack', label: 'Slack' },
+    { id: 'gmail',           label: 'Gmail'    },
+    { id: 'jira',            label: 'Jira'     },
+    { id: 'slack',           label: 'Slack'    },
     { id: 'google-calendar', label: 'Calendar' },
   ] as const;
+  const notifColors = ['#fa746f', '#4388fd', '#28C840', '#FEBC2E'] as const;
   const duration = 7.2;
 
   return (
@@ -81,6 +98,12 @@ export function TabShuffleFigure() {
             animationDelay: `${-(duration * (index / cards.length))}s`,
           })}
         >
+          {/* Notification dot */}
+          <div
+            className="absolute -right-1 -top-1 h-3 w-3 rounded-full [animation:problem-figure-badge-bounce_2s_ease-in-out_infinite]"
+            style={{ backgroundColor: notifColors[index], animationDelay: `${-index * 0.6}s` }}
+            aria-hidden
+          />
           <div className="flex items-center gap-1">
             <span className="h-1.5 w-1.5 rounded-full bg-mm-error/70" aria-hidden />
             <span className="h-1.5 w-1.5 rounded-full bg-mm-accent/70" aria-hidden />
@@ -102,31 +125,28 @@ export function TabShuffleFigure() {
 }
 
 /**
- * FIG 0.4 — an AI agent icon reaches for Slack, Jira, and Gmail with dashed
- * lines that never connect, each ending in a stalled "?", visualizing that
- * AI agents are not the solution because they lack context.
+ * FIG 0.4 — an AI agent scans with a rotating beam but can't resolve context:
+ * a ? mark pulses at every source endpoint, the robot icon pulses.
  */
 export function AgentNoContextFigure() {
   const sources = [
-    { id: 'slack', angle: 200 },
-    { id: 'jira', angle: 340 },
-    { id: 'gmail', angle: 90 },
+    { id: 'slack', angle: 200, bg: 'rgba(129,140,248,0.28)', border: 'rgba(129,140,248,0.55)' },
+    { id: 'jira',  angle: 340, bg: 'rgba(67,136,253,0.28)',  border: 'rgba(67,136,253,0.55)'  },
+    { id: 'gmail', angle: 90,  bg: 'rgba(234,67,53,0.28)',   border: 'rgba(234,67,53,0.55)'   },
   ] as const;
 
   return (
     <div data-problem-figure className="relative h-40 w-full select-none overflow-hidden md:h-44">
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 240 160" fill="none" aria-hidden>
+        {/* Dashed connection lines */}
         {sources.map((source) => {
           const radians = (source.angle * Math.PI) / 180;
           const x = 120 + 82 * Math.cos(radians);
-          const y = 80 + 58 * Math.sin(radians);
+          const y = 80  + 58 * Math.sin(radians);
           return (
             <line
               key={source.id}
-              x1="120"
-              y1="80"
-              x2={x}
-              y2={y}
+              x1="120" y1="80" x2={x} y2={y}
               stroke="var(--mm-accent, #adc6ff)"
               strokeWidth="1"
               strokeDasharray="3 7"
@@ -135,21 +155,52 @@ export function AgentNoContextFigure() {
             />
           );
         })}
+        {/* Rotating scan beam — thin line from center, rotates */}
+        <line
+          x1="120" y1="80" x2="120" y2="22"
+          stroke="var(--mm-accent, #adc6ff)"
+          strokeWidth="1.5"
+          opacity={0.45}
+          className="[animation:problem-figure-scan_3s_linear_infinite]"
+          style={{ transformOrigin: '120px 80px' }}
+        />
       </svg>
 
+      {/* Big ? above the robot — confused */}
       <div
-        className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-mm-outline-variant/60 bg-mm-surface-container/90"
+        className="absolute left-1/2 font-display text-2xl font-bold text-mm-error [animation:problem-figure-question-pulse_1.8s_ease-in-out_infinite]"
+        style={{ top: 'calc(50% - 2.8rem)', transform: 'translateX(-50%)' }}
+        aria-hidden
+      >
+        ?
+      </div>
+
+      {/* Robot icon — pulses */}
+      <div
+        className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-mm-outline-variant/60 bg-mm-surface-container/90 [animation:problem-figure-core-pulse_2.4s_ease-in-out_infinite]"
         aria-hidden
       >
         <Bot className="h-5 w-5 text-mm-on-surface-variant" aria-hidden />
       </div>
-      <span
-        className="absolute left-[58%] top-[28%] flex h-5 w-5 items-center justify-center rounded-full bg-mm-error/20 text-mm-error [animation:problem-figure-pulse-dot_2s_ease-in-out_infinite]"
-        aria-hidden
-      >
-        <HelpCircle className="h-3.5 w-3.5" aria-hidden />
-      </span>
 
+      {/* Per-source ? marks with staggered pulses */}
+      {sources.map((source, index) => {
+        const radians = (source.angle * Math.PI) / 180;
+        const x = 50 + (82 / 240) * 100 * Math.cos(radians);
+        const y = 50 + (58 / 160) * 100 * Math.sin(radians);
+        return (
+          <span
+            key={`q-${source.id}`}
+            className="absolute flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-mm-error/20 text-mm-error [animation:problem-figure-question-pulse_2.2s_ease-in-out_infinite]"
+            style={withVars({ left: `${x}%`, top: `${y}%`, animationDelay: `${-index * 0.75}s` })}
+            aria-hidden
+          >
+            <HelpCircle className="h-3.5 w-3.5" aria-hidden />
+          </span>
+        );
+      })}
+
+      {/* Source app icons */}
       {sources.map((source, index) => {
         const radians = (source.angle * Math.PI) / 180;
         const x = 50 + (82 / 240) * 100 * Math.cos(radians);
@@ -157,11 +208,11 @@ export function AgentNoContextFigure() {
         return (
           <div
             key={source.id}
-            className="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-mm-outline-variant/40 bg-mm-surface-container/60 opacity-40 [animation:problem-figure-ghost-fade_3.4s_ease-in-out_infinite]"
-            style={withVars({ left: `${x}%`, top: `${y}%`, animationDelay: `${-index * 1.1}s` })}
+            className="absolute flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full [animation:problem-figure-ghost-fade_3.4s_ease-in-out_infinite]"
+            style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${-index * 1.1}s`, background: source.bg, border: `1px solid ${source.border}` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={integrationIcon(source.id)} alt="" className="h-3.5 w-3.5 grayscale" aria-hidden />
+            <img src={integrationIcon(source.id)} alt="" className="h-4 w-4" aria-hidden />
           </div>
         );
       })}
@@ -175,9 +226,9 @@ export function AgentNoContextFigure() {
  */
 export function MemoryAccumulationFigure() {
   const rings = [
-    { radius: 34, source: 'gmail', angle: 225, delay: 0 },
-    { radius: 52, source: 'slack', angle: 315, delay: 1.6 },
-    { radius: 70, source: 'jira', angle: 45, delay: 3.2 },
+    { radius: 34, source: 'gmail',           angle: 225, delay: 0   },
+    { radius: 52, source: 'slack',           angle: 315, delay: 1.6 },
+    { radius: 70, source: 'jira',            angle: 45,  delay: 3.2 },
     { radius: 88, source: 'google-calendar', angle: 135, delay: 4.8 },
   ] as const;
   const duration = 6.4;
@@ -190,9 +241,7 @@ export function MemoryAccumulationFigure() {
           return (
             <circle
               key={ring.source}
-              cx="100"
-              cy="100"
-              r={ring.radius}
+              cx="100" cy="100" r={ring.radius}
               stroke="var(--mm-accent, #adc6ff)"
               strokeWidth="1.25"
               strokeDasharray={circumference}

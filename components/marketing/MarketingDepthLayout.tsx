@@ -61,7 +61,7 @@ export function MarketingDepthLayout({
               <p className="mt-6">
                 <Link
                   href={backHref}
-                  className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+                  className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
                 >
                   {backLabel}
                 </Link>

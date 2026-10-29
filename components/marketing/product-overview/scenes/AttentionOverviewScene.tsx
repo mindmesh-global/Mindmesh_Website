@@ -145,7 +145,7 @@ function AttentionActionCard({
                   aria-label="Open Dossier"
                   title="Open Dossier"
                   className={[
-                    'inline-flex min-h-10 items-center justify-center gap-1.5 rounded-md border border-white/20 px-3.5 text-xs font-semibold text-mm-on-primary-fixed transition-[background-color,box-shadow,transform]',
+                    'inline-flex min-h-9 items-center justify-center rounded-md border border-white/20 px-4 text-xs font-semibold text-mm-on-primary-fixed transition-[background-color,box-shadow,transform]',
                     'bg-mm-primary-fixed shadow-[inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-2px_4px_rgba(0,40,120,0.35),0_3px_0_rgba(15,55,140,0.9),0_0_18px_-2px_rgba(67,136,253,0.85)]',
                     'hover:bg-mm-primary-fixed-dim hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-2px_4px_rgba(0,40,120,0.35),0_3px_0_rgba(15,55,140,0.9),0_0_24px_-2px_rgba(67,136,253,1)]',
                     'active:translate-y-[2px] active:shadow-[inset_0_1px_2px_rgba(0,40,120,0.5)]',
@@ -153,11 +153,7 @@ function AttentionActionCard({
                   ].join(' ')}
                 >
                   Open Dossier
-                  <ChevronRight className="h-3.5 w-3.5" aria-hidden />
                 </button>
-                <span className="text-[10px] font-medium text-mm-primary">
-                  Opens a separate dossier window
-                </span>
               </div>
             ) : null}
           </div>
@@ -441,11 +437,11 @@ function OverlapAlert({
 }) {
   return (
     <div
-      className="flex items-start gap-2.5 rounded-lg border border-mm-error/40 bg-mm-error-container/25 px-3 py-2.5"
+      className="flex items-start gap-2.5 rounded-lg border border-mm-error/60 bg-mm-error-container/40 px-3 py-2.5"
       data-attention-overlap={alert.id}
       role="status"
     >
-      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-mm-error/20 text-mm-error">
+      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-mm-error/35 text-mm-error">
         <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
       </span>
       <div className="min-w-0">

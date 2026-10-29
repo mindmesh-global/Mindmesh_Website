@@ -7,40 +7,48 @@ type ProductOverviewSkeletonProps = {
 function FrameChromeSkeleton({ sceneLabel }: { sceneLabel?: string }) {
   return (
     <div
-      className="theater-frame-chrome flex flex-col overflow-hidden rounded-lg border border-mm-outline-variant bg-mm-surface-container-high shadow-mm-elevated"
+      data-light-window=""
+      className="theater-frame-chrome flex flex-col overflow-hidden rounded-xl"
+      style={{
+        border: '1px solid rgba(0,0,0,0.18)',
+        boxShadow: '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+      }}
       aria-hidden
     >
-      <div className="flex h-10 shrink-0 items-center gap-3 border-b border-mm-outline-variant/60 bg-mm-surface px-3">
-        <div className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-mm-outline-variant" />
-          <span className="h-2.5 w-2.5 rounded-full bg-mm-outline-variant" />
-          <span className="h-2.5 w-2.5 rounded-full bg-mm-outline-variant" />
+      {/* macOS light title bar */}
+      <div
+        className="relative flex h-8 shrink-0 items-center px-3"
+        style={{ background: 'linear-gradient(180deg, #f0f0f2 0%, #e8e8ea 100%)', borderBottom: '1px solid rgba(0,0,0,0.12)' }}
+      >
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded-full" style={{ background: '#FF5F57' }} />
+          <span className="h-3 w-3 rounded-full" style={{ background: '#FEBC2E' }} />
+          <span className="h-3 w-3 rounded-full" style={{ background: '#28C840' }} />
         </div>
-        <span className="text-sm font-medium text-mm-on-surface">MindMesh</span>
-        {sceneLabel ? (
-          <span className="rounded-md bg-mm-primary/10 px-2 py-0.5 text-xs text-mm-primary">
-            {sceneLabel}
-          </span>
-        ) : null}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>MindMesh</span>
+          {sceneLabel ? (
+            <span className="ml-2 rounded-md px-2 py-0.5 text-xs" style={{ background: 'rgba(0,102,204,0.08)', color: '#0066cc' }}>
+              {sceneLabel}
+            </span>
+          ) : null}
+        </div>
       </div>
-      <div className="flex min-h-0 flex-1 overflow-hidden">
-        <div className="hidden w-[220px] shrink-0 border-r border-mm-outline-variant/60 bg-mm-surface p-3 md:block">
+      <div className="flex min-h-0 flex-1 overflow-hidden" style={{ background: '#ffffff' }}>
+        <div className="hidden w-[220px] shrink-0 border-r p-3 md:block" style={{ background: '#f2f2f7', borderColor: '#d1d1d6' }}>
           <div className="space-y-2">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={index}
-                className="h-8 rounded-md bg-mm-surface-container-high/80"
-              />
+              <div key={index} className="h-8 rounded-md" style={{ background: '#e5e5ea' }} />
             ))}
           </div>
         </div>
-        <div className="flex min-w-0 flex-1 flex-col bg-mm-surface p-4 md:p-5">
-          <div className="mb-4 h-5 w-2/3 rounded bg-mm-surface-container-high/80" />
-          <div className="mb-2 h-4 w-1/2 rounded bg-mm-surface-container-high/60" />
+        <div className="flex min-w-0 flex-1 flex-col p-4 md:p-5" style={{ background: '#ffffff' }}>
+          <div className="mb-4 h-5 w-2/3 rounded" style={{ background: '#e5e5ea' }} />
+          <div className="mb-2 h-4 w-1/2 rounded" style={{ background: '#ebebed' }} />
           <div className="mt-4 space-y-3">
-            <div className="h-20 rounded-lg bg-mm-surface-container-high/70" />
-            <div className="h-16 rounded-lg bg-mm-surface-container-high/50" />
-            <div className="h-16 rounded-lg bg-mm-surface-container-high/40" />
+            <div className="h-20 rounded-lg" style={{ background: '#e5e5ea' }} />
+            <div className="h-16 rounded-lg" style={{ background: '#ebebed' }} />
+            <div className="h-16 rounded-lg" style={{ background: '#f0f0f2' }} />
           </div>
         </div>
       </div>

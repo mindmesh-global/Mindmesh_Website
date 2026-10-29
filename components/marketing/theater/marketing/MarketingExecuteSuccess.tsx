@@ -35,13 +35,13 @@ export function MarketingExecuteSuccess({
 
   return (
     <div
-      className={`rounded-xl border border-emerald-700/40 bg-emerald-950/30 p-4 md:p-5 ${className ?? ''}`}
+      className={`rounded-xl border border-green-600 bg-green-500/10 p-4 md:p-5 ${className ?? ''}`}
       data-marketing-execute-success
       style={{ opacity, willChange: opacity < 1 ? 'opacity' : undefined }}
     >
       <div className="flex items-start gap-3">
         <div
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-700/40 text-emerald-300"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500 text-white"
           aria-hidden
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,9 +55,9 @@ export function MarketingExecuteSuccess({
               {DONE_INDICATORS.map((item) => (
                 <li
                   key={item.id}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-emerald-700/40 bg-emerald-950/20 px-2.5 py-1 text-[11px] text-emerald-200"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-green-600 bg-green-500 px-2.5 py-1 text-[11px] font-bold text-white"
                 >
-                  <span className="text-emerald-400" aria-hidden>
+                  <span aria-hidden>
                     ✓
                   </span>
                   {item.label}

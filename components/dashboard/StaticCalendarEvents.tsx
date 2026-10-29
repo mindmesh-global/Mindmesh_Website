@@ -123,7 +123,17 @@ function MarketingCalendarEventsPanel({
     >
       <div className="mb-3 flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-mm-on-background">Today</h3>
-        <span className="text-[11px] text-mm-on-surface-variant">{events.length} events</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] text-mm-on-surface-variant">{events.length} events</span>
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-hidden
+            className="inline-flex items-center gap-1 rounded-md bg-mm-primary/15 px-2 py-1 text-[11px] font-medium text-mm-primary"
+          >
+            + Add event
+          </button>
+        </div>
       </div>
       <div className="space-y-2">
         {events.map((event) => {
@@ -160,14 +170,24 @@ function MarketingCalendarEventsPanel({
                   </div>
                 </div>
                 {!hideJoinButtons ? (
-                  <button
-                    type="button"
-                    tabIndex={-1}
-                    aria-hidden
-                    className="shrink-0 rounded-md bg-mm-primary-container px-2.5 py-1.5 text-[11px] font-medium text-mm-on-primary-container"
-                  >
-                    Join Meeting
-                  </button>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <button
+                      type="button"
+                      tabIndex={-1}
+                      aria-hidden
+                      className="rounded-md border border-mm-outline-variant/60 px-2.5 py-1.5 text-[11px] font-medium text-mm-on-surface-variant"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      tabIndex={-1}
+                      aria-hidden
+                      className="rounded-md bg-mm-primary-container px-2.5 py-1.5 text-[11px] font-medium text-mm-on-primary-container"
+                    >
+                      Join Meeting
+                    </button>
+                  </div>
                 ) : null}
               </div>
             </div>

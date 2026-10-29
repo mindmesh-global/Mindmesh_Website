@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MarketingDepthLayout } from '@/components/marketing/MarketingDepthLayout';
-import { MARKETING_DEPTH_BACK_LINKS } from '@/lib/marketing-routes';
+import { MARKETING_CTA_HREF } from '@/lib/marketing-routes';
 import { OG_IMAGE, OG_IMAGE_URL } from '@/lib/seo';
-
-const depthBack = MARKETING_DEPTH_BACK_LINKS['/upcoming-events'];
+import { EventsSceneWrapper } from './EventsSceneWrapper';
 
 const pageDescription =
-  'See what is ahead before it takes over your afternoon. MindMesh gives you a clear view of upcoming meetings and commitments so you can prepare, not scramble.';
+  "See what's coming across every client's calendar — before it owns your day. MindMesh surfaces upcoming meetings with the context you need to walk in prepared.";
 
 export const metadata: Metadata = {
   title: 'Upcoming Events',
@@ -29,24 +27,24 @@ export const metadata: Metadata = {
 
 const capabilityCards = [
   {
-    title: 'What is next, at a glance',
+    title: "Every client's calendar, one view",
     description:
-      'Scan the meetings and commitments that will shape your afternoon without opening every calendar tab.',
+      'Connect Google Calendar and Outlook Calendar for each client. MindMesh shows your full day across all accounts — no switching between calendar apps.',
+  },
+  {
+    title: 'Conflict detection across clients',
+    description:
+      'When two meetings overlap across different client calendars, MindMesh flags it automatically so you can resolve it before it becomes a problem.',
   },
   {
     title: 'Context before the call',
     description:
-      'Upcoming events sit next to inbox and priority signals so you know why a meeting matters before it starts.',
+      "Each meeting sits alongside the email threads and Jira context that are relevant to it. You know what the call is really about before it starts.",
   },
   {
-    title: 'Prep that Execute can act on',
+    title: 'Create, update, and block — from within MindMesh',
     description:
-      'The same calendar context that powers Focus also feeds Execute: block prep time, draft the reply, show up ready.',
-  },
-  {
-    title: 'Clarity over cognitive load',
-    description:
-      'A crystalline view of what is ahead, designed for mental clarity instead of another dense calendar wall.',
+      'MindMesh can create new events, update existing ones, and block prep time — all staged for your approval before anything changes in your calendar. No need to open the calendar app.',
   },
 ] as const;
 
@@ -54,39 +52,49 @@ export default function UpcomingEventsPage() {
   return (
     <MarketingDepthLayout
       eyebrow="Upcoming events"
-      title="See what is ahead before it takes over your afternoon"
-      subtitle="MindMesh gives you a clear view of upcoming meetings and commitments so you can prepare, not scramble."
-      backHref={depthBack.href}
-      backLabel={depthBack.label}
+      title="Know what's coming — before it owns your day."
+      subtitle="MindMesh reads every client's calendar and surfaces your upcoming meetings with the context you need to walk in prepared."
     >
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mm-content grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div>
             <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-              Calendar intelligence built for focus.
+              Every meeting, across every client.
             </h2>
             <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-              Connected calendars surface the next meetings that matter. Pair them with inbox and
-              priority context so the day stays intentional instead of reactive.
+              As a fractional professional you might have a Google Calendar for one client and
+              Outlook Calendar for another. MindMesh reads them both so your full day is visible in
+              one place — with automatic conflict detection across client calendars.
             </p>
-            <p className="mt-8">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/connected-apps"
-                className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+                className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
               >
-                Connect your calendars →
+                See connected apps
               </Link>
-            </p>
+              <Link
+                href={MARKETING_CTA_HREF}
+                className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
+              >
+                Download MindMesh
+              </Link>
+            </div>
           </div>
-          <div className="overflow-hidden rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container shadow-mm-elevated">
-            <Image
-              src="/images/upcoming-events-mockup.png"
-              alt="MindMesh Upcoming Events: next meetings and commitments in a clear schedule view"
-              width={1200}
-              height={800}
-              className="h-auto w-full"
-              priority
-            />
+
+          {/* Animated events demo */}
+          <div
+            data-light-window=""
+            className="overflow-hidden rounded-xl p-4 md:p-5"
+            style={{
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.18)',
+              boxShadow:
+                '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+              minHeight: '400px',
+            }}
+          >
+            <EventsSceneWrapper />
           </div>
         </div>
       </section>
@@ -94,18 +102,25 @@ export default function UpcomingEventsPage() {
       <section className="border-y border-mm-outline-variant/40 bg-mm-surface-container-low py-16 lg:py-24">
         <div className="mm-content">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Built for Prioritize and Execute.
+            Built for professionals who work across multiple clients.
           </h2>
           <p className="mt-4 max-w-[640px] text-base text-mm-on-surface-variant lg:text-lg">
-            Upcoming events are not a separate calendar app. They are part of the same cognitive
-            layer that finds your one priority and helps you get it done.
+            Most calendar tools are built for one company. MindMesh Upcoming Events is built for
+            the reality of fractional work — multiple clients, multiple calendars, zero surprises.
           </p>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {capabilityCards.map(({ title, description }) => (
               <div
                 key={title}
-                className="rounded-lg border border-mm-outline-variant/60 bg-mm-surface-container p-6"
+                data-light-window=""
+                className="rounded-xl p-6"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.18)',
+                  boxShadow:
+                    '0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.45), 0 20px 56px rgba(0,0,0,0.55), 0 52px 100px rgba(0,0,0,0.35)',
+                }}
               >
                 <h3 className="font-display text-lg font-semibold text-mm-on-background">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mm-on-surface-variant">
@@ -120,20 +135,21 @@ export default function UpcomingEventsPage() {
       <section className="bg-mm-background py-16 lg:py-24">
         <div className="mx-auto w-full max-w-[640px] px-6 text-center">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
-            Private by design.
+            Read-only. Approval-gated writes.
           </h2>
           <p className="mt-4 text-base text-mm-on-surface-variant lg:text-lg">
-            Calendar connections use the same local-first, privacy-conscious architecture as the
-            rest of MindMesh. Organize and retrieve schedule context with care.
+            Calendar connections are read-only by default. When MindMesh stages a calendar
+            block or event update, it waits in an approval queue — nothing changes in your
+            calendar until you confirm it.
           </p>
-          <p className="mt-8">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/security"
-              className="text-sm font-medium text-mm-primary transition-colors hover:text-mm-primary-dim"
+              className="inline-flex items-center gap-2 rounded-md bg-mm-primary-fixed px-5 py-2.5 text-sm font-semibold text-mm-on-primary-fixed transition-colors hover:bg-mm-primary-fixed-dim"
             >
-              Learn about security →
+              Learn about security
             </Link>
-          </p>
+          </div>
         </div>
       </section>
 

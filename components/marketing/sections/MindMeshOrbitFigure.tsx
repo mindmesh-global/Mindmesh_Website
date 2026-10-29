@@ -19,6 +19,7 @@ type OrbitPlanet = {
   durationSec: number;
   startAngleDeg: number;
   notifyDelayMs: number;
+  color: { bg: string; ring: string };
 };
 
 function iconFor(id: string) {
@@ -34,6 +35,7 @@ const PLANETS: readonly OrbitPlanet[] = [
     durationSec: 22,
     startAngleDeg: 15,
     notifyDelayMs: 0,
+    color: { bg: 'rgba(234,67,53,0.28)', ring: 'rgba(234,67,53,0.55)' },
   },
   {
     id: 'slack',
@@ -43,6 +45,7 @@ const PLANETS: readonly OrbitPlanet[] = [
     durationSec: 28,
     startAngleDeg: 90,
     notifyDelayMs: 1600,
+    color: { bg: 'rgba(129,140,248,0.28)', ring: 'rgba(129,140,248,0.55)' },
   },
   {
     id: 'jira',
@@ -52,6 +55,7 @@ const PLANETS: readonly OrbitPlanet[] = [
     durationSec: 34,
     startAngleDeg: 165,
     notifyDelayMs: 3200,
+    color: { bg: 'rgba(67,136,253,0.28)', ring: 'rgba(67,136,253,0.55)' },
   },
   {
     id: 'outlook-email',
@@ -61,6 +65,7 @@ const PLANETS: readonly OrbitPlanet[] = [
     durationSec: 26,
     startAngleDeg: 240,
     notifyDelayMs: 4800,
+    color: { bg: 'rgba(0,120,212,0.28)', ring: 'rgba(0,120,212,0.55)' },
   },
   {
     id: 'google-calendar',
@@ -70,6 +75,7 @@ const PLANETS: readonly OrbitPlanet[] = [
     durationSec: 31,
     startAngleDeg: 300,
     notifyDelayMs: 6400,
+    color: { bg: 'rgba(52,168,83,0.28)', ring: 'rgba(52,168,83,0.55)' },
   },
 ] as const;
 
@@ -210,6 +216,7 @@ export function MindMeshOrbitFigure() {
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
+      {/* Background glow aura */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[72%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
@@ -221,19 +228,41 @@ export function MindMeshOrbitFigure() {
         aria-hidden
       />
 
-      {/* Heartbeat waves from MindMesh: expand to the outermost app, then draw back. */}
+      {/* Orbit ring paths */}
+      <svg
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        viewBox="0 0 100 100"
+        fill="none"
+        aria-hidden
+      >
+        {PLANETS.map((planet) => (
+          <circle
+            key={`ring-${planet.id}`}
+            cx="50"
+            cy="50"
+            r={planet.radiusPct}
+            stroke="rgba(255,255,255,0.07)"
+            strokeWidth="0.4"
+            strokeDasharray="1.5 3"
+          />
+        ))}
+      </svg>
+
+      {/* Heartbeat waves from MindMesh */}
       {!prefersReducedMotion ? (
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           {[0, 1, 2].map((wave) => (
             <span
               key={wave}
-              className="absolute left-1/2 top-1/2 rounded-full border border-mm-primary/50"
+              className="absolute left-1/2 top-1/2 rounded-full"
               style={{
-                // Diameter matches outermost planet orbit so waves stop at the last app.
                 width: `${OUTER_ORBIT_DIAMETER_PCT}%`,
                 height: `${OUTER_ORBIT_DIAMETER_PCT}%`,
                 animation: 'problem-orbit-heartbeat 3.2s ease-in-out infinite',
                 animationDelay: `${wave * 1.05}s`,
+                borderColor: 'rgba(67,136,253,0.55)',
+                borderWidth: '1px',
+                borderStyle: 'solid',
               }}
             />
           ))}
@@ -304,15 +333,17 @@ export function MindMeshOrbitFigure() {
               style={{ top: `${50 - planet.radiusPct}%` }}
             >
               <div
-                className="relative flex h-10 w-10 items-center justify-center rounded-full border border-mm-outline-variant/50 bg-mm-surface-container/95 shadow-mm-elevated"
-                style={
-                  prefersReducedMotion
+                className="relative flex h-11 w-11 items-center justify-center rounded-full shadow-mm-elevated"
+                style={{
+                  background: planet.color.bg,
+                  border: `1px solid ${planet.color.ring}`,
+                  ...(prefersReducedMotion
                     ? { transform: `rotate(-${planet.startAngleDeg}deg)` }
                     : {
                         animation: `problem-orbit-spin ${planet.durationSec}s linear infinite reverse`,
                         animationDelay: delay,
-                      }
-                }
+                      }),
+                }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={planet.iconSrc} alt="" className="h-5 w-5" />
@@ -324,14 +355,26 @@ export function MindMeshOrbitFigure() {
                       : 'opacity-70',
                   ].join(' ')}
                 />
+                <span
+                  className="absolute top-full mt-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-medium"
+                  style={{
+                    color: 'rgba(255,255,255,0.6)',
+                    background: 'rgba(0,0,0,0.45)',
+                    backdropFilter: 'blur(4px)',
+                  }}
+                  aria-hidden
+                >
+                  {planet.label}
+                </span>
               </div>
             </div>
           </div>
         );
       })}
 
+      {/* Core */}
       <div
-        className="absolute left-1/2 top-1/2 z-10 flex h-20 w-20 items-center justify-center md:h-24 md:w-24"
+        className="absolute left-1/2 top-1/2 z-10 flex h-24 w-24 items-center justify-center md:h-28 md:w-28"
         style={{
           transform: `translate(-50%, -50%) translate(${tremorPx * (corePulse % 2 === 0 ? 1 : -1)}px, ${tremorPx * 0.55}px) scale(${tremorScale})`,
           transition: prefersReducedMotion ? undefined : 'transform 50ms linear',
@@ -351,7 +394,10 @@ export function MindMeshOrbitFigure() {
               : 'problem-orbit-core-aura 3.6s ease-in-out infinite',
           }}
         />
-        <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-mm-outline-variant/40 bg-black shadow-mm-elevated">
+        <div
+          className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-mm-outline-variant/40 shadow-mm-elevated"
+          style={{ background: 'radial-gradient(circle at 40% 35%, #0f1e40, #030810)' }}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/Logo/mindmesh-logo-tight.png"
