@@ -47,7 +47,7 @@ function FeatureCheck({ white = false }: { white?: boolean }) {
 }
 
 export default function BillingPlansClient() {
-  const [cycle, setCycle] = useState<Cycle>('monthly');
+  const [cycle, setCycle] = useState<Cycle>('yearly');
 
   return (
     <>
