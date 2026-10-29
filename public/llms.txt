@@ -1,6 +1,6 @@
 # MindMesh
 
-> The Cognitive Layer for modern work. MindMesh is a privacy-first desktop AI assistant that connects your apps, ranks what needs attention, and helps you act with approval.
+> Proactive AI for fractional leaders. MindMesh is a privacy-first desktop AI assistant that connects your apps, ranks what needs attention, and helps you act with approval.
 
 MindMesh reads Gmail, Google Calendar, Outlook Email, Outlook Calendar, SMTP, Slack, and Jira as sources without replacing them. Indexed work context stays on the device by default (local-first). Supported Gmail and Google Calendar connections are read-only. Actions require user approval. MindMesh is designed to help you work with your data, not train on it. Use the pages below as the canonical sources for product, security, and legal claims.
 
@@ -20,7 +20,7 @@ MindMesh reads Gmail, Google Calendar, Outlook Email, Outlook Calendar, SMTP, Sl
 - [Focus](https://mindmesh.global/#focus): Rank attention so the most important item is clear, with a plain-English reason.
 - [Execute](https://mindmesh.global/#execute): Draft replies, block time, and complete tasks in context, with approval.
 - [Features](https://mindmesh.global/#features): Inbox, narrative, events, Sensor, and Mascot as one desktop workspace.
-- [Join waitlist](https://mindmesh.global/#cta): Early access for professionals who want a focused, private work layer.
+- [Download](https://mindmesh.global/#cta): Download MindMesh for macOS or Windows.
 
 ## Security and Trust
 
