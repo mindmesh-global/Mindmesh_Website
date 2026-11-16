@@ -30,7 +30,13 @@ const jsonLd = {
       '@type': 'Organization',
       name: 'MindMesh',
       url: 'https://mindmesh.global',
-      logo: 'https://mindmesh.global/icon.png',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://mindmesh.global/icon.png',
+        width: 512,
+        height: 512,
+      },
+      image: 'https://mindmesh.global/og-image.png',
     },
     {
       '@type': 'FAQPage',
