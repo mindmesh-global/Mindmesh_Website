@@ -115,6 +115,44 @@ export default function TrustPage() {
       </section>
 
       <section className="bg-mm-background py-16 lg:py-24">
+        <div className="mm-content">
+          <h2 className="max-w-[720px] font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
+            MindMesh around the web.
+          </h2>
+          <p className="mt-4 max-w-[640px] text-base text-mm-on-surface-variant lg:text-lg">
+            Independent listings, reviews, and coverage from communities and platforms we did not write ourselves.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {[
+              { label: 'Product Hunt', href: 'https://www.producthunt.com/products/mindmesh-3' },
+              { label: 'G2', href: 'https://www.g2.com/products/the-vansh-group-mindmesh/reviews' },
+              { label: 'TrustRadius', href: 'https://www.trustradius.com/products/mindmesh' },
+              { label: 'SaaSHub', href: 'https://www.saashub.com/mindmesh' },
+              { label: 'Indie Hackers', href: 'https://www.indiehackers.com/post/mindmesh-is-live-a-workspace-that-helps-you-focus-on-what-actually-matters-6febfa59bc' },
+              { label: 'Hacker News', href: 'https://news.ycombinator.com/item?id=50015864' },
+              { label: 'Dev.to', href: 'https://dev.to/kashishh/building-mindmesh-an-ai-workspace-to-reduce-context-switching-1di9' },
+              { label: 'HackerNoon', href: 'https://hackernoon.com/preview/6ac8a3c93f75a65134d20d32' },
+              { label: 'GrowthHackers', href: 'https://community.growthhackers.com/threads/69ac38bd-9179-4276-88de-4c1f02e78caf' },
+              { label: 'Startup Buffer', href: 'https://startupbuffer.com/startup/mindmesh' },
+            ].map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-mm-outline-variant/60 px-4 py-2 text-sm text-mm-on-surface-variant transition-colors hover:border-mm-outline-variant hover:text-mm-on-surface"
+              >
+                {label}
+                <svg viewBox="0 0 12 12" className="h-3 w-3 shrink-0 opacity-50" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+                  <path d="M2.5 9.5l7-7M4 2.5h5.5V8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-mm-background py-16 lg:py-24">
         <div className="mx-auto w-full max-w-[640px] px-6 text-center">
           <h2 className="font-display text-[1.75rem] font-semibold tracking-tight text-mm-on-background md:text-[2rem]">
             Go deeper.
