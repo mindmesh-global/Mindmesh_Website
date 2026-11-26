@@ -119,6 +119,7 @@ export default function AboutPage() {
                     fill
                     className="object-cover object-top"
                     sizes="96px"
+                    quality={90}
                   />
                 </div>
                 <div className="space-y-1">
