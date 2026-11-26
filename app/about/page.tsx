@@ -76,7 +76,15 @@ export default function AboutPage() {
           <div className="max-w-[720px] space-y-5 text-base text-mm-on-surface-variant lg:text-lg">
             <p>
               MindMesh is a product of{' '}
-              <span className="font-medium text-mm-on-background">The Vansh Group</span> — a small,
+              <a
+                href="https://www.thevanshgroup.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-mm-on-background underline decoration-mm-outline-variant underline-offset-2 transition-colors hover:text-mm-primary hover:decoration-mm-primary"
+              >
+                The Vansh Group
+              </a>{' '}
+              — a small,
               focused team building tools for the way professionals actually work today.
             </p>
             <p>

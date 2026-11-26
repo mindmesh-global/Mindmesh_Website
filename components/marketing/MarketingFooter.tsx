@@ -19,7 +19,16 @@ export function MarketingFooter() {
               The cognitive layer for modern work.
             </p>
             <p className="text-sm text-mm-on-surface-variant">
-              MindMesh™ {year}. A product of The Vansh Group.
+              MindMesh™ {year}. A product of{' '}
+              <a
+                href="https://www.thevanshgroup.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-mm-primary"
+              >
+                The Vansh Group
+              </a>
+              .
             </p>
           </div>
 
