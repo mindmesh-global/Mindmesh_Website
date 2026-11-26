@@ -25,7 +25,7 @@ MindMesh reads Gmail, Google Calendar, Outlook Email, Outlook Calendar, SMTP, Sl
 ## Security and Trust
 
 - [Security](https://mindmesh.global/security): Local-first architecture, read-only integrations where it matters, and encrypted sensitive paths.
-- [Trust](https://mindmesh.global/trust): Verifiable trust for professionals who want AI orchestration without giving up data control.
+- [Trust](https://mindmesh.global/trust): Verifiable trust for professionals who want AI orchestration without giving up data control. Includes independent third-party listings on Product Hunt, G2, TrustRadius, SaaSHub, Indie Hackers, Hacker News, Dev.to, HackerNoon, GrowthHackers, and Startup Buffer.
 - [Privacy Policy](https://mindmesh.global/privacy): How MindMesh collects, uses, protects, and stores information, including third-party boundaries.
 - [Sub-processors](https://mindmesh.global/sub-processors): Vendors that process customer data on MindMesh's behalf.
 
