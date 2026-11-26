@@ -22,7 +22,7 @@ const inter = Inter({
   display: 'optional',
   preload: false,
   variable: '--font-inter',
-  adjustFontFallback: true,
+  adjustFontFallback: false,
 });
 
 /** Display Manrope: preload + swap so hero H1 can become the LCP element. */
@@ -32,7 +32,7 @@ const manrope = Manrope({
   display: 'swap',
   preload: true,
   variable: '--font-manrope',
-  adjustFontFallback: true,
+  adjustFontFallback: false,
 });
 
 function ThemeScript() {
