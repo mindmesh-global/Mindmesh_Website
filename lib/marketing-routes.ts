@@ -8,6 +8,7 @@ export const MARKETING_HOMEPAGE_PATH = '/' as const;
  */
 export const MARKETING_FUNNEL_PATHS = [
   '/',
+  '/about',
   '/inbox',
   '/connected-apps',
   '/yesterdays-narrative',
@@ -55,6 +56,7 @@ export const MARKETING_PRIMARY_CTA = {
 
 /** Same footer on homepage and depth pages (P2-T05 / P5-T11 / P9-T07). */
 export const MARKETING_FOOTER_LINKS = [
+  { label: 'About', href: '/about' },
   { label: 'Security', href: '/security' },
   { label: 'Privacy', href: '/privacy' },
   { label: 'Sub-processors', href: '/sub-processors' },

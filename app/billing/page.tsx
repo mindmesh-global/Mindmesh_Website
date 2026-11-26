@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'MindMesh | Billing & plans',
     description:
-      'Compare MindMesh Free, Pro, and Enterprise. Secure checkout and clear billing when the app launches.',
+      'Compare MindMesh Free, Pro, and Enterprise plans. Clear pricing, secure checkout.',
     url: 'https://mindmesh.global/billing',
     images: [OG_IMAGE],
   },
